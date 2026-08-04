@@ -30,7 +30,9 @@ const WORK = [
     year: '2026',
     stack: 'TypeScript · Node · Next.js · Gemini',
     status: 'Private',
-    body: 'For people living with heart failure, the dangerous weeks are the ones between clinic visits. Iris is a companion that stays present through them. Every reply moves through a staged pipeline: gate, route, retrieve, generate, guard. Retrieval runs as agent tools over a multimodal patient record, the patient model changes only through auditable patches, and a safety judge that fails closed reviews every response. A safety suite of 12 cases gates CI, and each night an agent drafts care plan changes for a clinician to approve.',
+    hook: 'A companion for the weeks between clinic visits.',
+    body: 'Heart failure turns dangerous quietly, at home, in the gap between appointments. Iris keeps a daily conversation going through that gap. Every reply travels five stages: gate, route, retrieve, generate, guard. Retrieval happens as agent tools reading a multimodal patient record, and the patient model changes only through patches a clinician can audit.',
+    result: 'Safety suite of 12 cases blocks every merge',
     links: {},
   },
   {
@@ -39,7 +41,9 @@ const WORK = [
     year: '2026',
     stack: 'TypeScript · WebGL · exchange depth feeds',
     status: 'Private',
-    body: 'For studying how markets actually move at the millisecond level. OFX maintains a sequenced local limit order book from exchange depth diffs, renders the liquidity field in WebGL, and captures full sessions for replay. Its offline study harness uses HAC errors and chronological out of sample splits, and it refuses to print statistics from thin samples. No signal claims until a long capture earns them.',
+    hook: 'A market at the resolution it actually trades.',
+    body: 'OFX reconstructs the limit order book locally from exchange depth diffs, keeps it strictly sequenced, and paints the liquidity field in WebGL. Sessions record to disk and replay exactly as they happened. Behind the screen sits a study harness with HAC errors and chronological splits.',
+    result: 'Refuses to report statistics from thin samples',
     links: {},
   },
   {
@@ -48,7 +52,9 @@ const WORK = [
     year: '2026',
     stack: 'Python · FastAPI · D3',
     status: null,
-    body: 'Telescope hours are the scarcest resource in astronomy. ExoSAGE screens NASA TOI transit candidates point in time, controls the false discovery rate, backtests walk forward, and allocates observing hours under correlated risk with mixed integer optimization. Eleven test suites over checksummed data snapshots and a real 12,000 point TESS light curve. It is a transparent physics and observability screen, not a trained classifier, and it says so on the label.',
+    hook: 'Telescope time is scarce. This decides where it goes.',
+    body: 'Candidates are screened as they looked on a given date and never later, so the backtest cannot quietly cheat. False discovery rate control keeps the shortlist honest across thousands of targets. Mixed integer optimization then spends the observing hours, accounting for risk that clusters rather than cancels.',
+    result: 'A screen, not a classifier. It makes no claim about life.',
     links: {},
   },
 ]
@@ -60,7 +66,9 @@ const RESEARCH = [
     year: '2026',
     stack: 'PyTorch · Slurm · 17 open models',
     status: null,
-    body: 'For anyone training multilingual models: how strongly does language identity shape what the model represents inside? I designed an intrinsic metric for exactly that and tested it across 17 open models, including Qwen3, Llama 3.1, OLMo-2 and BLOOM, against more than 30 preregistered predictions, confound controlled correlations and held out model families. The experiments run as Slurm campaigns on shared GPU clusters, and the results feed an NSF proposal with Prof. Philipp Koehn.',
+    hook: 'How much of a language model is about language itself?',
+    body: 'I designed an intrinsic metric that separates the language component of a representation from the meaning it carries, then spent a campaign trying to break it. Seventeen open models, predictions registered before the runs, controls for the obvious confounds, and model families held back to test whether any of it generalizes.',
+    result: '30+ preregistered predictions · feeds an NSF proposal with Prof. Koehn',
     links: {},
   },
   {
@@ -69,7 +77,9 @@ const RESEARCH = [
     year: '2026',
     stack: 'PyTorch · ConvNeXt · A100 cluster',
     status: null,
-    body: 'Which architectures actually learn a low resource ancient language? A systematic benchmark of more than 15 decoder architectures and learning rules for translating Egyptian hieroglyphs: Transformer, Mamba, MoE and TTT, backprop against Forward-Forward and NoProp, on a corpus of 61k examples, with multimodal variants that read the sign images themselves. The best decoders reach BLEU-4 30.3, ten times the Transformer baseline.',
+    hook: 'Which architectures learn a language that left almost no data?',
+    body: 'A controlled benchmark across more than 15 decoders and learning rules: Transformer and Mamba, mixture of experts and test time training, backprop set against Forward-Forward and NoProp. Some variants skip the lookup table entirely and read the carved sign images.',
+    result: 'BLEU-4 30.3, ten times the Transformer baseline',
     links: {},
   },
   {
@@ -78,7 +88,9 @@ const RESEARCH = [
     year: '2026',
     stack: 'NumPy · scikit-learn · SSL vision',
     status: null,
-    body: 'Can you recover what Egyptian signs do with no translations and no annotations at all? Distributional statistics with convolutional autoencoder features cluster sign function at ARI 0.262 against a 0.0016 random floor, with uniliteral recall 0.81 and determinative recall 0.77. The write up keeps the correction of an earlier inflated 67.4% figure, which leaned on human annotations. The honest number is the one that stays.',
+    hook: 'Recovering what a sign does with nothing to translate against.',
+    body: 'No dictionary, no parallel text, no human labels. Distributional statistics and self supervised visual features, clustered and then scored against the real Gardiner sign functions. An earlier version of this result was far prettier and quietly leaned on human annotations; the correction lives in the write up next to the number.',
+    result: 'ARI 0.262 against a 0.0016 random floor',
     links: {},
   },
   {
@@ -87,7 +99,9 @@ const RESEARCH = [
     year: '2026',
     stack: 'CatBoost · DoWhy · PuLP',
     status: null,
-    body: 'Education budgets are finite; absenteeism is not random. On the IHDS-II national survey of 47,027 students, a tuned gradient boosting ensemble reaches ROC-AUC 0.841 against a 0.699 logistic baseline. DoWhy validates the distance and income barrier causally, an ILP allocator doubles expected impact against random allocation at a fixed budget under stated effect assumptions, and 10,000 Monte Carlo runs stress test the plan.',
+    hook: 'Which students are about to disappear, and where should the money go?',
+    body: 'Two questions, one pipeline, on a national survey of 47,027 Indian students. Predictions are calibrated so the probabilities mean what they say. DoWhy then asks whether distance to school is a real barrier or a coincidence. An integer program spends a fixed budget on whoever it can actually help.',
+    result: 'ROC-AUC 0.841 against a 0.699 baseline · ATE 0.14 per SD of distance',
     links: {},
   },
   {
@@ -96,16 +110,9 @@ const RESEARCH = [
     year: '2026',
     stack: 'MERT · banded ridge · fMRI',
     status: 'Write-up on request',
-    body: 'Can audio features predict how a brain responds to music? MERT features with banded ridge regression predict cortical fMRI responses at mean r 0.311 ± 0.082 across five subjects, roughly 47% of the noise ceiling, beating a mel baseline five out of five. The results doc keeps a retraction of an earlier inflated figure, because the honest number is the one that counts.',
-    links: {},
-  },
-  {
-    title: 'Encore',
-    tag: 'Naturalistic fMRI · Event memory',
-    year: '2026',
-    stack: 'Python · zarr · 21 test files',
-    status: 'No model trained yet',
-    body: 'Does the way a brain encodes a film predict what a person recalls later, beyond what the film itself explains? Encore is the modeling framework for that question: leakage safe synthetic validation, ethics and compute policy docs, and every current output labeled a software demo until the real data gates pass. The discipline is the point.',
+    hook: 'Predicting a brain in the middle of a song.',
+    body: 'Audio features from MERT, banded ridge regression, and cortical responses recorded while five people listened to music. An earlier pass reported a much better number that turned out to be a cherry picked tail, so the retraction now sits directly above the real one.',
+    result: 'r 0.311 ± 0.082, roughly 47% of the noise ceiling, beating mel 5 of 5',
     links: {},
   },
 ]
@@ -327,7 +334,16 @@ function WorkRow({ p, i }) {
         <div>
           <h3 className="font-display text-3xl text-ink sm:text-4xl">{p.title}</h3>
           <p className="mt-2 font-mono text-xs uppercase tracking-widest text-clay">{p.tag}</p>
-          <p className="mt-4 max-w-2xl text-[17px] leading-relaxed text-clay">{p.body}</p>
+          {p.hook && (
+            <p className="mt-4 max-w-2xl font-display text-xl leading-snug text-ink sm:text-2xl">{p.hook}</p>
+          )}
+          <p className="mt-3 max-w-2xl text-[17px] leading-relaxed text-clay">{p.body}</p>
+          {p.result && (
+            <p className="mt-4 flex max-w-2xl items-start gap-2.5 font-mono text-[13px] leading-relaxed text-ink">
+              <span className="mt-1.5 inline-block size-2 shrink-0 bg-pink" aria-hidden="true" />
+              {p.result}
+            </p>
+          )}
         </div>
         <div className="flex flex-row flex-wrap gap-x-6 gap-y-2 border-line pt-1.5 text-sm sm:flex-col sm:border-l sm:pl-6">
           <p className="font-mono text-xs text-ink">{p.year}</p>
