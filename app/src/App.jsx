@@ -83,6 +83,17 @@ const RESEARCH = [
     links: {},
   },
   {
+    title: 'Glyphos',
+    tag: 'Decipherment infrastructure · Data tooling',
+    year: '2026',
+    stack: 'Python · uv · CI gated',
+    status: 'Code release planned',
+    hook: 'The plumbing that decides whether a decipherment result is real.',
+    body: 'Eleven ancient language corpora ingested behind 26 frozen test partitions, a preregistered run ledger, and a CI gate that blocks pretrained weights from quietly entering a from scratch experiment. A contamination audit found roughly 34% near duplicate leakage in the standard splits, which is the kind of thing that inflates every number downstream of it.',
+    result: 'No model results claimed yet, on purpose',
+    links: {},
+  },
+  {
     title: 'AttendOpt',
     tag: 'IHDS-II · Causal ML · Optimization',
     year: '2026',
