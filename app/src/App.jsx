@@ -10,31 +10,20 @@ const LINKS = {
 
 const NOW = [
   {
-    title: 'Iris, at Arzaic',
-    body: 'An LLM agent platform for chronic care. Co-founder and founding engineer: pipeline, safety gating and evaluation, end to end.',
-  },
-  {
     title: 'Research with Prof. Philipp Koehn',
     body: 'Evaluation metrics for LLM representations at Johns Hopkins, and an NSF proposal in the works.',
   },
   {
     title: 'M.S.E. Data Science, Johns Hopkins',
-    body: 'Graduating December 2026. Machine translation, deep learning, statistical learning.',
+    body: 'Graduating May 2027. Machine translation, deep learning, statistical learning.',
+  },
+  {
+    title: 'Open to research roles',
+    body: 'Interested in evaluation, interpretability, and agent systems that have to be trusted by someone.',
   },
 ]
 
 const WORK = [
-  {
-    title: 'Iris',
-    tag: 'LLM agent platform · Arzaic',
-    year: '2026',
-    stack: 'TypeScript · Node · Next.js · Gemini',
-    status: 'Private',
-    hook: 'A companion for the weeks between clinic visits.',
-    body: 'Heart failure turns dangerous quietly, at home, in the gap between appointments. Iris keeps a daily conversation going through that gap. Every reply travels five stages: gate, route, retrieve, generate, guard. Retrieval happens as agent tools reading a multimodal patient record, and the patient model changes only through patches a clinician can audit.',
-    result: 'Safety suite of 12 cases blocks every merge',
-    links: {},
-  },
   {
     title: 'OFX',
     tag: 'Order flow terminal · Market microstructure',
@@ -118,9 +107,8 @@ const RESEARCH = [
 ]
 
 const TIMELINE = [
-  { when: '2026', what: 'Co-Founder & Founding Engineer, Arzaic LLC', detail: 'Iris, an LLM agent platform for chronic care. April 2026 to present.' },
   { when: '2025', what: 'Research Assistant, Johns Hopkins University', detail: 'Advised by Prof. Philipp Koehn. December 2025 to present.' },
-  { when: '2024', what: 'M.S.E. Data Science, Johns Hopkins University', detail: 'August 2024 to December 2026.' },
+  { when: '2024', what: 'M.S.E. Data Science, Johns Hopkins University', detail: 'August 2024 to May 2027.' },
   { when: '2022', what: 'Research Assistant, GD Goenka University', detail: 'Chronic absenteeism study on 40k+ students, advised by Dr. Yogesh Kumar. Also: Data Scientist Intern at EBMS Solutions.' },
 ]
 
@@ -285,7 +273,7 @@ function Reveal({ children, className = '' }) {
 }
 
 function Marquee() {
-  const items = ['Open to research roles', 'LLM agents', 'Evaluation', 'Quant', 'Baltimore']
+  const items = ['Open to research roles', 'LLM evaluation', 'Machine translation', 'Quant', 'Baltimore']
   const run = items.map((t, i) => (
     <span key={i} className="mx-6 flex items-center gap-6">
       {t} <span className="text-blush">■</span>
@@ -439,20 +427,20 @@ function HomePage() {
     <main className="mx-auto max-w-5xl px-5 sm:px-8">
       <section className="py-20 text-center sm:py-28">
         <p className="font-mono text-sm uppercase tracking-[0.3em] text-pink">
-          Baltimore · Arzaic · Johns Hopkins
+          Baltimore · Johns Hopkins
         </p>
         <h1 className="mt-10 flex justify-center">
           <span className="sr-only">Waiz Khan</span>
           <DotMatrix text="WAIZ KHAN" className="w-full max-w-3xl cursor-crosshair" />
         </h1>
         <p className="mx-auto mt-12 max-w-4xl font-display text-4xl leading-snug text-ink sm:text-6xl sm:leading-[1.15]">
-          LLM agents in production, and the{' '}
-          <em className="italic text-pink">experiments that prove they work.</em>
+          Machine learning research, and the{' '}
+          <em className="italic text-pink">experiments that prove it works.</em>
         </p>
         <p className="mx-auto mt-8 max-w-2xl text-lg leading-relaxed text-clay">
-          Co-founder and founding engineer at Arzaic. Graduate researcher at Johns Hopkins with
-          Prof. Philipp Koehn. The parts I care most about are the unglamorous ones: safety gating,
-          evaluation, and numbers that survive being checked.
+          Graduate researcher at Johns Hopkins, working with Prof. Philipp Koehn on how language
+          models represent language. The parts I care most about are the unglamorous ones:
+          evaluation, preregistration, and numbers that survive being checked.
         </p>
         <div className="mt-10 flex flex-wrap justify-center gap-4 text-base">
           <Link to="/resume" className="border-2 border-ink bg-ink px-6 py-3 font-medium text-cream transition-colors hover:border-pink hover:bg-pink">
@@ -512,16 +500,17 @@ function HomePage() {
           <Reveal>
             <div className="space-y-5 text-[17px] leading-relaxed text-clay">
               <p>
-                I like systems where the failure mode is boring. At Arzaic, that means an agent
-                platform where safety gating and evaluation came before features. In research, it
-                means preregistering predictions before the experiment runs, and keeping the
-                retraction next to the result when a number turns out to be inflated.
+                I like systems where the failure mode is boring. In research that means registering
+                predictions before the experiment runs, controlling for the confounds that would
+                make a result look better than it is, and keeping the retraction next to the number
+                when one turns out to be inflated.
               </p>
               <p>
-                Right now that work spans two worlds: Iris, a clinical agent platform at the startup
-                I co-founded, and research at Johns Hopkins with Prof. Philipp Koehn on how
-                multilingual language models represent language, which is growing into an NSF
-                proposal.
+                Most of my time goes to research at Johns Hopkins with Prof. Philipp Koehn on how
+                multilingual language models represent language, work that is growing into an NSF
+                proposal. The rest goes to building things that have to hold up outside a notebook:
+                market microstructure tooling, decision systems for scarce scientific resources, and
+                decipherment infrastructure for scripts nobody can read.
               </p>
             </div>
           </Reveal>
