@@ -17,12 +17,12 @@ const NOW = [
 const WORK = [
   {
     title: 'Iris',
-    tag: 'LLM agents · Arzaic',
+    tag: 'Arzaic · LLM agents',
     year: '2026',
     stack: 'TypeScript · Node · Next.js',
     status: 'Private',
     hook: 'A companion for the weeks between clinic visits.',
-    body: 'Five stages per reply: gate, route, retrieve, generate, guard. Retrieval runs as agent tools over a versioned patient record.',
+    body: 'Five stages per reply: gate, route, retrieve, generate, guard. Agent tools retrieve over a multimodal patient record that changes only through auditable patches.',
     result: 'A safety judge fails closed on every response; safety evaluation gates every merge',
     links: {},
   },
@@ -58,8 +58,8 @@ const RESEARCH = [
     stack: 'PyTorch · Slurm · 17 models',
     status: null,
     hook: 'How much of a language model is about language itself?',
-    body: 'An intrinsic metric for the language component of a representation, tested on NTREX-128 and Belebele across 17 open models.',
-    result: 'Then I broke it: trained against directly, it collapses into a shortcut. A construct failure, not a bug.',
+    body: 'An intrinsic metric for the language component of a representation, tested on NTREX-128 and Belebele across 17 open models against preregistered predictions.',
+    result: 'Trained against directly, the metric collapses into a shortcut. A construct failure, not an implementation bug.',
     links: {},
   },
   {
@@ -120,17 +120,17 @@ const RESEARCH = [
 ]
 
 const INDEX = [
-  { name: 'Encore', what: 'Does how a brain encodes a film predict what it later recalls', year: '2026', note: 'No model trained yet' },
-  { name: 'Morrow', what: 'iOS app turning Apple Health data into an explainable daily landscape', year: '2026', note: 'Local only, no cloud' },
-  { name: 'Cheironomia', what: 'Real time sign language recognition on device, 55k parameter model', year: '2026', note: 'Needs held out eval' },
-  { name: 'QuantNet Solver', what: 'C++20 Newton and Levenberg-Marquardt solver for poker equilibria', year: '2026', note: 'Needs a benchmark' },
-  { name: 'Regime Detector', what: 'Market regimes via liquid time constant networks and graph contagion', year: '2026', note: 'Figures, no table yet' },
-  { name: 'SLM Lab', what: 'Matched comparison of small language model architectures under a fixed budget', year: '2026', note: 'Preregistered, unrun' },
-  { name: 'NavRover', what: 'Turning robot logs into a labeled ground vehicle navigation dataset', year: '2026', note: 'Pipeline, no policy' },
-  { name: 'Agentic Snake', what: 'Graph attention reinforcement learning with a live attention view', year: '2026', note: 'Trained, needs baseline' },
-  { name: 'Black-Scholes Pricer', what: 'Options pricer, Greeks, implied volatility solver, arbitrage checks', year: '2025', note: '91 tests in CI' },
-  { name: 'Klesis', what: 'Messenger that sends text between devices over sound, no network', year: '2026', note: 'Live in the browser' },
-  { name: 'Heela', what: 'College access platform for refugee students, co-founded', year: '2023', note: 'In production' },
+  { name: 'Encore', what: 'Naturalistic fMRI framework testing whether encoding time brain activity predicts later free recall, beyond what the film itself explains.', year: '2026', note: 'No model trained yet' },
+  { name: 'Morrow', what: 'iOS app turning Apple Health data into an explainable daily landscape. Deterministic engine, no cloud, no analytics.', year: '2026', note: 'Local only' },
+  { name: 'Cheironomia', what: 'Real time sign language recognition on iPhone. Vision hand pose into a 55k parameter Core ML network, entirely on device.', year: '2026', note: 'Needs held out eval' },
+  { name: 'QuantNet Solver', what: 'C++20 Newton and Levenberg-Marquardt solver for quantal response equilibria in imperfect information poker.', year: '2026', note: 'Needs a benchmark' },
+  { name: 'Regime Detector', what: 'Market regime detection combining liquid time constant networks, graph based contagion, and a reinforcement learned policy.', year: '2026', note: 'Figures, no table yet' },
+  { name: 'SLM Lab', what: 'Matched comparison of small language models: transformer against mamba, CfC, test time training and mixture of experts, under one fixed budget.', year: '2026', note: 'Preregistered, unrun' },
+  { name: 'NavRover', what: 'Offline pipeline converting robot bag files into a labeled ground vehicle navigation dataset, with synthetic fixtures validating the label math.', year: '2026', note: 'Pipeline, no policy' },
+  { name: 'Agentic Snake', what: 'Graph attention double dueling deep Q network with prioritized replay, and a live view of what the agent attends to.', year: '2026', note: 'Trained, needs baseline' },
+  { name: 'Black-Scholes Pricer', what: 'European options pricer with Greeks, a Newton-Raphson implied volatility solver with Brent fallback, and arbitrage diagnostics.', year: '2025', note: '91 tests in CI' },
+  { name: 'Klesis', what: 'Messenger that carries text between nearby devices over sound. No network, no accounts, no pairing.', year: '2026', note: 'Live in the browser' },
+  { name: 'Heela', what: 'College access platform for refugee students, co-founded. Student, advisor and admin roles running in production.', year: '2023', note: 'In production' },
 ]
 
 const TIMELINE = [
@@ -547,9 +547,8 @@ function HomePage() {
               </p>
               <p>
                 Research at Johns Hopkins with Prof. Philipp Koehn on how multilingual models
-                represent language, now growing into an NSF proposal. The rest of my time goes to
-                Iris, the agent platform at the startup I co-founded, and to tools that have to hold
-                up outside a notebook.
+                represent language, now growing into an NSF proposal. Alongside it, Iris: the agent
+                platform at Arzaic, the startup I co-founded.
               </p>
             </div>
           </Reveal>
