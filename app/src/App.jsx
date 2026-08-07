@@ -9,40 +9,42 @@ const LINKS = {
 }
 
 const NOW = [
-  {
-    title: 'Research with Prof. Philipp Koehn',
-    body: 'Evaluation metrics for LLM representations at Johns Hopkins, and an NSF proposal in the works.',
-  },
-  {
-    title: 'M.S.E. Data Science, Johns Hopkins',
-    body: 'Graduating May 2027. Machine translation, deep learning, statistical learning.',
-  },
-  {
-    title: 'Open to research roles',
-    body: 'Interested in evaluation, interpretability, and agent systems that have to be trusted by someone.',
-  },
+  { title: 'Research with Prof. Philipp Koehn', body: 'Evaluation metrics for LLM representations at Johns Hopkins. An NSF proposal in development.' },
+  { title: 'Iris, at Arzaic', body: 'Co-founder and founding engineer. An LLM agent platform for heart failure care.' },
+  { title: 'M.S.E. Data Science, Johns Hopkins', body: 'May 2027. Machine translation, deep learning, applied statistics.' },
 ]
 
 const WORK = [
   {
-    title: 'OFX',
-    tag: 'Order flow terminal · Market microstructure',
+    title: 'Iris',
+    tag: 'LLM agents · Arzaic',
     year: '2026',
-    stack: 'TypeScript · WebGL · exchange depth feeds',
+    stack: 'TypeScript · Node · Next.js',
+    status: 'Private',
+    hook: 'A companion for the weeks between clinic visits.',
+    body: 'Five stages per reply: gate, route, retrieve, generate, guard. Retrieval runs as agent tools over a versioned patient record.',
+    result: 'A safety judge fails closed on every response; safety evaluation gates every merge',
+    links: {},
+  },
+  {
+    title: 'OFX',
+    tag: 'Order flow · Microstructure',
+    year: '2026',
+    stack: 'TypeScript · WebGL',
     status: 'Private',
     hook: 'A market at the resolution it actually trades.',
-    body: 'OFX reconstructs the limit order book locally from exchange depth diffs, keeps it strictly sequenced, and paints the liquidity field in WebGL. Sessions record to disk and replay exactly as they happened. Behind the screen sits a study harness with HAC errors and chronological splits.',
-    result: 'Refuses to report statistics from thin samples',
+    body: 'A sequenced limit order book rebuilt from exchange depth diffs, the liquidity field in WebGL, and full session replay.',
+    result: 'The study harness refuses to report statistics from thin samples',
     links: {},
   },
   {
     title: 'ExoSAGE',
-    tag: 'Exoplanet screening · Telescope allocation',
+    tag: 'Exoplanets · Telescope allocation',
     year: '2026',
     stack: 'Python · FastAPI · D3',
     status: null,
     hook: 'Telescope time is scarce. This decides where it goes.',
-    body: 'Candidates are screened as they looked on a given date and never later, so the backtest cannot quietly cheat. False discovery rate control keeps the shortlist honest across thousands of targets. Mixed integer optimization then spends the observing hours, accounting for risk that clusters rather than cancels.',
+    body: 'Candidates screened as they looked on a given date, never later, with false discovery rate control across thousands of targets.',
     result: 'A screen, not a classifier. It makes no claim about life.',
     links: {},
   },
@@ -51,76 +53,91 @@ const WORK = [
 const RESEARCH = [
   {
     title: 'Multilingual LLM interpretability',
-    tag: 'Johns Hopkins · NSF proposal work',
+    tag: 'Johns Hopkins · NSF proposal',
     year: '2026',
-    stack: 'PyTorch · Slurm · 17 open models',
+    stack: 'PyTorch · Slurm · 17 models',
     status: null,
     hook: 'How much of a language model is about language itself?',
-    body: 'I designed an intrinsic metric that separates the language component of a representation from the meaning it carries, then spent a campaign trying to break it. Seventeen open models, predictions registered before the runs, controls for the obvious confounds, and model families held back to test whether any of it generalizes.',
-    result: '30+ preregistered predictions · feeds an NSF proposal with Prof. Koehn',
+    body: 'An intrinsic metric for the language component of a representation, tested on NTREX-128 and Belebele across 17 open models.',
+    result: 'Then I broke it: trained against directly, it collapses into a shortcut. A construct failure, not a bug.',
     links: {},
   },
   {
     title: 'Hieroglyph translation',
     tag: 'Johns Hopkins · Multimodal MT',
     year: '2026',
-    stack: 'PyTorch · ConvNeXt · A100 cluster',
+    stack: 'PyTorch · ConvNeXt',
     status: null,
     hook: 'Which architectures learn a language that left almost no data?',
-    body: 'A controlled benchmark across more than 15 decoders and learning rules: Transformer and Mamba, mixture of experts and test time training, backprop set against Forward-Forward and NoProp. Some variants skip the lookup table entirely and read the carved sign images.',
-    result: 'BLEU-4 30.3, ten times the Transformer baseline',
+    body: 'Fifteen decoders and learning rules on a 61k example corpus, some reading the carved sign images rather than a lookup table.',
+    result: 'BLEU-4 30.3 on a 150 example test set',
     links: {},
   },
   {
     title: 'Gardiner',
-    tag: 'Egyptian sign function · Unsupervised',
+    tag: 'Sign function · Unsupervised',
     year: '2026',
-    stack: 'NumPy · scikit-learn · SSL vision',
+    stack: 'NumPy · SSL vision',
     status: null,
     hook: 'Recovering what a sign does with nothing to translate against.',
-    body: 'No dictionary, no parallel text, no human labels. Distributional statistics and self supervised visual features, clustered and then scored against the real Gardiner sign functions. An earlier version of this result was far prettier and quietly leaned on human annotations; the correction lives in the write up next to the number.',
-    result: 'ARI 0.262 against a 0.0016 random floor',
+    body: 'No dictionary, no parallel text, no labels. Distributional statistics and self supervised visual features.',
+    result: 'ARI 0.262 against a 0.0016 random floor, and a correction of the inflated number that came before it',
     links: {},
   },
   {
     title: 'Glyphos',
-    tag: 'Decipherment infrastructure · Data tooling',
+    tag: 'Decipherment infrastructure',
     year: '2026',
-    stack: 'Python · uv · CI gated',
-    status: 'Code release planned',
-    hook: 'The plumbing that decides whether a decipherment result is real.',
-    body: 'Eleven ancient language corpora ingested behind 26 frozen test partitions, a preregistered run ledger, and a CI gate that blocks pretrained weights from quietly entering a from scratch experiment. A contamination audit found roughly 34% near duplicate leakage in the standard splits, which is the kind of thing that inflates every number downstream of it.',
-    result: 'No model results claimed yet, on purpose',
+    stack: 'Python · CI gated',
+    status: 'Release planned',
+    hook: 'The plumbing that decides whether a result is real.',
+    body: 'Eleven ancient language corpora behind 26 frozen test partitions, a preregistered ledger, and a gate blocking pretrained weights.',
+    result: 'An audit found roughly 34% near duplicate leakage in the standard splits',
     links: {},
   },
   {
     title: 'AttendOpt',
-    tag: 'IHDS-II · Causal ML · Optimization',
+    tag: 'Causal ML · Optimization',
     year: '2026',
     stack: 'CatBoost · DoWhy · PuLP',
     status: null,
-    hook: 'Which students are about to disappear, and where should the money go?',
-    body: 'Two questions, one pipeline, on a national survey of 47,027 Indian students. Predictions are calibrated so the probabilities mean what they say. DoWhy then asks whether distance to school is a real barrier or a coincidence. An integer program spends a fixed budget on whoever it can actually help.',
-    result: 'ROC-AUC 0.841 against a 0.699 baseline · ATE 0.14 per SD of distance',
+    hook: 'Who is about to leave school, and where should the money go?',
+    body: 'A national survey of 47,027 students, calibrated predictions, and a causal test of whether distance is a real barrier.',
+    result: 'ROC-AUC 0.841 against a 0.699 baseline; an integer program doubles impact per fixed budget',
     links: {},
   },
   {
     title: 'Resonance',
-    tag: 'Music and the brain · Audio ML',
+    tag: 'Music and the brain',
     year: '2026',
     stack: 'MERT · banded ridge · fMRI',
-    status: 'Write-up on request',
+    status: null,
     hook: 'Predicting a brain in the middle of a song.',
-    body: 'Audio features from MERT, banded ridge regression, and cortical responses recorded while five people listened to music. An earlier pass reported a much better number that turned out to be a cherry picked tail, so the retraction now sits directly above the real one.',
-    result: 'r 0.311 ± 0.082, roughly 47% of the noise ceiling, beating mel 5 of 5',
+    body: 'MERT audio features against cortical responses recorded while five people listened to music.',
+    result: 'r 0.311 ± 0.082, about 47% of the noise ceiling, with the retraction of a prettier earlier number kept beside it',
     links: {},
   },
 ]
 
+const INDEX = [
+  { name: 'Encore', what: 'Does how a brain encodes a film predict what it later recalls', year: '2026', note: 'No model trained yet' },
+  { name: 'Morrow', what: 'iOS app turning Apple Health data into an explainable daily landscape', year: '2026', note: 'Local only, no cloud' },
+  { name: 'Cheironomia', what: 'Real time sign language recognition on device, 55k parameter model', year: '2026', note: 'Needs held out eval' },
+  { name: 'QuantNet Solver', what: 'C++20 Newton and Levenberg-Marquardt solver for poker equilibria', year: '2026', note: 'Needs a benchmark' },
+  { name: 'Regime Detector', what: 'Market regimes via liquid time constant networks and graph contagion', year: '2026', note: 'Figures, no table yet' },
+  { name: 'SLM Lab', what: 'Matched comparison of small language model architectures under a fixed budget', year: '2026', note: 'Preregistered, unrun' },
+  { name: 'NavRover', what: 'Turning robot logs into a labeled ground vehicle navigation dataset', year: '2026', note: 'Pipeline, no policy' },
+  { name: 'Agentic Snake', what: 'Graph attention reinforcement learning with a live attention view', year: '2026', note: 'Trained, needs baseline' },
+  { name: 'Black-Scholes Pricer', what: 'Options pricer, Greeks, implied volatility solver, arbitrage checks', year: '2025', note: '91 tests in CI' },
+  { name: 'Klesis', what: 'Messenger that sends text between devices over sound, no network', year: '2026', note: 'Live in the browser' },
+  { name: 'Heela', what: 'College access platform for refugee students, co-founded', year: '2023', note: 'In production' },
+]
+
 const TIMELINE = [
+  { when: '2026', what: 'Founding Engineer and Co-Founder, Arzaic LLC', detail: 'Iris, an LLM agent platform for heart failure care. April 2026 to present.' },
   { when: '2025', what: 'Research Assistant, Johns Hopkins University', detail: 'Advised by Prof. Philipp Koehn. December 2025 to present.' },
   { when: '2024', what: 'M.S.E. Data Science, Johns Hopkins University', detail: 'August 2024 to May 2027.' },
-  { when: '2022', what: 'Research Assistant, GD Goenka University', detail: 'Chronic absenteeism study on 40k+ students, advised by Dr. Yogesh Kumar. Also: Data Scientist Intern at EBMS Solutions.' },
+  { when: '2022', what: 'Research Assistant, GD Goenka University', detail: 'Chronic absenteeism on a 40k student national survey, advised by Dr. Yogesh Kumar.' },
 ]
 
 // ---------- dot matrix (squares) ----------
@@ -325,6 +342,19 @@ function SectionTitle({ index, children }) {
   )
 }
 
+function IndexRow({ r }) {
+  return (
+    <div className="grid grid-cols-[1fr_auto] gap-x-6 gap-y-1 border-b border-line py-4 sm:grid-cols-[11rem_1fr_9rem]">
+      <p className="font-semibold text-ink">{r.name}</p>
+      <p className="order-3 text-[15px] leading-snug text-clay sm:order-none">{r.what}</p>
+      <p className="text-right font-mono text-xs text-clay">
+        {r.year}
+        {r.note && <span className="block text-pink">{r.note}</span>}
+      </p>
+    </div>
+  )
+}
+
 function WorkRow({ p, i }) {
   return (
     <Reveal>
@@ -511,17 +541,15 @@ function HomePage() {
           <Reveal>
             <div className="space-y-5 text-[17px] leading-relaxed text-clay">
               <p>
-                I like systems where the failure mode is boring. In research that means registering
-                predictions before the experiment runs, controlling for the confounds that would
-                make a result look better than it is, and keeping the retraction next to the number
-                when one turns out to be inflated.
+                I like systems where the failure mode is boring. That means registering predictions
+                before the experiment runs, and keeping the retraction next to the number when one
+                turns out to be inflated.
               </p>
               <p>
-                Most of my time goes to research at Johns Hopkins with Prof. Philipp Koehn on how
-                multilingual language models represent language, work that is growing into an NSF
-                proposal. The rest goes to building things that have to hold up outside a notebook:
-                market microstructure tooling, decision systems for scarce scientific resources, and
-                decipherment infrastructure for scripts nobody can read.
+                Research at Johns Hopkins with Prof. Philipp Koehn on how multilingual models
+                represent language, now growing into an NSF proposal. The rest of my time goes to
+                Iris, the agent platform at the startup I co-founded, and to tools that have to hold
+                up outside a notebook.
               </p>
             </div>
           </Reveal>
@@ -580,6 +608,19 @@ function WorkPage() {
           ))}
         </div>
       </section>
+      <section className="pt-24 sm:pt-28">
+        <Reveal>
+          <SectionTitle index="03">Also</SectionTitle>
+        </Reveal>
+        <div className="mt-4">
+          {INDEX.map((r) => (
+            <Reveal key={r.name}>
+              <IndexRow r={r} />
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
       <section className="py-20 text-center">
         <Reveal>
           <p className="text-[15px] text-clay">
