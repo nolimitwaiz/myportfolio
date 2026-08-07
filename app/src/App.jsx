@@ -5,7 +5,7 @@ const LINKS = {
   github: 'https://github.com/nolimitwaiz',
   linkedin: 'https://www.linkedin.com/in/waiz-khan-024529223',
   email: 'mailto:wkhan12@jh.edu',
-  resumePdf: '/myportfolio/resume_waizkhan.pdf',
+  resumePdf: '/myportfolio/Waiz_Khan.pdf',
 }
 
 const NOW = [
@@ -605,7 +605,7 @@ function ResumePage() {
         <div className="mt-8 flex flex-wrap items-center gap-4">
           <a
             href={LINKS.resumePdf}
-            download="Waiz_Khan_Resume.pdf"
+            download="Waiz_Khan.pdf"
             className="border-2 border-ink bg-ink px-6 py-3 text-base font-medium text-cream transition-colors hover:border-pink hover:bg-pink"
           >
             Download PDF
