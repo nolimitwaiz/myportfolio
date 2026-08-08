@@ -35,7 +35,7 @@ const WORK = [
     hook: 'A market at the resolution it actually trades.',
     body: 'A sequenced limit order book rebuilt from exchange depth diffs, the liquidity field in WebGL, and full session replay.',
     result: 'The study harness refuses to report statistics from thin samples',
-    links: {},
+    links: { code: 'https://github.com/nolimitwaiz/ofx-terminal' },
   },
   {
     title: 'ExoSAGE',
@@ -46,7 +46,7 @@ const WORK = [
     hook: 'Telescope time is scarce. This decides where it goes.',
     body: 'Candidates screened as they looked on a given date, never later, with false discovery rate control across thousands of targets.',
     result: 'A screen, not a classifier. It makes no claim about life.',
-    links: {},
+    links: { code: 'https://github.com/nolimitwaiz/exosage' },
   },
 ]
 
@@ -93,7 +93,7 @@ const RESEARCH = [
     hook: 'The plumbing that decides whether a result is real.',
     body: 'Eleven ancient language corpora behind 26 frozen test partitions, a preregistered ledger, and a gate blocking pretrained weights.',
     result: 'An audit found roughly 34% near duplicate leakage in the standard splits',
-    links: {},
+    links: { code: 'https://github.com/nolimitwaiz/glyphos' },
   },
   {
     title: 'AttendOpt',
@@ -104,7 +104,7 @@ const RESEARCH = [
     hook: 'Who is about to leave school, and where should the money go?',
     body: 'A national survey of 47,027 students, calibrated predictions, and a causal test of whether distance is a real barrier.',
     result: 'ROC-AUC 0.841 against a 0.699 baseline; an integer program doubles impact per fixed budget',
-    links: {},
+    links: { code: 'https://github.com/nolimitwaiz/attendopt' },
   },
   {
     title: 'Resonance',
@@ -119,6 +119,31 @@ const RESEARCH = [
   },
 ]
 
+const VIZ = [
+  {
+    title: 'Screening 7,512 planet candidates',
+    tag: 'D3.js v7 · Distribution + sky projection',
+    year: '2026',
+    stack: 'JavaScript · D3 v7 · no build step',
+    status: null,
+    hook: 'Which of these worlds are worth a telescope?',
+    body: 'Every TESS candidate with a measured radius and starlight, on log scales, with the temperate band and the rocky ceiling drawn in. A hand-implemented Aitoff projection puts the same objects on the sky.',
+    result: 'Fourteen of 7,512 fall inside the temperate, rocky box',
+    links: { live: 'https://nolimitwaiz.github.io/dataviz-samples/exoplanet-screen/', code: 'https://github.com/nolimitwaiz/dataviz-samples/tree/main/exoplanet-screen' },
+  },
+  {
+    title: 'Watching a strategy stop guessing',
+    tag: 'D3.js v7 · Small multiples',
+    year: '2026',
+    stack: 'JavaScript · D3 v7 · no build step',
+    status: null,
+    hook: 'Twelve poker decisions, from coin-flip to committed.',
+    body: 'A solver walks the equilibrium path as players get less random. Each panel is one decision; strong hands climb, weak ones fall, and the whole thing starts at fifty-fifty.',
+    result: 'Exploitability falls 0.499 to 0.278, and the page says it stopped there',
+    links: { live: 'https://nolimitwaiz.github.io/dataviz-samples/qre-path/', code: 'https://github.com/nolimitwaiz/dataviz-samples/tree/main/qre-path' },
+  },
+]
+
 const INDEX = [
   { name: 'Encore', what: 'Naturalistic fMRI framework testing whether encoding time brain activity predicts later free recall, beyond what the film itself explains.', year: '2026', note: 'No model trained yet' },
   { name: 'Morrow', what: 'iOS app turning Apple Health data into an explainable daily landscape. Deterministic engine, no cloud, no analytics.', year: '2026', note: 'Local only' },
@@ -126,11 +151,11 @@ const INDEX = [
   { name: 'QuantNet Solver', what: 'C++20 Newton and Levenberg-Marquardt solver for quantal response equilibria in imperfect information poker.', year: '2026', note: 'Needs a benchmark' },
   { name: 'Regime Detector', what: 'Market regime detection combining liquid time constant networks, graph based contagion, and a reinforcement learned policy.', year: '2026', note: 'Figures, no table yet' },
   { name: 'SLM Lab', what: 'Matched comparison of small language models: transformer against mamba, CfC, test time training and mixture of experts, under one fixed budget.', year: '2026', note: 'Preregistered, unrun' },
-  { name: 'NavRover', what: 'Offline pipeline converting robot bag files into a labeled ground vehicle navigation dataset, with synthetic fixtures validating the label math.', year: '2026', note: 'Pipeline, no policy' },
+  { name: 'NavRover', href: 'https://github.com/nolimitwaiz/navrover', what: 'Offline pipeline converting robot bag files into a labeled ground vehicle navigation dataset, with synthetic fixtures validating the label math.', year: '2026', note: 'Pipeline, no policy' },
   { name: 'Agentic Snake', what: 'Graph attention double dueling deep Q network with prioritized replay, and a live view of what the agent attends to.', year: '2026', note: 'Trained, needs baseline' },
-  { name: 'Black-Scholes Pricer', what: 'European options pricer with Greeks, a Newton-Raphson implied volatility solver with Brent fallback, and arbitrage diagnostics.', year: '2025', note: '91 tests in CI' },
-  { name: 'Klesis', what: 'Messenger that carries text between nearby devices over sound. No network, no accounts, no pairing.', year: '2026', note: 'Live in the browser' },
-  { name: 'Heela', what: 'College access platform for refugee students, co-founded. Student, advisor and admin roles running in production.', year: '2023', note: 'In production' },
+  { name: 'Black-Scholes Pricer', href: 'https://github.com/nolimitwaiz/black-scholes-pricer', what: 'European options pricer with Greeks, a Newton-Raphson implied volatility solver with Brent fallback, and arbitrage diagnostics.', year: '2025', note: '91 tests in CI' },
+  { name: 'Klesis', href: 'https://nolimitwaiz.github.io/klesis/', what: 'Messenger that carries text between nearby devices over sound. No network, no accounts, no pairing.', year: '2026', note: 'Live in the browser' },
+  { name: 'Heela', href: 'https://heela.org', what: 'College access platform for refugee students, co-founded. Student, advisor and admin roles running in production.', year: '2023', note: 'In production' },
 ]
 
 const TIMELINE = [
@@ -345,7 +370,13 @@ function SectionTitle({ index, children }) {
 function IndexRow({ r }) {
   return (
     <div className="grid grid-cols-[1fr_auto] gap-x-6 gap-y-1 border-b border-line py-4 sm:grid-cols-[11rem_1fr_9rem]">
-      <p className="font-semibold text-ink">{r.name}</p>
+      <p className="font-semibold text-ink">
+        {r.href ? (
+          <a href={r.href} target="_blank" rel="noopener noreferrer" className="underline decoration-blush decoration-2 underline-offset-4 transition-colors hover:text-pink">
+            {r.name}
+          </a>
+        ) : r.name}
+      </p>
       <p className="order-3 text-[15px] leading-snug text-clay sm:order-none">{r.what}</p>
       <p className="text-right font-mono text-xs text-clay">
         {r.year}
@@ -599,7 +630,18 @@ function WorkPage() {
       </section>
       <section className="pt-24 sm:pt-28">
         <Reveal>
-          <SectionTitle index="02">Research</SectionTitle>
+          <SectionTitle index="02">Visualization</SectionTitle>
+        </Reveal>
+        <div>
+          {VIZ.map((p, i) => (
+            <WorkRow key={p.title} p={p} i={i} />
+          ))}
+        </div>
+      </section>
+
+      <section className="pt-24 sm:pt-28">
+        <Reveal>
+          <SectionTitle index="03">Research</SectionTitle>
         </Reveal>
         <div>
           {RESEARCH.map((p, i) => (
@@ -609,7 +651,7 @@ function WorkPage() {
       </section>
       <section className="pt-24 sm:pt-28">
         <Reveal>
-          <SectionTitle index="03">Also</SectionTitle>
+          <SectionTitle index="04">Also</SectionTitle>
         </Reveal>
         <div className="mt-4">
           {INDEX.map((r) => (
@@ -627,7 +669,7 @@ function WorkPage() {
             <a href={LINKS.github} target="_blank" rel="noopener noreferrer" className="text-ink underline decoration-blush decoration-2 underline-offset-4 hover:text-pink">
               GitHub
             </a>
-            . Code links appear here as each project is published.
+            , including the ones still being packaged.
           </p>
         </Reveal>
       </section>
