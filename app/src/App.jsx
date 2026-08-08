@@ -117,6 +117,17 @@ const RESEARCH = [
     result: 'r 0.311 ± 0.082, about 47% of the noise ceiling, with the retraction of a prettier earlier number kept beside it',
     links: {},
   },
+  {
+    title: 'Heela',
+    tag: 'Nonprofit · heela.org',
+    year: '2023 –',
+    stack: 'HTML · React · Supabase · Vercel',
+    status: null,
+    hook: 'Heela means hope in Pashto.',
+    body: 'A college preparation platform for refugee students, co-founded and running in production. Students, advisors and administrators each get their own view, and fellows are invited, matched and carried through an application year.',
+    result: 'Live at heela.org',
+    links: { live: 'https://heela.org' },
+  },
 ]
 
 const VIZ = [
@@ -155,7 +166,6 @@ const INDEX = [
   { name: 'Agentic Snake', what: 'Graph attention double dueling deep Q network with prioritized replay, and a live view of what the agent attends to.', year: '2026', note: 'Trained, needs baseline' },
   { name: 'Black-Scholes Pricer', href: 'https://github.com/nolimitwaiz/black-scholes-pricer', what: 'European options pricer with Greeks, a Newton-Raphson implied volatility solver with Brent fallback, and arbitrage diagnostics.', year: '2025', note: '91 tests in CI' },
   { name: 'Klesis', href: 'https://nolimitwaiz.github.io/klesis/', what: 'Messenger that carries text between nearby devices over sound. No network, no accounts, no pairing.', year: '2026', note: 'Live in the browser' },
-  { name: 'Heela', href: 'https://heela.org', what: 'College access platform for refugee students, co-founded. Student, advisor and admin roles running in production.', year: '2023', note: 'In production' },
 ]
 
 const TIMELINE = [
@@ -442,10 +452,17 @@ function WorkRow({ p, i }) {
 // ---------- layout ----------
 
 function ScrollToTop() {
-  const { pathname } = useLocation()
+  const { pathname, hash } = useLocation()
   useEffect(() => {
+    if (hash) {
+      const el = document.querySelector(hash)
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        return
+      }
+    }
     window.scrollTo(0, 0)
-  }, [pathname])
+  }, [pathname, hash])
   return null
 }
 
@@ -461,8 +478,11 @@ function Layout() {
           <Link to="/" className="font-display text-xl italic text-ink">
             Waiz Khan
           </Link>
-          <nav className="flex items-center gap-6 text-[15px] text-clay">
+          <nav className="flex items-center gap-4 text-[15px] text-clay sm:gap-6">
             <NavLink to="/work" className={navClass}>Work</NavLink>
+            <NavLink to="/work#visualization" className="hidden transition-colors hover:text-ink sm:block">Visualization</NavLink>
+            <NavLink to="/work#research" className="hidden transition-colors hover:text-ink sm:block">Research</NavLink>
+            <NavLink to="/#about" className="hidden transition-colors hover:text-ink sm:block">About</NavLink>
             <a href={LINKS.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="text-ink transition-colors hover:text-pink">
               <GitHubIcon />
             </a>
@@ -628,7 +648,7 @@ function WorkPage() {
           ))}
         </div>
       </section>
-      <section className="pt-24 sm:pt-28">
+      <section id="visualization" className="pt-24 sm:pt-28">
         <Reveal>
           <SectionTitle index="02">Visualization</SectionTitle>
         </Reveal>
@@ -639,7 +659,7 @@ function WorkPage() {
         </div>
       </section>
 
-      <section className="pt-24 sm:pt-28">
+      <section id="research" className="pt-24 sm:pt-28">
         <Reveal>
           <SectionTitle index="03">Research</SectionTitle>
         </Reveal>
