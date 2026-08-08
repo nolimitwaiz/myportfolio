@@ -120,7 +120,7 @@ const RESEARCH = [
   {
     title: 'Heela',
     tag: 'Nonprofit · Vice Chair and Director',
-    year: '2023 –',
+    year: '2026 –',
     stack: 'HTML · React · Supabase · Vercel',
     status: null,
     hook: 'Heela means hope in Pashto.',
