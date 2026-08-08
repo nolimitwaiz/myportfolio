@@ -17,12 +17,12 @@ const NOW = [
 const WORK = [
   {
     title: 'Iris',
-    tag: 'Arzaic · LLM agents',
+    tag: 'Arzaic · Co-Founder and Founding Engineer',
     year: '2026',
     stack: 'TypeScript · Node · Next.js',
     status: 'Private',
     hook: 'A companion for the weeks between clinic visits.',
-    body: 'Five stages per reply: gate, route, retrieve, generate, guard. Agent tools retrieve over a multimodal patient record that changes only through auditable patches.',
+    body: 'Five stages per reply: gate, route, retrieve, generate, guard. Agent tools retrieve over a multimodal patient record that changes only through auditable patches. Built at Arzaic, where I am co-founder and founding engineer.',
     result: 'A safety judge fails closed on every response; safety evaluation gates every merge',
     links: {},
   },
@@ -119,12 +119,12 @@ const RESEARCH = [
   },
   {
     title: 'Heela',
-    tag: 'Nonprofit · heela.org',
+    tag: 'Nonprofit · Vice Chair and Director',
     year: '2023 –',
     stack: 'HTML · React · Supabase · Vercel',
     status: null,
     hook: 'Heela means hope in Pashto.',
-    body: 'A college preparation platform for refugee students, co-founded and running in production. Students, advisors and administrators each get their own view, and fellows are invited, matched and carried through an application year.',
+    body: 'A college preparation platform for refugee students, running in production. Students, advisors and administrators each get their own view, and fellows are invited, matched and carried through an application year. I serve as Vice Chair and Director.',
     result: 'Live at heela.org',
     links: { live: 'https://heela.org' },
   },
@@ -169,7 +169,7 @@ const INDEX = [
 ]
 
 const TIMELINE = [
-  { when: '2026', what: 'Founding Engineer and Co-Founder, Arzaic LLC', detail: 'Iris, an LLM agent platform for heart failure care. April 2026 to present.' },
+  { when: '2026', what: 'Co-Founder and Founding Engineer, Arzaic LLC', detail: 'Iris, an LLM agent platform for heart failure care. April 2026 to present.' },
   { when: '2025', what: 'Research Assistant, Johns Hopkins University', detail: 'Advised by Prof. Philipp Koehn. December 2025 to present.' },
   { when: '2024', what: 'M.S.E. Data Science, Johns Hopkins University', detail: 'August 2024 to May 2027.' },
   { when: '2022', what: 'Research Assistant, GD Goenka University', detail: 'Chronic absenteeism on a 40k student national survey, advised by Dr. Yogesh Kumar.' },
