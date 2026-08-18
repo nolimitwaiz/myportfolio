@@ -1,181 +1,211 @@
 import { useEffect, useRef } from 'react'
-import { BrowserRouter, Routes, Route, Link, NavLink, Outlet, useLocation } from 'react-router-dom'
+import {
+  BrowserRouter,
+  Link,
+  Navigate,
+  NavLink,
+  Outlet,
+  Route,
+  Routes,
+  useLocation,
+  useParams,
+} from 'react-router-dom'
 
 const LINKS = {
   github: 'https://github.com/nolimitwaiz',
   linkedin: 'https://www.linkedin.com/in/waiz-khan-024529223',
   email: 'mailto:wkhan12@jh.edu',
   resumePdf: '/myportfolio/Waiz_Khan.pdf',
+  heela: 'https://heela.org',
 }
-
-const NOW = [
-  { title: 'Research with Prof. Philipp Koehn', body: 'Evaluation metrics for LLM representations at Johns Hopkins. An NSF proposal in development.' },
-  { title: 'Iris, at Arzaic', body: 'Co-founder and founding engineer. An LLM agent platform for heart failure care.' },
-  { title: 'M.S.E. Data Science, Johns Hopkins', body: 'May 2027. Machine translation, deep learning, applied statistics.' },
-]
-
-const WORK = [
-  {
-    title: 'Iris',
-    tag: 'Arzaic · Co-Founder and Founding Engineer',
-    year: '2026',
-    stack: 'TypeScript · Node · Next.js',
-    status: 'Private',
-    hook: 'A companion for the weeks between clinic visits.',
-    body: 'Five stages per reply: gate, route, retrieve, generate, guard. Agent tools retrieve over a multimodal patient record that changes only through auditable patches. Built at Arzaic, where I am co-founder and founding engineer.',
-    result: 'A safety judge fails closed on every response; safety evaluation gates every merge',
-    links: {},
-  },
-  {
-    title: 'OFX',
-    tag: 'Order flow · Microstructure',
-    year: '2026',
-    stack: 'TypeScript · WebGL',
-    status: 'Private',
-    hook: 'A market at the resolution it actually trades.',
-    body: 'A sequenced limit order book rebuilt from exchange depth diffs, the liquidity field in WebGL, and full session replay.',
-    result: 'The study harness refuses to report statistics from thin samples',
-    links: { code: 'https://github.com/nolimitwaiz/ofx-terminal' },
-  },
-  {
-    title: 'ExoSAGE',
-    tag: 'Exoplanets · Telescope allocation',
-    year: '2026',
-    stack: 'Python · FastAPI · D3',
-    status: null,
-    hook: 'Telescope time is scarce. This decides where it goes.',
-    body: 'Candidates screened as they looked on a given date, never later, with false discovery rate control across thousands of targets.',
-    result: 'A screen, not a classifier. It makes no claim about life.',
-    links: { code: 'https://github.com/nolimitwaiz/exosage' },
-  },
-]
 
 const RESEARCH = [
   {
-    title: 'Multilingual LLM interpretability',
-    tag: 'Johns Hopkins · NSF proposal',
-    year: '2026',
-    stack: 'PyTorch · Slurm · 17 models',
-    status: null,
-    hook: 'How much of a language model is about language itself?',
-    body: 'An intrinsic metric for the language component of a representation, tested on NTREX-128 and Belebele across 17 open models against preregistered predictions.',
-    result: 'Trained against directly, the metric collapses into a shortcut. A construct failure, not an implementation bug.',
-    links: {},
+    index: '01',
+    slug: 'multilingual-representation',
+    title: 'Multilingual Representation',
+    question: 'What does a language model share when the language changes?',
+    institution: 'Johns Hopkins · Prof. Philipp Koehn',
+    dates: '2025–Present',
+    summary:
+      'Language-specific variation inside multilingual language models, studied across layers, languages, model families, and training methods.',
+    anchors: ['17 open models', '128 languages', '0.6B–8B parameters', 'held-out model families'],
+    why:
+      'Multilingual models can express the same meaning in many languages, but their internal representations still carry language-specific structure. Understanding that structure can clarify what transfers across languages and what does not.',
+    method:
+      'Representation-level measurements are evaluated across NTREX-128 and Belebele, across model depth, model families, and training recipes. Predictions are set before experiments, and model families are held out during validation.',
+    findings:
+      'The experiments found a recurring depth structure in language-specific variation, substantial differences between training recipes, and relationships with downstream multilingual behavior that persisted under additional controls and held-out validation.',
+    changed:
+      'Directly optimizing one representation metric exposed a shortcut. That shifted the work from treating the metric as a target to asking which measurements remain meaningful under intervention.',
+    future:
+      'Can representation-level measurements become useful objectives for improving multilingual models?',
+    technical: [
+      'Evaluation spans 17 open models from 0.6B to 8B parameters.',
+      'Language coverage is drawn from NTREX-128 and paired with downstream evaluation on Belebele.',
+      'Validation includes additional controls and held-out model families rather than only random examples.',
+    ],
+    links: [],
   },
   {
-    title: 'Hieroglyph translation',
-    tag: 'Johns Hopkins · Multimodal MT',
-    year: '2026',
-    stack: 'PyTorch · ConvNeXt',
-    status: null,
-    hook: 'Which architectures learn a language that left almost no data?',
-    body: 'Fifteen decoders and learning rules on a 61k example corpus, some reading the carved sign images rather than a lookup table.',
-    result: 'BLEU-4 30.3 on a 150 example test set',
-    links: {},
+    index: '02',
+    slug: 'low-resource-language-learning',
+    title: 'Low-Resource Language Learning',
+    question: 'What can a model learn when examples become scarce?',
+    institution: 'Johns Hopkins · Machine Translation',
+    dates: 'Ongoing',
+    summary:
+      'Representation, transfer, translation, and evaluation when training data is uneven or scarce.',
+    anchors: ['representation', 'cross-lingual transfer', 'machine translation', 'evaluation'],
+    why:
+      'Modern language models learn from abundance. Most languages do not have it. Low-resource research asks what fails first, what can transfer, and how improvement should be measured when benchmarks are small.',
+    method:
+      'The work connects multilingual representation analysis with translation experiments, controlled comparisons, and evaluation designed for small or uneven datasets.',
+    findings:
+      'The current evidence points toward transfer and evaluation as inseparable problems: a better score matters only when the test set, language coverage, and source of supervision are clear.',
+    changed:
+      'The research expanded from translation performance alone toward the representations and evaluation choices that determine whether a result is trustworthy.',
+    future:
+      'How can higher-resource languages help without erasing the structure of the language receiving the transfer?',
+    technical: [
+      'Representation: what disappears first as supervision becomes scarce?',
+      'Transfer: what can a higher-resource language lend to a lower-resource one?',
+      'Evaluation: how can progress be separated from benchmark noise or leakage?',
+    ],
+    links: [],
   },
   {
-    title: 'Gardiner',
-    tag: 'Sign function · Unsupervised',
-    year: '2026',
-    stack: 'NumPy · SSL vision',
-    status: null,
-    hook: 'Recovering what a sign does with nothing to translate against.',
-    body: 'No dictionary, no parallel text, no labels. Distributional statistics and self supervised visual features.',
-    result: 'ARI 0.262 against a 0.0016 random floor, and a correction of the inflated number that came before it',
-    links: {},
+    index: '03',
+    slug: 'computational-decipherment',
+    title: 'Computational Decipherment',
+    question: 'What can we recover when even the language itself has been lost?',
+    institution: 'Johns Hopkins · Ancient Languages',
+    dates: '2026–Present',
+    summary:
+      'Multimodal translation, unsupervised sign structure, and evaluation infrastructure for ancient scripts.',
+    anchors: ['61k examples', '15+ architectures', 'vision + language', '≈34% duplicate leakage'],
+    why:
+      'Computational decipherment is low-resource learning at its limit. Data is scarce, scripts may be only partly understood, and evaluation can fail before the model does.',
+    method:
+      'The research combines image-based hieroglyph translation, distributional and visual analysis of sign function, and frozen evaluation infrastructure across eleven ancient-language corpora.',
+    findings:
+      'A hieroglyph translation study reached BLEU-4 30.3 on a 150-example held-out set. Unsupervised sign-function clustering reached ARI 0.262 against a 0.0016 random floor. A later audit found about 34% near-duplicate leakage in standard splits.',
+    changed:
+      'The leakage audit changed the research program. Glyphos emerged as evaluation infrastructure: frozen partitions, preregistered runs, audit logs, and automated checks that block pretrained weights.',
+    future:
+      'Can translation, visual structure, and graph-based evidence support one another without importing an answer from pretrained systems?',
+    technical: [
+      'Translation: 61,000 examples across 15+ decoders and learning methods, including models that read carved-sign images.',
+      'Structure: distributional statistics and self-supervised visual features for sign-function discovery without labels or parallel text.',
+      'Evaluation: eleven corpora, 26 frozen partitions, preregistered runs, and contamination audits.',
+    ],
+    links: [
+      { label: 'Glyphos code', href: 'https://github.com/nolimitwaiz/glyphos' },
+    ],
   },
   {
-    title: 'Glyphos',
-    tag: 'Decipherment infrastructure',
-    year: '2026',
-    stack: 'Python · CI gated',
-    status: 'Release planned',
-    hook: 'The plumbing that decides whether a result is real.',
-    body: 'Eleven ancient language corpora behind 26 frozen test partitions, a preregistered ledger, and a gate blocking pretrained weights.',
-    result: 'An audit found roughly 34% near duplicate leakage in the standard splits',
-    links: { code: 'https://github.com/nolimitwaiz/glyphos' },
-  },
-  {
-    title: 'AttendOpt',
-    tag: 'Causal ML · Optimization',
-    year: '2026',
-    stack: 'CatBoost · DoWhy · PuLP',
-    status: null,
-    hook: 'Who is about to leave school, and where should the money go?',
-    body: 'A national survey of 47,027 students, calibrated predictions, and a causal test of whether distance is a real barrier.',
-    result: 'ROC-AUC 0.841 against a 0.699 baseline; an integer program doubles impact per fixed budget',
-    links: { code: 'https://github.com/nolimitwaiz/attendopt' },
-  },
-  {
-    title: 'Resonance',
-    tag: 'Music and the brain',
-    year: '2026',
-    stack: 'MERT · banded ridge · fMRI',
-    status: null,
-    hook: 'Predicting a brain in the middle of a song.',
-    body: 'MERT audio features against cortical responses recorded while five people listened to music.',
-    result: 'r 0.311 ± 0.082, about 47% of the noise ceiling, with the retraction of a prettier earlier number kept beside it',
-    links: {},
-  },
-  {
-    title: 'Heela',
-    tag: 'Nonprofit · Vice Chair and Director',
-    year: '2026 –',
-    stack: 'HTML · React · Supabase · Vercel',
-    status: null,
-    hook: 'Heela means hope in Pashto.',
-    body: 'A college preparation platform for refugee students, running in production. Students, advisors and administrators each get their own view, and fellows are invited, matched and carried through an application year. I serve as Vice Chair and Director.',
-    result: 'Live at heela.org',
-    links: { live: 'https://heela.org' },
+    index: '04',
+    slug: 'human-systems',
+    title: 'Human Systems',
+    question: 'What changes when a prediction affects a person?',
+    institution: 'GD Goenka University · Dr. Yogesh Kumar',
+    dates: '2022 · Revisited 2026',
+    summary:
+      'Prediction, causal inference, and fixed-budget allocation for chronic absenteeism.',
+    anchors: ['47,027 students', 'ROC-AUC 0.841', '0.699 baseline', 'causal inference + optimization'],
+    why:
+      'One of my first research questions concerned students who stop showing up. Predicting risk is only the beginning when the result may influence where limited support is sent.',
+    method:
+      'The original absenteeism study was revisited with calibrated models, a causal test of school distance, and an integer program that allocates a fixed intervention budget.',
+    findings:
+      'The strongest model reached ROC-AUC 0.841 against a 0.699 linear baseline. Under the stated intervention assumptions, optimized allocation doubled expected impact relative to random targeting.',
+    changed:
+      'The question grew from prediction into three linked problems: who is at risk, which factors may actually matter, and where a limited budget should go.',
+    future:
+      'How should uncertainty in causal estimates and intervention effects change the allocation itself?',
+    technical: [
+      'Prediction: calibrated risk models evaluated with state-grouped train and test splits.',
+      'Causal inference: distance-to-school estimates tested with refutation checks.',
+      'Optimization: one intervention per student under a fixed budget, with Monte Carlo sensitivity analysis.',
+    ],
+    links: [
+      { label: 'AttendOpt code', href: 'https://github.com/nolimitwaiz/attendopt' },
+    ],
   },
 ]
 
-const VIZ = [
+const DIRECTIONS = [
   {
-    title: 'Screening 7,512 planet candidates',
-    tag: 'D3.js v7 · Distribution + sky projection',
-    year: '2026',
-    stack: 'JavaScript · D3 v7 · no build step',
-    status: null,
-    hook: 'Which of these worlds are worth a telescope?',
-    body: 'Every TESS candidate with a measured radius and starlight, on log scales, with the temperate band and the rocky ceiling drawn in. A hand-implemented Aitoff projection puts the same objects on the sky.',
-    result: 'Fourteen of 7,512 fall inside the temperate, rocky box',
-    links: { live: 'https://nolimitwaiz.github.io/dataviz-samples/exoplanet-screen/', code: 'https://github.com/nolimitwaiz/dataviz-samples/tree/main/exoplanet-screen' },
+    title: 'Memory',
+    question: 'How should a machine remember?',
+    terms: 'Continual learning · episodic memory · consolidation · retrieval',
   },
   {
-    title: 'Watching a strategy stop guessing',
-    tag: 'D3.js v7 · Small multiples',
-    year: '2026',
-    stack: 'JavaScript · D3 v7 · no build step',
-    status: null,
-    hook: 'Twelve poker decisions, from coin-flip to committed.',
-    body: 'A solver walks the equilibrium path as players get less random. Each panel is one decision; strong hands climb, weak ones fall, and the whole thing starts at fifty-fifty.',
-    result: 'Exploitability falls 0.499 to 0.278, and the page says it stopped there',
-    links: { live: 'https://nolimitwaiz.github.io/dataviz-samples/qre-path/', code: 'https://github.com/nolimitwaiz/dataviz-samples/tree/main/qre-path' },
+    title: 'World Models',
+    question: 'How does a representation become a world?',
+    terms: 'Multimodal learning · prediction · embodied intelligence',
+  },
+  {
+    title: 'Language',
+    question: 'Can meaning survive changes in language, modality, and supervision?',
+    terms: 'Multilingual AI · low-resource learning · representation',
+  },
+  {
+    title: 'NeuroAI',
+    question: 'What should machine learning borrow from human cognition?',
+    terms: 'Memory · event segmentation · naturalistic fMRI',
+  },
+  {
+    title: 'Learning',
+    question: 'Can a model continue changing after training ends?',
+    terms: 'Continual adaptation · test-time learning · alternative learning systems',
   },
 ]
 
-const INDEX = [
-  { name: 'Encore', what: 'Naturalistic fMRI framework testing whether encoding time brain activity predicts later free recall, beyond what the film itself explains.', year: '2026', note: 'No model trained yet' },
-  { name: 'Morrow', what: 'iOS app turning Apple Health data into an explainable daily landscape. Deterministic engine, no cloud, no analytics.', year: '2026', note: 'Local only' },
-  { name: 'Cheironomia', what: 'Real time sign language recognition on iPhone. Vision hand pose into a 55k parameter Core ML network, entirely on device.', year: '2026', note: 'Needs held out eval' },
-  { name: 'QuantNet Solver', what: 'C++20 Newton and Levenberg-Marquardt solver for quantal response equilibria in imperfect information poker.', year: '2026', note: 'Needs a benchmark' },
-  { name: 'Regime Detector', what: 'Market regime detection combining liquid time constant networks, graph based contagion, and a reinforcement learned policy.', year: '2026', note: 'Figures, no table yet' },
-  { name: 'SLM Lab', what: 'Matched comparison of small language models: transformer against mamba, CfC, test time training and mixture of experts, under one fixed budget.', year: '2026', note: 'Preregistered, unrun' },
-  { name: 'NavRover', href: 'https://github.com/nolimitwaiz/navrover', what: 'Offline pipeline converting robot bag files into a labeled ground vehicle navigation dataset, with synthetic fixtures validating the label math.', year: '2026', note: 'Pipeline, no policy' },
-  { name: 'Agentic Snake', what: 'Graph attention double dueling deep Q network with prioritized replay, and a live view of what the agent attends to.', year: '2026', note: 'Trained, needs baseline' },
-  { name: 'Black-Scholes Pricer', href: 'https://github.com/nolimitwaiz/black-scholes-pricer', what: 'European options pricer with Greeks, a Newton-Raphson implied volatility solver with Brent fallback, and arbitrage diagnostics.', year: '2025', note: '91 tests in CI' },
-  { name: 'Klesis', href: 'https://nolimitwaiz.github.io/klesis/', what: 'Messenger that carries text between nearby devices over sound. No network, no accounts, no pairing.', year: '2026', note: 'Live in the browser' },
+const SYSTEMS = [
+  {
+    title: 'OFX',
+    line: 'Market structure at event resolution.',
+    href: 'https://github.com/nolimitwaiz/ofx-terminal',
+  },
+  {
+    title: 'NavRover',
+    line: 'Learning to move through the world.',
+    href: 'https://github.com/nolimitwaiz/navrover',
+  },
+  {
+    title: 'Klesis',
+    line: 'Communication without a network.',
+    href: 'https://nolimitwaiz.github.io/klesis/',
+  },
 ]
 
-const TIMELINE = [
-  { when: '2026', what: 'Co-Founder and Founding Engineer, Arzaic LLC', detail: 'Iris, an LLM agent platform for heart failure care. April 2026 to present.' },
-  { when: '2025', what: 'Research Assistant, Johns Hopkins University', detail: 'Advised by Prof. Philipp Koehn. December 2025 to present.' },
-  { when: '2024', what: 'M.S.E. Data Science, Johns Hopkins University', detail: 'August 2024 to May 2027.' },
-  { when: '2022', what: 'Research Assistant, GD Goenka University', detail: 'Chronic absenteeism on a 40k student national survey, advised by Dr. Yogesh Kumar.' },
+const EXPERIENCE = [
+  {
+    when: '2026–Present',
+    role: 'Co-Founder & Founding Engineer',
+    place: 'Arzaic',
+    detail: 'Iris, a healthcare agent architecture for longitudinal patient support.',
+  },
+  {
+    when: '2026–Present',
+    role: 'Vice Chair & Director',
+    place: 'Heela',
+    detail: 'Leadership, governance, and continuity for a nonprofit supporting refugee students.',
+  },
+  {
+    when: '2025–Present',
+    role: 'Graduate Researcher',
+    place: 'Johns Hopkins University',
+    detail: 'Multilingual representation and computational decipherment with Prof. Philipp Koehn.',
+  },
+  {
+    when: '2022',
+    role: 'Research Assistant',
+    place: 'GD Goenka University',
+    detail: 'Chronic absenteeism research with Dr. Yogesh Kumar.',
+  },
 ]
-
-// ---------- dot matrix (squares) ----------
 
 const GLYPHS = {
   W: ['10001', '10001', '10001', '10101', '10101', '10101', '01010'],
@@ -185,119 +215,62 @@ const GLYPHS = {
   K: ['10001', '10010', '10100', '11000', '10100', '10010', '10001'],
   H: ['10001', '10001', '10001', '11111', '10001', '10001', '10001'],
   N: ['10001', '11001', '10101', '10011', '10001', '10001', '10001'],
-  ' ': ['000', '000', '000', '000', '000', '000', '000'],
 }
 
 const CELL = 10
-const S_ON = 7.4
-const S_OFF = 4.2
-const INK = '#171310'
-const FAINT = '#e0d4b6'
-const PINK = '#e64980'
-const HOVER_RADIUS = 85
+const ON = 7.4
+const OFF = 4.2
 
 function buildDots(text) {
-  const glyphs = [...text.toUpperCase()].map((ch) => GLYPHS[ch] ?? GLYPHS[' '])
+  const glyphs = [...text].map((letter) => GLYPHS[letter])
   const dots = []
-  let xOffset = 0
-  glyphs.forEach((glyph, gi) => {
-    const width = glyph[0].length
+  let offset = 0
+  glyphs.forEach((glyph, glyphIndex) => {
     glyph.forEach((row, y) => {
       ;[...row].forEach((bit, x) => {
-        dots.push({
-          on: bit === '1',
-          cx: (xOffset + x + 0.5) * CELL,
-          cy: (y + 0.5) * CELL,
-          delay: (xOffset + x) * 18 + y * 26,
-        })
+        dots.push({ on: bit === '1', cx: (offset + x + 0.5) * CELL, cy: (y + 0.5) * CELL })
       })
     })
-    xOffset += width + (gi < glyphs.length - 1 ? 1 : 0)
+    offset += 5 + (glyphIndex < glyphs.length - 1 ? 1 : 0)
   })
-  return { dots, cols: xOffset }
+  return { dots, cols: offset }
 }
 
-function DotMatrix({ text, className }) {
-  const svgRef = useRef(null)
-  const rectRefs = useRef([])
+function DotWord({ text }) {
+  const rects = useRef([])
   const { dots, cols } = buildDots(text)
 
   useEffect(() => {
     const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
-    rectRefs.current.forEach((el, i) => {
-      if (!el) return
+    rects.current.forEach((element, index) => {
+      if (!element) return
       if (reduced) {
-        el.style.opacity = 1
+        element.style.opacity = 1
         return
       }
-      el.style.opacity = 0
-      el.animate([{ opacity: 0 }, { opacity: 1 }], {
-        duration: 380,
-        delay: dots[i].delay,
-        fill: 'forwards',
-        easing: 'ease-out',
+      element.animate([{ opacity: 0, transform: 'scale(.65)' }, { opacity: 1, transform: 'scale(1)' }], {
+        duration: 360,
+        delay: index * 9,
+        fill: 'both',
+        easing: 'cubic-bezier(.2,.9,.2,1)',
       })
     })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  useEffect(() => {
-    const svg = svgRef.current
-    if (!svg) return
-    let raf = null
-    let point = null
-
-    const apply = () => {
-      raf = null
-      rectRefs.current.forEach((el, i) => {
-        if (!el) return
-        const d = dots[i]
-        const dist = point ? Math.hypot(d.cx - point.x, d.cy - point.y) : Infinity
-        const near = dist < HOVER_RADIUS
-        const boost = near ? 1 + (1 - dist / HOVER_RADIUS) * 0.55 : 1
-        const size = (d.on ? S_ON : S_OFF) * boost
-        el.setAttribute('width', size.toFixed(2))
-        el.setAttribute('height', size.toFixed(2))
-        el.setAttribute('x', (d.cx - size / 2).toFixed(2))
-        el.setAttribute('y', (d.cy - size / 2).toFixed(2))
-        el.setAttribute('fill', d.on ? (near ? PINK : INK) : FAINT)
-      })
-    }
-    const onMove = (e) => {
-      const rect = svg.getBoundingClientRect()
-      point = {
-        x: ((e.clientX - rect.left) / rect.width) * cols * CELL,
-        y: ((e.clientY - rect.top) / rect.height) * 7 * CELL,
-      }
-      if (!raf) raf = requestAnimationFrame(apply)
-    }
-    const onLeave = () => {
-      point = null
-      if (!raf) raf = requestAnimationFrame(apply)
-    }
-    svg.addEventListener('pointermove', onMove)
-    svg.addEventListener('pointerleave', onLeave)
-    return () => {
-      svg.removeEventListener('pointermove', onMove)
-      svg.removeEventListener('pointerleave', onLeave)
-      if (raf) cancelAnimationFrame(raf)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
-    <svg ref={svgRef} viewBox={`0 0 ${cols * CELL} ${7 * CELL}`} className={className} aria-hidden="true">
-      {dots.map((d, i) => {
-        const size = d.on ? S_ON : S_OFF
+    <svg viewBox={`0 0 ${cols * CELL} 70`} className="w-full" aria-hidden="true">
+      {dots.map((dot, index) => {
+        const size = dot.on ? ON : OFF
         return (
           <rect
-            key={i}
-            ref={(el) => (rectRefs.current[i] = el)}
-            x={d.cx - size / 2}
-            y={d.cy - size / 2}
+            key={index}
+            ref={(element) => (rects.current[index] = element)}
+            x={dot.cx - size / 2}
+            y={dot.cy - size / 2}
             width={size}
             height={size}
-            fill={d.on ? INK : FAINT}
+            fill={dot.on ? '#171310' : '#e0d4b6'}
+            style={{ transformOrigin: `${dot.cx}px ${dot.cy}px` }}
           />
         )
       })}
@@ -305,393 +278,496 @@ function DotMatrix({ text, className }) {
   )
 }
 
-// ---------- shared pieces ----------
-
 function Reveal({ children, className = '' }) {
   const ref = useRef(null)
   useEffect(() => {
-    const el = ref.current
-    if (!el) return
+    const element = ref.current
+    if (!element) return
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      el.classList.add('in')
+      element.classList.add('in')
       return
     }
-    const io = new IntersectionObserver(
+    const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          el.classList.add('in')
-          io.disconnect()
+          element.classList.add('in')
+          observer.disconnect()
         }
       },
-      { threshold: 0.12 },
+      { threshold: 0.08 },
     )
-    io.observe(el)
-    return () => io.disconnect()
+    observer.observe(element)
+    return () => observer.disconnect()
   }, [])
-  return (
-    <div ref={ref} className={`reveal ${className}`}>
-      {children}
-    </div>
-  )
+  return <div ref={ref} className={`reveal ${className}`}>{children}</div>
 }
 
-function Marquee() {
-  const items = ['Open to research roles', 'LLM evaluation', 'Machine translation', 'Quant', 'Baltimore']
-  const run = items.map((t, i) => (
-    <span key={i} className="mx-6 flex items-center gap-6">
-      {t} <span className="text-blush">■</span>
-    </span>
-  ))
-  return (
-    <div className="marquee border-b-2 border-ink bg-ink py-2.5 font-mono text-xs uppercase tracking-[0.2em] text-cream">
-      <div className="marquee-track">
-        <div className="flex">{run}</div>
-        <div className="flex" aria-hidden="true">{run}</div>
-      </div>
-    </div>
-  )
+function PageMeta({ title, description }) {
+  useEffect(() => {
+    document.title = title ? `${title} · Waiz Khan` : 'Waiz Khan'
+    const meta = document.querySelector('meta[name="description"]')
+    if (meta && description) meta.setAttribute('content', description)
+  }, [title, description])
+  return null
 }
-
-function GitHubIcon({ className = 'size-5' }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
-      <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12Z" />
-    </svg>
-  )
-}
-
-function ArrowIcon({ className = 'size-4' }) {
-  return (
-    <svg className={className} viewBox="0 0 20 20" fill="none" aria-hidden="true">
-      <path d="M5 15L15 5M15 5H7.5M15 5v7.5" stroke="currentColor" strokeWidth="1.75" strokeLinecap="square" />
-    </svg>
-  )
-}
-
-function SectionTitle({ index, children }) {
-  return (
-    <div className="flex items-end justify-between border-b-2 border-ink pb-5">
-      <h2 className="font-display text-5xl text-ink sm:text-6xl">{children}</h2>
-      <span className="font-mono text-base text-pink">{index}</span>
-    </div>
-  )
-}
-
-function IndexRow({ r }) {
-  return (
-    <div className="grid grid-cols-[1fr_auto] gap-x-6 gap-y-1 border-b border-line py-4 sm:grid-cols-[11rem_1fr_9rem]">
-      <p className="font-semibold text-ink">
-        {r.href ? (
-          <a href={r.href} target="_blank" rel="noopener noreferrer" className="underline decoration-blush decoration-2 underline-offset-4 transition-colors hover:text-pink">
-            {r.name}
-          </a>
-        ) : r.name}
-      </p>
-      <p className="order-3 text-[15px] leading-snug text-clay sm:order-none">{r.what}</p>
-      <p className="text-right font-mono text-xs text-clay">
-        {r.year}
-        {r.note && <span className="block text-pink">{r.note}</span>}
-      </p>
-    </div>
-  )
-}
-
-function WorkRow({ p, i }) {
-  return (
-    <Reveal>
-      <div className="grid gap-4 border-b border-line py-10 sm:grid-cols-[3.5rem_1fr_13rem] sm:gap-8">
-        <span className="pt-1.5 font-mono text-sm text-pink">{String(i + 1).padStart(2, '0')}</span>
-        <div>
-          <h3 className="font-display text-3xl text-ink sm:text-4xl">{p.title}</h3>
-          <p className="mt-2 font-mono text-xs uppercase tracking-widest text-clay">{p.tag}</p>
-          {p.hook && (
-            <p className="mt-4 max-w-2xl font-display text-xl leading-snug text-ink sm:text-2xl">{p.hook}</p>
-          )}
-          <p className="mt-3 max-w-2xl text-[17px] leading-relaxed text-clay">{p.body}</p>
-          {p.result && (
-            <p className="mt-4 flex max-w-2xl items-start gap-2.5 font-mono text-[13px] leading-relaxed text-ink">
-              <span className="mt-1.5 inline-block size-2 shrink-0 bg-pink" aria-hidden="true" />
-              {p.result}
-            </p>
-          )}
-        </div>
-        <div className="flex flex-row flex-wrap gap-x-6 gap-y-2 border-line pt-1.5 text-sm sm:flex-col sm:border-l sm:pl-6">
-          <p className="font-mono text-xs text-ink">{p.year}</p>
-          <p className="font-mono text-xs leading-relaxed text-clay">{p.stack}</p>
-          {p.links.code && (
-            <a
-              href={p.links.code}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-ink underline decoration-blush decoration-2 underline-offset-4 transition-colors hover:text-pink"
-            >
-              <GitHubIcon className="size-4" /> Code
-            </a>
-          )}
-          {p.links.live && (
-            <a
-              href={p.links.live}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-ink underline decoration-blush decoration-2 underline-offset-4 transition-colors hover:text-pink"
-            >
-              <ArrowIcon className="size-4" /> Live
-            </a>
-          )}
-          {p.status && (
-            <p className="border border-ink/20 px-2.5 py-1 font-mono text-[11px] uppercase tracking-wider text-ink/60 sm:self-start">
-              {p.status}
-            </p>
-          )}
-        </div>
-      </div>
-    </Reveal>
-  )
-}
-
-// ---------- layout ----------
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation()
   useEffect(() => {
     if (hash) {
-      const el = document.querySelector(hash)
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-        return
-      }
+      requestAnimationFrame(() => document.querySelector(hash)?.scrollIntoView({ behavior: 'smooth' }))
+      return
     }
     window.scrollTo(0, 0)
   }, [pathname, hash])
   return null
 }
 
-function Layout() {
+function ArrowLink({ to, children, external = false, className = '' }) {
+  const styles = `inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] underline decoration-blush decoration-2 underline-offset-4 transition-colors hover:text-pink ${className}`
+  if (external) {
+    return <a href={to} target="_blank" rel="noopener noreferrer" className={styles}>{children} ↗</a>
+  }
+  return <Link to={to} className={styles}>{children} →</Link>
+}
+
+function Header() {
   const navClass = ({ isActive }) =>
-    `transition-colors hover:text-ink ${isActive ? 'text-ink underline decoration-pink decoration-2 underline-offset-8' : ''}`
+    `whitespace-nowrap transition-colors hover:text-pink ${isActive ? 'text-ink underline decoration-pink decoration-2 underline-offset-8' : ''}`
+
   return (
-    <div className="min-h-screen">
-      <ScrollToTop />
-      <Marquee />
-      <header className="sticky top-0 z-10 border-b border-line bg-cream/85 backdrop-blur-md">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-5 py-4 sm:px-8">
-          <Link to="/" className="font-display text-xl italic text-ink">
-            Waiz Khan
-          </Link>
-          <nav className="flex items-center gap-4 text-[15px] text-clay sm:gap-6">
-            <NavLink to="/work" className={navClass}>Work</NavLink>
-            <NavLink to="/work#visualization" className="hidden transition-colors hover:text-ink sm:block">Visualization</NavLink>
-            <NavLink to="/work#research" className="hidden transition-colors hover:text-ink sm:block">Research</NavLink>
-            <NavLink to="/#about" className="hidden transition-colors hover:text-ink sm:block">About</NavLink>
-            <a href={LINKS.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="text-ink transition-colors hover:text-pink">
-              <GitHubIcon />
-            </a>
-            <NavLink
-              to="/resume"
-              className="border-2 border-ink bg-ink px-4 py-1.5 font-medium text-cream transition-colors hover:border-pink hover:bg-pink"
-            >
-              Resume
-            </NavLink>
+    <header className="sticky top-0 z-50 border-b border-line bg-cream/92 backdrop-blur-md">
+      <div className="mx-auto flex max-w-7xl flex-col items-start gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-7 sm:px-8">
+        <Link to="/" className="font-display text-xl italic text-ink">Waiz Khan</Link>
+        <div className="flex w-full min-w-0 items-center justify-start gap-5 overflow-x-auto pb-1 text-[13px] text-clay sm:w-auto sm:flex-1 sm:justify-end sm:gap-6 sm:pb-0 sm:text-[14px]">
+          <nav className="flex items-center gap-5 sm:gap-6" aria-label="Primary navigation">
+            <NavLink to="/research" className={navClass}>Research</NavLink>
+            <NavLink to="/directions" className={navClass}>Directions</NavLink>
+            <NavLink to="/build" className={navClass}>Build</NavLink>
+            <NavLink to="/heela" className={navClass}>Heela</NavLink>
+            <NavLink to="/story" className={navClass}>Story</NavLink>
+            <NavLink to="/resume" className={navClass}>CV</NavLink>
           </nav>
+          <a href={LINKS.github} target="_blank" rel="noopener noreferrer" className="whitespace-nowrap font-mono text-xs text-ink hover:text-pink">GitHub ↗</a>
         </div>
-      </header>
+      </div>
+    </header>
+  )
+}
+
+function Footer() {
+  return (
+    <footer className="border-t border-ink bg-cream">
+      <div className="mx-auto flex max-w-7xl flex-wrap items-end justify-between gap-8 px-5 py-10 sm:px-8">
+        <div>
+          <p className="font-display text-3xl text-ink">Waiz Khan</p>
+          <p className="mt-2 text-sm leading-relaxed text-clay">Johns Hopkins University · M.S.E. Data Science</p>
+        </div>
+        <div className="flex flex-wrap gap-5 font-mono text-xs uppercase tracking-wider text-ink">
+          <a href={LINKS.email} className="hover:text-pink">Email</a>
+          <a href={LINKS.github} target="_blank" rel="noopener noreferrer" className="hover:text-pink">GitHub ↗</a>
+          <a href={LINKS.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-pink">LinkedIn ↗</a>
+          <Link to="/resume" className="hover:text-pink">CV</Link>
+        </div>
+      </div>
+    </footer>
+  )
+}
+
+function Layout() {
+  return (
+    <div className="min-h-screen bg-cream text-ink">
+      <ScrollToTop />
+      <Header />
       <Outlet />
-      <footer className="border-t-2 border-ink">
-        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-5 py-6 text-[15px] text-clay sm:px-8">
-          <p className="font-mono text-xs">© {new Date().getFullYear()} Waiz Khan</p>
-          <div className="flex items-center gap-6">
-            <a href={LINKS.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="transition-colors hover:text-pink">
-              <GitHubIcon />
-            </a>
-            <a href={LINKS.linkedin} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-pink">LinkedIn</a>
-            <a href={LINKS.email} className="transition-colors hover:text-pink">Email</a>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }
 
-// ---------- pages ----------
+function ResearchRow({ item }) {
+  return (
+    <Reveal>
+      <article className="grid gap-6 border-t border-ink py-10 sm:grid-cols-[5rem_1fr_15rem] sm:gap-10 sm:py-14">
+        <span className="font-mono text-sm text-pink">{item.index}</span>
+        <div>
+          <h3 className="font-display text-4xl leading-tight sm:text-5xl">{item.title}</h3>
+          <p className="mt-4 max-w-3xl font-display text-2xl leading-snug text-clay sm:text-3xl">{item.question}</p>
+          <p className="mt-6 max-w-2xl text-[16px] leading-relaxed text-clay">{item.summary}</p>
+          <div className="mt-7"><ArrowLink to={`/research/${item.slug}`}>Explore research</ArrowLink></div>
+        </div>
+        <div className="space-y-5 border-line text-sm text-clay sm:border-l sm:pl-6">
+          <div>
+            <p className="font-medium text-ink">{item.institution}</p>
+            <p className="mt-1 font-mono text-xs text-pink">{item.dates}</p>
+          </div>
+          <ul className="space-y-2 font-mono text-xs leading-relaxed">
+            {item.anchors.map((anchor) => <li key={anchor}>{anchor}</li>)}
+          </ul>
+        </div>
+      </article>
+    </Reveal>
+  )
+}
+
+function ResearchIndex({ compact = false }) {
+  return (
+    <section className={compact ? '' : 'pb-20'}>
+      {RESEARCH.map((item) => <ResearchRow key={item.slug} item={item} />)}
+      <div className="border-t border-ink" />
+    </section>
+  )
+}
+
+function SectionEyebrow({ children, light = false }) {
+  return <p className={`font-mono text-xs uppercase tracking-[0.25em] ${light ? 'text-blush' : 'text-pink'}`}>{children}</p>
+}
 
 function HomePage() {
   return (
-    <main className="mx-auto max-w-5xl px-5 sm:px-8">
-      <section className="py-20 text-center sm:py-28">
-        <p className="font-mono text-sm uppercase tracking-[0.3em] text-pink">
-          Baltimore · Johns Hopkins
-        </p>
-        <h1 className="mt-10 flex justify-center">
-          <span className="sr-only">Waiz Khan</span>
-          <DotMatrix text="WAIZ KHAN" className="w-full max-w-3xl cursor-crosshair" />
-        </h1>
-        <p className="mx-auto mt-12 max-w-4xl font-display text-4xl leading-snug text-ink sm:text-6xl sm:leading-[1.15]">
-          Machine learning research, and the{' '}
-          <em className="italic text-pink">experiments that prove it works.</em>
-        </p>
-        <p className="mx-auto mt-8 max-w-2xl text-lg leading-relaxed text-clay">
-          Graduate researcher at Johns Hopkins, working with Prof. Philipp Koehn on how language
-          models represent language. The parts I care most about are the unglamorous ones:
-          evaluation, preregistration, and numbers that survive being checked.
-        </p>
-        <div className="mt-10 flex flex-wrap justify-center gap-4 text-base">
-          <Link to="/resume" className="border-2 border-ink bg-ink px-6 py-3 font-medium text-cream transition-colors hover:border-pink hover:bg-pink">
-            View resume
-          </Link>
-          <Link to="/work" className="border-2 border-ink px-6 py-3 text-ink transition-colors hover:border-pink hover:text-pink">
-            See the work
-          </Link>
-          <a href={LINKS.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 border-2 border-ink px-6 py-3 text-ink transition-colors hover:border-pink hover:text-pink">
-            <GitHubIcon className="size-5" /> GitHub
-          </a>
+    <main>
+      <PageMeta
+        description="Waiz Khan studies multilingual language models, low-resource learning, computational decipherment, and reliable AI at Johns Hopkins University."
+      />
+
+      <section className="mx-auto grid min-h-[78vh] max-w-7xl items-center gap-12 px-5 py-20 sm:px-8 lg:grid-cols-[1.6fr_1fr] lg:py-28">
+        <div>
+          <SectionEyebrow>Baltimore · Johns Hopkins</SectionEyebrow>
+          <h1 className="sr-only">Waiz Khan</h1>
+          <div className="mt-10 max-w-4xl space-y-3">
+            <DotWord text="WAIZ" />
+            <DotWord text="KHAN" />
+          </div>
         </div>
+        <Reveal className="lg:pt-24">
+          <p className="font-display text-4xl leading-[1.12] sm:text-5xl">I study how machines learn when information is incomplete.</p>
+          <p className="mt-7 font-mono text-sm leading-loose text-pink">Language. Representation. Memory. Worlds.</p>
+          <div className="mt-12"><ArrowLink to="/research">Research</ArrowLink></div>
+        </Reveal>
       </section>
 
-      <Reveal>
-        <section aria-label="Currently" className="border-2 border-ink">
-          <div className="grid divide-y-2 divide-ink sm:grid-cols-3 sm:divide-x-2 sm:divide-y-0">
-            {NOW.map((n) => (
-              <div key={n.title} className="p-7">
-                <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-pink">Now</p>
-                <h2 className="mt-3 text-lg font-semibold text-ink">{n.title}</h2>
-                <p className="mt-2 text-[15px] leading-relaxed text-clay">{n.body}</p>
+      <section className="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-28">
+        <div className="mb-14 flex items-end justify-between gap-8">
+          <div>
+            <SectionEyebrow>01</SectionEyebrow>
+            <h2 className="mt-4 font-display text-6xl sm:text-7xl">Research</h2>
+          </div>
+          <span className="hidden font-mono text-xs text-clay sm:block">Questions, methods, evidence</span>
+        </div>
+        <ResearchIndex compact />
+        <div className="pt-10 text-right"><ArrowLink to="/research">Explore all research</ArrowLink></div>
+      </section>
+
+      <section className="bg-ink text-cream">
+        <div className="mx-auto max-w-7xl px-5 py-24 sm:px-8 sm:py-32">
+          <SectionEyebrow light>02 · Directions</SectionEyebrow>
+          <p className="mt-6 font-display text-4xl sm:text-6xl">Questions I haven’t finished asking.</p>
+          <div className="mt-16 grid gap-px bg-cream/20 sm:grid-cols-2 lg:grid-cols-5">
+            {DIRECTIONS.map((direction) => (
+              <div key={direction.title} className="bg-ink p-6">
+                <p className="font-mono text-xs uppercase tracking-widest text-blush">{direction.title}</p>
+                <p className="mt-5 font-display text-2xl leading-snug">{direction.question}</p>
               </div>
             ))}
           </div>
-        </section>
-      </Reveal>
-
-      <section className="pt-24 sm:pt-28">
-        <Reveal>
-          <SectionTitle index="01">Selected</SectionTitle>
-        </Reveal>
-        <div>
-          {WORK.map((p, i) => (
-            <WorkRow key={p.title} p={p} i={i} />
-          ))}
+          <div className="mt-10"><ArrowLink to="/directions" className="text-cream">Explore directions</ArrowLink></div>
         </div>
-        <Reveal>
-          <div className="pt-8 text-right">
-            <Link to="/work" className="font-mono text-sm uppercase tracking-wider text-ink underline decoration-blush decoration-2 underline-offset-4 transition-colors hover:text-pink">
-              All work and research →
-            </Link>
+      </section>
+
+      <section className="bg-ink text-cream">
+        <div className="mx-auto max-w-7xl border-t border-cream/20 px-5 py-28 sm:px-8 sm:py-40">
+          <SectionEyebrow light>03 · Build</SectionEyebrow>
+          <p className="mt-10 font-display text-7xl sm:text-8xl">Arzaic</p>
+          <p className="mt-10 max-w-3xl font-display text-3xl leading-snug text-sand sm:text-5xl">Useful AI is not enough when being wrong has consequences.</p>
+          <div className="mt-16 grid gap-12 lg:grid-cols-[1fr_1.2fr]">
+            <div>
+              <p className="font-mono text-xs uppercase tracking-[0.25em] text-blush">Iris</p>
+              <p className="mt-4 font-display text-4xl">What happens between clinic visits?</p>
+            </div>
+            <div>
+              <p className="font-mono text-sm tracking-wide text-blush">GATE → ROUTE → RETRIEVE → GENERATE → GUARD</p>
+              <p className="mt-7 text-[17px] leading-relaxed text-sand">Iris is a healthcare agent architecture for longitudinal patient support, organized around auditable state, retrieval, tools, and safety checks.</p>
+              <div className="mt-8"><ArrowLink to="/build" className="text-cream">Inside Iris</ArrowLink></div>
+            </div>
           </div>
+        </div>
+      </section>
+
+      <section className="bg-sand">
+        <div className="mx-auto grid max-w-7xl gap-16 px-5 py-28 sm:px-8 sm:py-36 lg:grid-cols-[1fr_1fr]">
+          <div>
+            <SectionEyebrow>04 · Heela</SectionEyebrow>
+            <h2 className="mt-7 font-display text-7xl sm:text-8xl">Heela</h2>
+            <p className="mt-3 font-display text-2xl italic text-pink">Hope, in Pashto.</p>
+          </div>
+          <Reveal>
+            <p className="font-display text-4xl leading-tight sm:text-5xl">Some access problems don’t need another model.</p>
+            <p className="mt-8 text-[17px] leading-relaxed text-clay">Heela is a nonprofit organization that helps refugee students navigate the path toward higher education through mentorship, guidance, and sustained support.</p>
+            <p className="mt-6 font-mono text-xs uppercase tracking-[0.18em] text-pink">Vice Chair & Director · Governance · People · Continuity</p>
+            <div className="mt-9"><ArrowLink to="/heela">More about Heela</ArrowLink></div>
+          </Reveal>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-5 py-32 sm:px-8 sm:py-44">
+        <SectionEyebrow>05 · Story</SectionEyebrow>
+        <Reveal>
+          <p className="mt-16 max-w-5xl font-display text-6xl uppercase leading-[0.95] sm:text-8xl">Before models,<br />I thought in frames.</p>
+          <p className="mt-14 max-w-2xl text-xl leading-relaxed text-clay">Stories are representations too. They decide what to preserve, what to remove, and what a viewer carries forward.</p>
+          <div className="mt-10"><ArrowLink to="/story">Continue the story</ArrowLink></div>
         </Reveal>
       </section>
 
-      <section className="pt-24 sm:pt-28">
-        <Reveal>
-          <SectionTitle index="02">About</SectionTitle>
-        </Reveal>
-        <div className="mt-12 grid gap-12 sm:grid-cols-2">
-          <Reveal>
-            <p className="font-display text-4xl leading-snug text-ink sm:text-5xl">
-              Every number on this site is one <em className="italic text-pink">I measured.</em>
-            </p>
-          </Reveal>
-          <Reveal>
-            <div className="space-y-5 text-[17px] leading-relaxed text-clay">
-              <p>
-                I like systems where the failure mode is boring. That means registering predictions
-                before the experiment runs, and keeping the retraction next to the number when one
-                turns out to be inflated.
-              </p>
-              <p>
-                Research at Johns Hopkins with Prof. Philipp Koehn on how multilingual models
-                represent language, now growing into an NSF proposal. Alongside it, Iris: the agent
-                platform at Arzaic, the startup I co-founded.
-              </p>
-            </div>
-          </Reveal>
+      <section className="mx-auto max-w-7xl border-t border-ink px-5 py-20 sm:px-8 sm:py-28">
+        <div className="flex items-end justify-between gap-8">
+          <div><SectionEyebrow>06</SectionEyebrow><h2 className="mt-4 font-display text-5xl sm:text-6xl">Selected systems</h2></div>
+          <span className="hidden font-mono text-xs text-clay sm:block">Three, not twenty</span>
         </div>
         <div className="mt-12">
-          {TIMELINE.map((t) => (
-            <Reveal key={t.what}>
-              <div className="grid gap-1 border-b border-line py-6 sm:grid-cols-[6rem_1fr] sm:gap-8">
-                <span className="font-mono text-sm text-pink">{t.when}</span>
-                <div>
-                  <h3 className="text-lg font-semibold text-ink">{t.what}</h3>
-                  <p className="mt-1 text-[15px] leading-relaxed text-clay">{t.detail}</p>
-                </div>
-              </div>
-            </Reveal>
+          {SYSTEMS.map((system) => (
+            <a key={system.title} href={system.href} target="_blank" rel="noopener noreferrer" className="group grid gap-2 border-t border-line py-7 sm:grid-cols-[12rem_1fr_auto] sm:items-center">
+              <span className="font-display text-3xl group-hover:text-pink">{system.title}</span>
+              <span className="text-clay">{system.line}</span>
+              <span className="font-mono text-xs text-pink">↗</span>
+            </a>
           ))}
+          <div className="border-t border-line pt-8"><ArrowLink to={LINKS.github} external>Everything else on GitHub</ArrowLink></div>
         </div>
-      </section>
-
-      <section id="contact" className="py-28 text-center sm:py-32">
-        <Reveal>
-          <p className="font-mono text-sm uppercase tracking-[0.3em] text-pink">Contact</p>
-          <a
-            href={LINKS.email}
-            className="mt-6 block font-display text-5xl text-ink underline decoration-blush decoration-4 underline-offset-[12px] transition-colors hover:text-pink sm:text-7xl"
-          >
-            Say hello.
-          </a>
-          <p className="mt-8 text-base text-clay">wkhan12@jh.edu · usually replies the same day</p>
-        </Reveal>
       </section>
     </main>
   )
 }
 
-function WorkPage() {
+function ResearchPage() {
   return (
-    <main className="mx-auto max-w-5xl px-5 sm:px-8">
-      <section className="pt-16 sm:pt-20">
-        <Reveal>
-          <SectionTitle index="01">Work</SectionTitle>
-        </Reveal>
-        <div>
-          {WORK.map((p, i) => (
-            <WorkRow key={p.title} p={p} i={i} />
-          ))}
+    <main className="mx-auto max-w-7xl px-5 pb-24 pt-20 sm:px-8 sm:pt-28">
+      <PageMeta title="Research" description="Research by Waiz Khan in multilingual representation, low-resource learning, computational decipherment, and causal ML." />
+      <SectionEyebrow>Research</SectionEyebrow>
+      <h1 className="mt-6 max-w-5xl font-display text-6xl leading-[1.02] sm:text-8xl">Questions first.<br />Evidence close behind.</h1>
+      <p className="mt-10 max-w-2xl text-lg leading-relaxed text-clay">Four connected research programs spanning language, representation, ancient scripts, and human systems.</p>
+      <div className="mt-20"><ResearchIndex /></div>
+    </main>
+  )
+}
+
+function ResearchDetailPage() {
+  const { slug } = useParams()
+  const item = RESEARCH.find((entry) => entry.slug === slug)
+  if (!item) return <Navigate to="/research" replace />
+
+  return (
+    <main>
+      <PageMeta title={item.title} description={`${item.title}: ${item.question}`} />
+      <section className="mx-auto max-w-7xl px-5 pb-20 pt-16 sm:px-8 sm:pb-28 sm:pt-24">
+        <Link to="/research" className="font-mono text-xs uppercase tracking-wider text-clay hover:text-pink">← All research</Link>
+        <div className="mt-14 grid gap-12 lg:grid-cols-[1.4fr_.6fr]">
+          <div>
+            <SectionEyebrow>{item.index} · Research</SectionEyebrow>
+            <h1 className="mt-6 font-display text-6xl leading-none sm:text-8xl">{item.title}</h1>
+            <p className="mt-10 max-w-4xl font-display text-3xl leading-snug text-clay sm:text-5xl">{item.question}</p>
+          </div>
+          <div className="border-t border-ink pt-5 lg:mt-12">
+            <p className="font-medium">{item.institution}</p>
+            <p className="mt-2 font-mono text-xs text-pink">{item.dates}</p>
+          </div>
         </div>
-      </section>
-      <section id="visualization" className="pt-24 sm:pt-28">
-        <Reveal>
-          <SectionTitle index="02">Visualization</SectionTitle>
-        </Reveal>
-        <div>
-          {VIZ.map((p, i) => (
-            <WorkRow key={p.title} p={p} i={i} />
-          ))}
+
+        <div className="mt-20 grid gap-px bg-line sm:grid-cols-2 lg:grid-cols-4">
+          {item.anchors.map((anchor) => <div key={anchor} className="bg-cream p-6 font-mono text-sm text-ink">{anchor}</div>)}
         </div>
       </section>
 
-      <section id="research" className="pt-24 sm:pt-28">
-        <Reveal>
-          <SectionTitle index="03">Research</SectionTitle>
-        </Reveal>
-        <div>
-          {RESEARCH.map((p, i) => (
-            <WorkRow key={p.title} p={p} i={i} />
-          ))}
-        </div>
-      </section>
-      <section className="pt-24 sm:pt-28">
-        <Reveal>
-          <SectionTitle index="04">Also</SectionTitle>
-        </Reveal>
-        <div className="mt-4">
-          {INDEX.map((r) => (
-            <Reveal key={r.name}>
-              <IndexRow r={r} />
+      <section className="border-y border-ink bg-sand">
+        <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-28">
+          {[
+            ['Question', item.why],
+            ['Method', item.method],
+            ['Findings', item.findings],
+            ['What changed', item.changed],
+          ].map(([label, copy]) => (
+            <Reveal key={label}>
+              <div className="grid gap-6 border-t border-ink py-10 sm:grid-cols-[11rem_1fr] sm:py-14">
+                <SectionEyebrow>{label}</SectionEyebrow>
+                <p className="max-w-4xl font-display text-3xl leading-snug sm:text-4xl">{copy}</p>
+              </div>
             </Reveal>
           ))}
+          <div className="border-t border-ink" />
+
+          <details className="group border-b border-ink py-7">
+            <summary className="cursor-pointer list-none font-mono text-xs uppercase tracking-[0.18em] text-ink">Methods + results <span className="text-pink group-open:hidden">↓</span><span className="hidden text-pink group-open:inline">↑</span></summary>
+            <ul className="mt-8 max-w-3xl space-y-4 text-[17px] leading-relaxed text-clay">
+              {item.technical.map((line) => <li key={line} className="border-l-2 border-pink pl-4">{line}</li>)}
+            </ul>
+          </details>
+
+          <div className="grid gap-6 pt-14 sm:grid-cols-[11rem_1fr]">
+            <SectionEyebrow>Where next</SectionEyebrow>
+            <p className="max-w-4xl font-display text-4xl leading-snug sm:text-5xl">{item.future}</p>
+          </div>
+
+          {item.links.length > 0 && (
+            <div className="mt-14 flex flex-wrap gap-6">
+              {item.links.map((link) => <ArrowLink key={link.href} to={link.href} external>{link.label}</ArrowLink>)}
+            </div>
+          )}
+        </div>
+      </section>
+    </main>
+  )
+}
+
+function DirectionsPage() {
+  return (
+    <main className="bg-ink text-cream">
+      <PageMeta title="Directions" description="Research directions in memory, world models, language, NeuroAI, and continual learning." />
+      <section className="mx-auto max-w-7xl px-5 py-24 sm:px-8 sm:py-32">
+        <SectionEyebrow light>Directions</SectionEyebrow>
+        <h1 className="mt-7 font-display text-6xl sm:text-8xl">Questions I haven’t finished asking.</h1>
+        <div className="mt-24">
+          {DIRECTIONS.map((direction, index) => (
+            <Reveal key={direction.title}>
+              <section className="grid gap-8 border-t border-cream/25 py-16 sm:grid-cols-[5rem_1fr] sm:py-24">
+                <span className="font-mono text-xs text-blush">{String(index + 1).padStart(2, '0')}</span>
+                <div>
+                  <h2 className="font-display text-6xl uppercase sm:text-8xl">{direction.title}</h2>
+                  <p className="mt-8 max-w-4xl font-display text-3xl leading-snug text-sand sm:text-5xl">{direction.question}</p>
+                  <p className="mt-8 font-mono text-xs uppercase tracking-[0.16em] text-blush">{direction.terms}</p>
+                </div>
+              </section>
+            </Reveal>
+          ))}
+          <div className="border-t border-cream/25" />
+        </div>
+      </section>
+    </main>
+  )
+}
+
+function BuildPage() {
+  return (
+    <main>
+      <PageMeta title="Build" description="Arzaic, Iris, and selected systems by Waiz Khan." />
+      <section className="bg-ink text-cream">
+        <div className="mx-auto max-w-7xl px-5 py-24 sm:px-8 sm:py-36">
+          <SectionEyebrow light>Build</SectionEyebrow>
+          <h1 className="mt-8 font-display text-7xl sm:text-9xl">Arzaic</h1>
+          <p className="mt-10 max-w-4xl font-display text-4xl leading-tight text-sand sm:text-6xl">Useful AI is not enough when being wrong has consequences.</p>
         </div>
       </section>
 
-      <section className="py-20 text-center">
-        <Reveal>
-          <p className="text-[15px] text-clay">
-            More experiments and tooling live on{' '}
-            <a href={LINKS.github} target="_blank" rel="noopener noreferrer" className="text-ink underline decoration-blush decoration-2 underline-offset-4 hover:text-pink">
-              GitHub
+      <section className="bg-ink text-cream">
+        <div className="mx-auto max-w-7xl border-t border-cream/20 px-5 py-24 sm:px-8 sm:py-32">
+          <div className="grid gap-16 lg:grid-cols-[.8fr_1.2fr]">
+            <div>
+              <SectionEyebrow light>Iris</SectionEyebrow>
+              <h2 className="mt-6 font-display text-6xl sm:text-8xl">What happens between clinic visits?</h2>
+            </div>
+            <div>
+              <div className="grid gap-px bg-cream/20 sm:grid-cols-5">
+                {['Gate', 'Route', 'Retrieve', 'Generate', 'Guard'].map((stage) => <div key={stage} className="bg-ink p-5 text-center font-mono text-xs uppercase tracking-wider text-blush">{stage}</div>)}
+              </div>
+              <p className="mt-10 text-xl leading-relaxed text-sand">Iris is a healthcare agent architecture for longitudinal patient support, designed around auditable state, retrieval, tools, and safety checks.</p>
+              <div className="mt-10 grid gap-4 font-mono text-xs uppercase tracking-wider text-blush sm:grid-cols-2">
+                {['Longitudinal memory', 'Multimodal patient data', 'Agent tools', 'Safety evaluation'].map((term) => <p key={term} className="border-t border-cream/25 pt-4">{term}</p>)}
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-28 border-t border-cream/20 pt-12">
+            <SectionEyebrow light>Next / Arzaic</SectionEyebrow>
+            <p className="mt-5 font-display text-6xl sm:text-8xl">Eve</p>
+            <p className="mt-6 font-display text-3xl text-sand sm:text-4xl">Can reliability itself be learned?</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-5 py-24 sm:px-8 sm:py-32">
+        <SectionEyebrow>Experience</SectionEyebrow>
+        <h2 className="mt-6 font-display text-5xl sm:text-7xl">The work around the work.</h2>
+        <div className="mt-16">
+          {EXPERIENCE.map((item) => (
+            <Reveal key={`${item.place}-${item.role}`}>
+              <div className="grid gap-4 border-t border-ink py-8 sm:grid-cols-[10rem_1fr_1fr] sm:gap-8">
+                <span className="font-mono text-xs text-pink">{item.when}</span>
+                <div><p className="font-display text-2xl">{item.place}</p><p className="mt-1 text-sm text-clay">{item.role}</p></div>
+                <p className="text-[15px] leading-relaxed text-clay">{item.detail}</p>
+              </div>
+            </Reveal>
+          ))}
+          <div className="border-t border-ink" />
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl border-t border-ink px-5 py-20 sm:px-8 sm:py-28">
+        <SectionEyebrow>Selected systems</SectionEyebrow>
+        <div className="mt-10">
+          {SYSTEMS.map((system) => (
+            <a key={system.title} href={system.href} target="_blank" rel="noopener noreferrer" className="group grid gap-2 border-t border-line py-7 sm:grid-cols-[12rem_1fr_auto] sm:items-center">
+              <span className="font-display text-3xl group-hover:text-pink">{system.title}</span>
+              <span className="text-clay">{system.line}</span>
+              <span className="font-mono text-xs text-pink">↗</span>
             </a>
-            , including the ones still being packaged.
-          </p>
-        </Reveal>
+          ))}
+          <div className="border-t border-line pt-8"><ArrowLink to={LINKS.github} external>Everything else on GitHub</ArrowLink></div>
+        </div>
+      </section>
+    </main>
+  )
+}
+
+function HeelaPage() {
+  return (
+    <main className="bg-sand">
+      <PageMeta title="Heela" description="Heela is a nonprofit supporting refugee students on the path toward higher education." />
+      <section className="mx-auto max-w-7xl px-5 py-24 sm:px-8 sm:py-36">
+        <SectionEyebrow>Heela · Nonprofit Organization</SectionEyebrow>
+        <h1 className="mt-8 font-display text-8xl sm:text-9xl">Heela</h1>
+        <p className="mt-4 font-display text-3xl italic text-pink sm:text-4xl">Hope, in Pashto.</p>
+        <div className="mt-20 grid gap-14 lg:grid-cols-[1.1fr_.9fr]">
+          <p className="font-display text-5xl leading-tight sm:text-6xl">Some access problems don’t need another model.</p>
+          <div>
+            <p className="text-xl leading-relaxed text-clay">Heela helps refugee students navigate the path toward higher education through mentorship, guidance, and sustained support.</p>
+            <p className="mt-8 font-mono text-xs uppercase tracking-[0.2em] text-pink">Vice Chair & Director</p>
+            <p className="mt-5 text-[17px] leading-relaxed text-clay">My role spans leadership, governance, people, and continuity: helping the organization remain useful to students and dependable for the people who support them.</p>
+            <div className="mt-10"><ArrowLink to={LINKS.heela} external>Visit Heela</ArrowLink></div>
+          </div>
+        </div>
+
+        <div className="mt-24 grid gap-px bg-ink sm:grid-cols-3">
+          {['Governance', 'People', 'Continuity'].map((word) => <div key={word} className="bg-sand p-9 font-display text-3xl">{word}</div>)}
+        </div>
+      </section>
+    </main>
+  )
+}
+
+function StoryPage() {
+  return (
+    <main>
+      <PageMeta title="Story" description="The visual questions that preceded Waiz Khan’s work in language, memory, and intelligent systems." />
+      <section className="mx-auto max-w-7xl px-5 py-28 sm:px-8 sm:py-44">
+        <SectionEyebrow>Story</SectionEyebrow>
+        <h1 className="mt-20 max-w-6xl font-display text-7xl uppercase leading-[0.92] sm:text-9xl">Before models,<br />I thought in frames.</h1>
+      </section>
+      <section className="border-y border-ink bg-sand">
+        <div className="mx-auto max-w-5xl px-5 py-28 text-center sm:px-8 sm:py-44">
+          <p className="font-display text-5xl sm:text-7xl">I was once drawn to filmmaking.</p>
+        </div>
+      </section>
+      <section className="mx-auto max-w-7xl px-5 py-28 sm:px-8 sm:py-44">
+        <p className="max-w-4xl font-display text-5xl leading-tight sm:text-7xl">Stories are representations too.</p>
+        <p className="mt-10 max-w-2xl text-xl leading-relaxed text-clay">They decide what to preserve, what to remove, and what a viewer carries forward.</p>
+        <p className="mt-24 font-display text-4xl sm:text-5xl">I stopped making films.<br /><em className="text-pink">The questions stayed.</em></p>
+
+        <div className="mt-28 grid gap-6 sm:grid-cols-4">
+          {['Image', 'Language', 'Memory', 'World'].map((word, index) => (
+            <div key={word} className="border-t border-ink pt-5">
+              <p className="font-mono text-xs text-pink">0{index + 1}</p>
+              <p className="mt-4 font-display text-4xl">{word}</p>
+            </div>
+          ))}
+        </div>
       </section>
     </main>
   )
@@ -699,41 +775,19 @@ function WorkPage() {
 
 function ResumePage() {
   return (
-    <main className="mx-auto max-w-5xl px-5 sm:px-8">
-      <section className="pt-16 sm:pt-20">
-        <Reveal>
-          <SectionTitle index="03">Resume</SectionTitle>
-        </Reveal>
-        <div className="mt-8 flex flex-wrap items-center gap-4">
-          <a
-            href={LINKS.resumePdf}
-            download="Waiz_Khan.pdf"
-            className="border-2 border-ink bg-ink px-6 py-3 text-base font-medium text-cream transition-colors hover:border-pink hover:bg-pink"
-          >
-            Download PDF
-          </a>
-          <a
-            href={LINKS.resumePdf}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="border-2 border-ink px-6 py-3 text-base text-ink transition-colors hover:border-pink hover:text-pink"
-          >
-            Open in new tab
-          </a>
-        </div>
-        <div className="my-10 border-2 border-ink">
-          <object data={LINKS.resumePdf} type="application/pdf" className="h-[85vh] w-full" aria-label="Waiz Khan resume PDF">
-            <div className="p-10 text-center text-clay">
-              <p>
-                Your browser does not preview PDFs.{' '}
-                <a href={LINKS.resumePdf} className="text-ink underline decoration-blush decoration-2 underline-offset-4 hover:text-pink">
-                  Download the resume instead.
-                </a>
-              </p>
-            </div>
-          </object>
-        </div>
-      </section>
+    <main className="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-28">
+      <PageMeta title="CV" description="Curriculum vitae for Waiz Khan." />
+      <SectionEyebrow>CV</SectionEyebrow>
+      <h1 className="mt-6 font-display text-6xl sm:text-8xl">Curriculum vitae</h1>
+      <div className="mt-10 flex flex-wrap gap-4">
+        <a href={LINKS.resumePdf} download="Waiz_Khan.pdf" className="border-2 border-ink bg-ink px-6 py-3 text-cream hover:border-pink hover:bg-pink">Download PDF</a>
+        <a href={LINKS.resumePdf} target="_blank" rel="noopener noreferrer" className="border-2 border-ink px-6 py-3 hover:border-pink hover:text-pink">Open in new tab</a>
+      </div>
+      <div className="my-10 border-2 border-ink">
+        <object data={LINKS.resumePdf} type="application/pdf" className="h-[85vh] w-full" aria-label="Waiz Khan resume PDF">
+          <div className="p-10 text-center text-clay"><a href={LINKS.resumePdf} className="underline decoration-blush decoration-2 underline-offset-4">Download the CV</a></div>
+        </object>
+      </div>
     </main>
   )
 }
@@ -744,9 +798,14 @@ export default function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
-          <Route path="/work" element={<WorkPage />} />
+          <Route path="/research" element={<ResearchPage />} />
+          <Route path="/research/:slug" element={<ResearchDetailPage />} />
+          <Route path="/directions" element={<DirectionsPage />} />
+          <Route path="/build" element={<BuildPage />} />
+          <Route path="/heela" element={<HeelaPage />} />
+          <Route path="/story" element={<StoryPage />} />
           <Route path="/resume" element={<ResumePage />} />
-          <Route path="*" element={<HomePage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>
     </BrowserRouter>

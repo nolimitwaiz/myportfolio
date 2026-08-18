@@ -13,49 +13,65 @@
   --color-blush: #f5b6cd;
 }
 
+:root {
+  color: #171310;
+  background: #faf4e8;
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: #faf4e8;
+}
+
+a {
+  color: inherit;
+}
+
 ::selection {
   background-color: rgb(230 73 128 / 0.22);
 }
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 6rem;
 }
 
-/* marquee */
-.marquee {
-  overflow: hidden;
-}
-.marquee-track {
-  display: flex;
-  width: max-content;
-  animation: marquee 28s linear infinite;
-}
-@keyframes marquee {
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-/* scroll reveal */
 .reveal {
   opacity: 0;
   transform: translateY(16px);
   transition: opacity 0.65s ease, transform 0.65s ease;
 }
+
 .reveal.in {
   opacity: 1;
   transform: none;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .marquee-track {
-    animation: none;
+summary::-webkit-details-marker {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  html {
+    scroll-padding-top: 8.5rem;
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
   .reveal {
     opacity: 1;
     transform: none;
     transition: none;
   }
+
   html {
     scroll-behavior: auto;
   }
