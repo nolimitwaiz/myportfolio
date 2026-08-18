@@ -393,15 +393,14 @@ function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-cream/92 backdrop-blur-md">
-      <div className="mx-auto flex max-w-7xl flex-col items-start gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-7 sm:px-8">
+      <div className="mx-auto flex max-w-7xl flex-col items-start gap-2 px-5 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-7 sm:px-8">
         <Link to="/" className="font-display text-xl italic text-ink">Waiz Khan</Link>
         <div className="flex w-full min-w-0 items-center justify-start gap-5 overflow-x-auto pb-1 text-[13px] text-clay sm:w-auto sm:flex-1 sm:justify-end sm:gap-6 sm:pb-0 sm:text-[14px]">
           <nav className="flex items-center gap-5 sm:gap-6" aria-label="Primary navigation">
             <NavLink to="/research" className={navClass}>Research</NavLink>
-            <NavLink to="/directions" className={navClass}>Directions</NavLink>
-            <NavLink to="/build" className={navClass}>Build</NavLink>
+            <NavLink to="/build" className={navClass}>Work</NavLink>
             <NavLink to="/heela" className={navClass}>Heela</NavLink>
-            <NavLink to="/story" className={navClass}>Story</NavLink>
+            <NavLink to="/story" className={navClass}>About</NavLink>
             <NavLink to="/resume" className={navClass}>CV</NavLink>
           </nav>
           <a href={LINKS.github} target="_blank" rel="noopener noreferrer" className="whitespace-nowrap font-mono text-xs text-ink hover:text-pink">GitHub ↗</a>
@@ -414,7 +413,7 @@ function Header() {
 function Footer() {
   return (
     <footer className="border-t border-ink bg-cream">
-      <div className="mx-auto flex max-w-7xl flex-wrap items-end justify-between gap-8 px-5 py-10 sm:px-8">
+      <div className="mx-auto flex max-w-7xl flex-wrap items-end justify-between gap-6 px-5 py-7 sm:px-8">
         <div>
           <p className="font-display text-3xl text-ink">Waiz Khan</p>
           <p className="mt-2 text-sm leading-relaxed text-clay">Johns Hopkins University · M.S.E. Data Science</p>
@@ -475,6 +474,28 @@ function ResearchIndex({ compact = false }) {
   )
 }
 
+function ResearchGrid() {
+  return (
+    <div className="grid border-l border-t border-ink md:grid-cols-2">
+      {RESEARCH.map((item) => (
+        <article key={item.slug} className="border-b border-r border-ink p-5 sm:p-6">
+          <div className="flex items-start justify-between gap-4">
+            <SectionEyebrow>{item.index}</SectionEyebrow>
+            <span className="font-mono text-[11px] text-clay">{item.dates}</span>
+          </div>
+          <h3 className="mt-4 font-display text-3xl leading-tight">{item.title}</h3>
+          <p className="mt-2 font-display text-xl leading-snug text-clay">{item.question}</p>
+          <p className="mt-4 text-[13px] font-medium text-ink">{item.institution}</p>
+          <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1 font-mono text-[11px] text-pink">
+            {item.anchors.slice(0, 3).map((anchor) => <span key={anchor}>{anchor}</span>)}
+          </div>
+          <div className="mt-5"><ArrowLink to={`/research/${item.slug}`}>Details</ArrowLink></div>
+        </article>
+      ))}
+    </div>
+  )
+}
+
 function SectionEyebrow({ children, light = false }) {
   return <p className={`font-mono text-xs uppercase tracking-[0.25em] ${light ? 'text-blush' : 'text-pink'}`}>{children}</p>
 }
@@ -486,107 +507,60 @@ function HomePage() {
         description="Waiz Khan studies multilingual language models, low-resource learning, computational decipherment, and reliable AI at Johns Hopkins University."
       />
 
-      <section className="mx-auto grid min-h-[58vh] max-w-7xl items-center gap-8 px-5 py-14 sm:px-8 sm:py-18 lg:grid-cols-[1.35fr_1fr]">
-        <div>
-          <SectionEyebrow>Baltimore · Johns Hopkins</SectionEyebrow>
-          <h1 className="sr-only">Waiz Khan</h1>
-          <div className="mt-8 max-w-2xl">
-            <DotMatrix text="WAIZ KHAN" className="w-full cursor-crosshair" />
+      <section className="mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-12">
+        <div className="grid items-center gap-8 lg:grid-cols-[1.25fr_.75fr]">
+          <div>
+            <SectionEyebrow>Baltimore · Johns Hopkins</SectionEyebrow>
+            <h1 className="sr-only">Waiz Khan</h1>
+            <div className="mt-6 max-w-xl"><DotMatrix text="WAIZ KHAN" className="w-full cursor-crosshair" /></div>
+          </div>
+          <div>
+            <p className="font-display text-3xl leading-tight sm:text-4xl">Student at Johns Hopkins University.</p>
+            <p className="mt-3 text-[15px] leading-relaxed text-clay">M.S.E. Data Science. Research in multilingual language models, low-resource NLP, and computational decipherment.</p>
+            <div className="mt-5 flex gap-6"><ArrowLink to="/research">Research</ArrowLink><ArrowLink to="/resume">CV</ArrowLink></div>
           </div>
         </div>
-        <Reveal>
-          <p className="font-display text-3xl leading-[1.15] sm:text-4xl">Data science student at Johns Hopkins University.</p>
-          <p className="mt-5 text-[16px] leading-relaxed text-clay">Research in multilingual language models, low-resource learning, and computational decipherment.</p>
-          <div className="mt-8"><ArrowLink to="/research">Research</ArrowLink></div>
-        </Reveal>
+
+        <div className="mt-9 grid border-l border-t border-line sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            ['Education', 'Johns Hopkins', 'M.S.E. Data Science · 2027'],
+            ['Research', 'Graduate Researcher', 'Prof. Philipp Koehn · 2025–Present'],
+            ['Arzaic', 'Co-Founder & Founding Engineer', 'Iris · Healthcare agents'],
+            ['Heela', 'Vice Chair & Director', 'Nonprofit · Refugee education'],
+          ].map(([label, title, detail]) => (
+            <div key={label} className="border-b border-r border-line p-4">
+              <p className="font-mono text-[10px] uppercase tracking-widest text-pink">{label}</p>
+              <p className="mt-2 text-sm font-semibold">{title}</p>
+              <p className="mt-1 text-xs leading-relaxed text-clay">{detail}</p>
+            </div>
+          ))}
+        </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-5 py-14 sm:px-8 sm:py-20">
-        <div className="mb-10 flex items-end justify-between gap-8">
-          <div>
-            <SectionEyebrow>01</SectionEyebrow>
-            <h2 className="mt-3 font-display text-5xl sm:text-6xl">Research</h2>
-          </div>
-          <span className="hidden font-mono text-xs text-clay sm:block">Questions, methods, evidence</span>
+      <section className="mx-auto max-w-7xl border-t border-ink px-5 py-10 sm:px-8 sm:py-12">
+        <div className="mb-7 flex items-end justify-between gap-6">
+          <div><SectionEyebrow>Research</SectionEyebrow><h2 className="mt-2 font-display text-4xl">Four research programs</h2></div>
+          <ArrowLink to="/research">Full research profile</ArrowLink>
         </div>
-        <ResearchIndex compact />
-        <div className="pt-8 text-right"><ArrowLink to="/research">Explore all research</ArrowLink></div>
+        <ResearchGrid />
       </section>
 
       <section className="bg-ink text-cream">
-        <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-22">
-          <SectionEyebrow light>02 · Directions</SectionEyebrow>
-          <p className="mt-5 font-display text-4xl sm:text-5xl">Questions I haven’t finished asking.</p>
-          <div className="mt-10 grid gap-px bg-cream/20 sm:grid-cols-2 lg:grid-cols-5">
-            {DIRECTIONS.map((direction) => (
-              <div key={direction.title} className="bg-ink p-6">
-                <p className="font-mono text-xs uppercase tracking-widest text-blush">{direction.title}</p>
-                <p className="mt-5 font-display text-2xl leading-snug">{direction.question}</p>
-              </div>
+        <div className="mx-auto max-w-7xl px-5 py-9 sm:px-8">
+          <div className="grid gap-px bg-cream/20 md:grid-cols-4">
+            <Link to="/build" className="bg-ink p-5 hover:bg-white/5">
+              <p className="font-mono text-[10px] uppercase tracking-widest text-blush">Current build</p>
+              <p className="mt-2 font-display text-2xl">Iris / Arzaic</p>
+              <p className="mt-2 text-xs leading-relaxed text-sand">Auditable healthcare agents for longitudinal support.</p>
+            </Link>
+            {SYSTEMS.map((system) => (
+              <a key={system.title} href={system.href} target="_blank" rel="noopener noreferrer" className="bg-ink p-5 hover:bg-white/5">
+                <p className="font-mono text-[10px] uppercase tracking-widest text-blush">Selected system ↗</p>
+                <p className="mt-2 font-display text-2xl">{system.title}</p>
+                <p className="mt-2 text-xs leading-relaxed text-sand">{system.line}</p>
+              </a>
             ))}
           </div>
-          <div className="mt-8"><ArrowLink to="/directions" className="text-cream">Explore directions</ArrowLink></div>
-        </div>
-      </section>
-
-      <section className="bg-ink text-cream">
-        <div className="mx-auto max-w-7xl border-t border-cream/20 px-5 py-18 sm:px-8 sm:py-24">
-          <SectionEyebrow light>03 · Build</SectionEyebrow>
-          <p className="mt-7 font-display text-6xl sm:text-7xl">Arzaic</p>
-          <p className="mt-7 max-w-3xl font-display text-3xl leading-snug text-sand sm:text-4xl">Useful AI is not enough when being wrong has consequences.</p>
-          <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_1.2fr]">
-            <div>
-              <p className="font-mono text-xs uppercase tracking-[0.25em] text-blush">Iris</p>
-              <p className="mt-4 font-display text-4xl">What happens between clinic visits?</p>
-            </div>
-            <div>
-              <p className="font-mono text-sm tracking-wide text-blush">GATE → ROUTE → RETRIEVE → GENERATE → GUARD</p>
-              <p className="mt-7 text-[17px] leading-relaxed text-sand">Iris is a healthcare agent architecture for longitudinal patient support, organized around auditable state, retrieval, tools, and safety checks.</p>
-              <div className="mt-8"><ArrowLink to="/build" className="text-cream">Inside Iris</ArrowLink></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-sand">
-        <div className="mx-auto grid max-w-7xl gap-10 px-5 py-18 sm:px-8 sm:py-24 lg:grid-cols-[1fr_1fr]">
-          <div>
-            <SectionEyebrow>04 · Heela</SectionEyebrow>
-            <h2 className="mt-5 font-display text-6xl sm:text-7xl">Heela</h2>
-            <p className="mt-3 font-display text-2xl italic text-pink">Hope, in Pashto.</p>
-          </div>
-          <Reveal>
-            <p className="font-display text-3xl leading-tight sm:text-4xl">Some access problems don’t need another model.</p>
-            <p className="mt-8 text-[17px] leading-relaxed text-clay">Heela is a nonprofit organization that helps refugee students navigate the path toward higher education through mentorship, guidance, and sustained support.</p>
-            <p className="mt-6 font-mono text-xs uppercase tracking-[0.18em] text-pink">Vice Chair & Director · Governance · People · Continuity</p>
-            <div className="mt-9"><ArrowLink to="/heela">More about Heela</ArrowLink></div>
-          </Reveal>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-28">
-        <SectionEyebrow>05 · Story</SectionEyebrow>
-        <Reveal>
-          <p className="mt-10 max-w-5xl font-display text-5xl uppercase leading-[0.95] sm:text-7xl">Before models,<br />I thought in frames.</p>
-          <p className="mt-9 max-w-2xl text-lg leading-relaxed text-clay">Stories are representations too. They decide what to preserve, what to remove, and what a viewer carries forward.</p>
-          <div className="mt-10"><ArrowLink to="/story">Continue the story</ArrowLink></div>
-        </Reveal>
-      </section>
-
-      <section className="mx-auto max-w-7xl border-t border-ink px-5 py-14 sm:px-8 sm:py-20">
-        <div className="flex items-end justify-between gap-8">
-          <div><SectionEyebrow>06</SectionEyebrow><h2 className="mt-4 font-display text-5xl sm:text-6xl">Selected systems</h2></div>
-          <span className="hidden font-mono text-xs text-clay sm:block">Three, not twenty</span>
-        </div>
-        <div className="mt-12">
-          {SYSTEMS.map((system) => (
-            <a key={system.title} href={system.href} target="_blank" rel="noopener noreferrer" className="group grid gap-2 border-t border-line py-7 sm:grid-cols-[12rem_1fr_auto] sm:items-center">
-              <span className="font-display text-3xl group-hover:text-pink">{system.title}</span>
-              <span className="text-clay">{system.line}</span>
-              <span className="font-mono text-xs text-pink">↗</span>
-            </a>
-          ))}
-          <div className="border-t border-line pt-8"><ArrowLink to={LINKS.github} external>Everything else on GitHub</ArrowLink></div>
         </div>
       </section>
     </main>
@@ -595,12 +569,25 @@ function HomePage() {
 
 function ResearchPage() {
   return (
-    <main className="mx-auto max-w-7xl px-5 pb-18 pt-14 sm:px-8 sm:pt-20">
+    <main className="mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-12">
       <PageMeta title="Research" description="Research by Waiz Khan in multilingual representation, low-resource learning, computational decipherment, and causal ML." />
-      <SectionEyebrow>Research</SectionEyebrow>
-      <h1 className="mt-5 max-w-5xl font-display text-5xl leading-[1.02] sm:text-7xl">Questions first.<br />Evidence close behind.</h1>
-      <p className="mt-7 max-w-2xl text-[17px] leading-relaxed text-clay">Four connected research programs spanning language, representation, ancient scripts, and human systems.</p>
-      <div className="mt-12"><ResearchIndex /></div>
+      <div className="grid gap-5 border-b border-ink pb-8 lg:grid-cols-[1fr_.8fr] lg:items-end">
+        <div><SectionEyebrow>Research</SectionEyebrow><h1 className="mt-3 font-display text-5xl sm:text-6xl">Research profile</h1></div>
+        <p className="text-[15px] leading-relaxed text-clay">Four programs spanning multilingual representation, low-resource learning, ancient scripts, and causal machine learning.</p>
+      </div>
+      <div className="mt-8"><ResearchGrid /></div>
+
+      <section id="directions" className="mt-10 border-t border-ink pt-8">
+        <div className="mb-6 flex items-end justify-between gap-6"><div><SectionEyebrow>Directions</SectionEyebrow><h2 className="mt-2 font-display text-3xl">Research interests</h2></div></div>
+        <div className="grid border-l border-t border-line sm:grid-cols-2 lg:grid-cols-5">
+          {DIRECTIONS.map((direction) => (
+            <div key={direction.title} className="border-b border-r border-line p-4">
+              <p className="font-mono text-[11px] uppercase tracking-wider text-pink">{direction.title}</p>
+              <p className="mt-2 text-xs leading-relaxed text-clay">{direction.terms}</p>
+            </div>
+          ))}
+        </div>
+      </section>
     </main>
   )
 }
@@ -613,56 +600,56 @@ function ResearchDetailPage() {
   return (
     <main>
       <PageMeta title={item.title} description={`${item.title}: ${item.question}`} />
-      <section className="mx-auto max-w-7xl px-5 pb-14 pt-12 sm:px-8 sm:pb-20 sm:pt-16">
+      <section className="mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-12">
         <Link to="/research" className="font-mono text-xs uppercase tracking-wider text-clay hover:text-pink">← All research</Link>
-        <div className="mt-10 grid gap-10 lg:grid-cols-[1.4fr_.6fr]">
+        <div className="mt-7 grid gap-7 lg:grid-cols-[1.4fr_.6fr]">
           <div>
             <SectionEyebrow>{item.index} · Research</SectionEyebrow>
-            <h1 className="mt-5 font-display text-5xl leading-none sm:text-7xl">{item.title}</h1>
-            <p className="mt-7 max-w-4xl font-display text-2xl leading-snug text-clay sm:text-4xl">{item.question}</p>
+            <h1 className="mt-3 font-display text-4xl leading-none sm:text-6xl">{item.title}</h1>
+            <p className="mt-4 max-w-4xl font-display text-xl leading-snug text-clay sm:text-3xl">{item.question}</p>
           </div>
-          <div className="border-t border-ink pt-5 lg:mt-12">
+          <div className="border-t border-ink pt-4 lg:mt-8">
             <p className="font-medium">{item.institution}</p>
             <p className="mt-2 font-mono text-xs text-pink">{item.dates}</p>
           </div>
         </div>
 
-        <div className="mt-12 grid gap-px bg-line sm:grid-cols-2 lg:grid-cols-4">
-          {item.anchors.map((anchor) => <div key={anchor} className="bg-cream p-6 font-mono text-sm text-ink">{anchor}</div>)}
+        <div className="mt-7 grid gap-px bg-line sm:grid-cols-2 lg:grid-cols-4">
+          {item.anchors.map((anchor) => <div key={anchor} className="bg-cream p-4 font-mono text-xs text-ink">{anchor}</div>)}
         </div>
       </section>
 
       <section className="border-y border-ink bg-sand">
-        <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8 sm:py-20">
-          {[
+        <div className="mx-auto max-w-7xl px-5 py-9 sm:px-8 sm:py-12">
+          <div className="grid border-l border-t border-ink md:grid-cols-2">
+            {[
             ['Question', item.why],
             ['Method', item.method],
             ['Findings', item.findings],
             ['What changed', item.changed],
           ].map(([label, copy]) => (
-            <Reveal key={label}>
-              <div className="grid gap-5 border-t border-ink py-8 sm:grid-cols-[10rem_1fr] sm:py-10">
+              <div key={label} className="border-b border-r border-ink p-5 sm:p-6">
                 <SectionEyebrow>{label}</SectionEyebrow>
-                <p className="max-w-4xl font-display text-2xl leading-snug sm:text-3xl">{copy}</p>
+                <p className="mt-3 text-[15px] leading-relaxed text-clay">{copy}</p>
               </div>
-            </Reveal>
           ))}
-          <div className="border-t border-ink" />
+          </div>
 
-          <details className="group border-b border-ink py-7">
-            <summary className="cursor-pointer list-none font-mono text-xs uppercase tracking-[0.18em] text-ink">Methods + results <span className="text-pink group-open:hidden">↓</span><span className="hidden text-pink group-open:inline">↑</span></summary>
-            <ul className="mt-8 max-w-3xl space-y-4 text-[17px] leading-relaxed text-clay">
-              {item.technical.map((line) => <li key={line} className="border-l-2 border-pink pl-4">{line}</li>)}
-            </ul>
-          </details>
-
-          <div className="grid gap-5 pt-10 sm:grid-cols-[10rem_1fr]">
-            <SectionEyebrow>Where next</SectionEyebrow>
-            <p className="max-w-4xl font-display text-3xl leading-snug sm:text-4xl">{item.future}</p>
+          <div className="mt-7 grid gap-7 lg:grid-cols-[1.25fr_.75fr]">
+            <div>
+              <SectionEyebrow>Methods + results</SectionEyebrow>
+              <ul className="mt-3 space-y-2 text-[14px] leading-relaxed text-clay">
+                {item.technical.map((line) => <li key={line} className="border-l-2 border-pink pl-3">{line}</li>)}
+              </ul>
+            </div>
+            <div>
+              <SectionEyebrow>Where next</SectionEyebrow>
+              <p className="mt-3 font-display text-2xl leading-snug">{item.future}</p>
+            </div>
           </div>
 
           {item.links.length > 0 && (
-            <div className="mt-14 flex flex-wrap gap-6">
+            <div className="mt-7 flex flex-wrap gap-6">
               {item.links.map((link) => <ArrowLink key={link.href} to={link.href} external>{link.label}</ArrowLink>)}
             </div>
           )}
@@ -673,30 +660,7 @@ function ResearchDetailPage() {
 }
 
 function DirectionsPage() {
-  return (
-    <main className="bg-ink text-cream">
-      <PageMeta title="Directions" description="Research directions in memory, world models, language, NeuroAI, and continual learning." />
-      <section className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-22">
-        <SectionEyebrow light>Directions</SectionEyebrow>
-        <h1 className="mt-5 font-display text-5xl sm:text-7xl">Questions I haven’t finished asking.</h1>
-        <div className="mt-14">
-          {DIRECTIONS.map((direction, index) => (
-            <Reveal key={direction.title}>
-              <section className="grid gap-6 border-t border-cream/25 py-10 sm:grid-cols-[4rem_1fr] sm:py-14">
-                <span className="font-mono text-xs text-blush">{String(index + 1).padStart(2, '0')}</span>
-                <div>
-                  <h2 className="font-display text-5xl uppercase sm:text-7xl">{direction.title}</h2>
-                  <p className="mt-5 max-w-4xl font-display text-2xl leading-snug text-sand sm:text-4xl">{direction.question}</p>
-                  <p className="mt-5 font-mono text-xs uppercase tracking-[0.16em] text-blush">{direction.terms}</p>
-                </div>
-              </section>
-            </Reveal>
-          ))}
-          <div className="border-t border-cream/25" />
-        </div>
-      </section>
-    </main>
-  )
+  return <Navigate to="/research#directions" replace />
 }
 
 function BuildPage() {
@@ -704,67 +668,52 @@ function BuildPage() {
     <main>
       <PageMeta title="Build" description="Arzaic, Iris, and selected systems by Waiz Khan." />
       <section className="bg-ink text-cream">
-        <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-22">
-          <SectionEyebrow light>Build</SectionEyebrow>
-          <h1 className="mt-6 font-display text-6xl sm:text-8xl">Arzaic</h1>
-          <p className="mt-7 max-w-4xl font-display text-3xl leading-tight text-sand sm:text-5xl">Useful AI is not enough when being wrong has consequences.</p>
-        </div>
-      </section>
-
-      <section className="bg-ink text-cream">
-        <div className="mx-auto max-w-7xl border-t border-cream/20 px-5 py-16 sm:px-8 sm:py-22">
-          <div className="grid gap-10 lg:grid-cols-[.8fr_1.2fr]">
+        <div className="mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-12">
+          <div className="grid gap-8 lg:grid-cols-[.75fr_1.25fr]">
             <div>
-              <SectionEyebrow light>Iris</SectionEyebrow>
-              <h2 className="mt-5 font-display text-5xl sm:text-7xl">What happens between clinic visits?</h2>
+              <SectionEyebrow light>Arzaic · Current</SectionEyebrow>
+              <h1 className="mt-3 font-display text-5xl sm:text-6xl">Iris</h1>
+              <p className="mt-3 text-sm text-blush">Co-Founder & Founding Engineer</p>
             </div>
             <div>
-              <div className="grid gap-px bg-cream/20 sm:grid-cols-5">
-                {['Gate', 'Route', 'Retrieve', 'Generate', 'Guard'].map((stage) => <div key={stage} className="bg-ink p-5 text-center font-mono text-xs uppercase tracking-wider text-blush">{stage}</div>)}
-              </div>
-              <p className="mt-10 text-xl leading-relaxed text-sand">Iris is a healthcare agent architecture for longitudinal patient support, designed around auditable state, retrieval, tools, and safety checks.</p>
-              <div className="mt-10 grid gap-4 font-mono text-xs uppercase tracking-wider text-blush sm:grid-cols-2">
-                {['Longitudinal memory', 'Multimodal patient data', 'Agent tools', 'Safety evaluation'].map((term) => <p key={term} className="border-t border-cream/25 pt-4">{term}</p>)}
+              <h2 className="font-display text-3xl leading-tight text-sand">Healthcare agents for the time between clinic visits.</h2>
+              <p className="mt-4 text-[15px] leading-relaxed text-sand">An architecture for longitudinal patient support built around auditable state, retrieval, tools, and safety checks.</p>
+              <div className="mt-5 grid gap-px bg-cream/20 sm:grid-cols-5">
+                {['Gate', 'Route', 'Retrieve', 'Generate', 'Guard'].map((stage) => <div key={stage} className="bg-ink p-3 text-center font-mono text-[10px] uppercase tracking-wider text-blush">{stage}</div>)}
               </div>
             </div>
           </div>
-
-          <div className="mt-18 border-t border-cream/20 pt-9">
-            <SectionEyebrow light>Next / Arzaic</SectionEyebrow>
-            <p className="mt-4 font-display text-5xl sm:text-7xl">Eve</p>
-            <p className="mt-6 font-display text-3xl text-sand sm:text-4xl">Can reliability itself be learned?</p>
+          <div className="mt-8 flex items-center gap-5 border-t border-cream/20 pt-6">
+            <SectionEyebrow light>Next · Eve</SectionEyebrow>
+            <p className="font-display text-xl text-sand">Researching whether reliability can be learned.</p>
           </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-22">
-        <SectionEyebrow>Experience</SectionEyebrow>
-        <h2 className="mt-5 font-display text-4xl sm:text-6xl">The work around the work.</h2>
-        <div className="mt-10">
-          {EXPERIENCE.map((item) => (
-            <Reveal key={`${item.place}-${item.role}`}>
-              <div className="grid gap-4 border-t border-ink py-8 sm:grid-cols-[10rem_1fr_1fr] sm:gap-8">
-                <span className="font-mono text-xs text-pink">{item.when}</span>
-                <div><p className="font-display text-2xl">{item.place}</p><p className="mt-1 text-sm text-clay">{item.role}</p></div>
-                <p className="text-[15px] leading-relaxed text-clay">{item.detail}</p>
+      <section className="mx-auto grid max-w-7xl gap-10 px-5 py-10 sm:px-8 sm:py-12 lg:grid-cols-[1.4fr_.6fr]">
+        <div>
+          <SectionEyebrow>Experience</SectionEyebrow>
+          <div className="mt-5 border-t border-ink">
+            {EXPERIENCE.map((item) => (
+              <div key={`${item.place}-${item.role}`} className="grid gap-2 border-b border-line py-4 sm:grid-cols-[7rem_1fr_1.2fr] sm:gap-5">
+                <span className="font-mono text-[10px] text-pink">{item.when}</span>
+                <div><p className="font-display text-xl">{item.place}</p><p className="mt-1 text-xs text-clay">{item.role}</p></div>
+                <p className="text-[13px] leading-relaxed text-clay">{item.detail}</p>
               </div>
-            </Reveal>
-          ))}
-          <div className="border-t border-ink" />
+            ))}
+          </div>
         </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl border-t border-ink px-5 py-14 sm:px-8 sm:py-20">
-        <SectionEyebrow>Selected systems</SectionEyebrow>
-        <div className="mt-10">
-          {SYSTEMS.map((system) => (
-            <a key={system.title} href={system.href} target="_blank" rel="noopener noreferrer" className="group grid gap-2 border-t border-line py-7 sm:grid-cols-[12rem_1fr_auto] sm:items-center">
-              <span className="font-display text-3xl group-hover:text-pink">{system.title}</span>
-              <span className="text-clay">{system.line}</span>
-              <span className="font-mono text-xs text-pink">↗</span>
-            </a>
-          ))}
-          <div className="border-t border-line pt-8"><ArrowLink to={LINKS.github} external>Everything else on GitHub</ArrowLink></div>
+        <div>
+          <SectionEyebrow>Selected systems</SectionEyebrow>
+          <div className="mt-5 border-t border-ink">
+            {SYSTEMS.map((system) => (
+              <a key={system.title} href={system.href} target="_blank" rel="noopener noreferrer" className="group block border-b border-line py-4">
+                <span className="font-display text-2xl group-hover:text-pink">{system.title}</span>
+                <span className="ml-3 text-xs text-clay">{system.line}</span>
+              </a>
+            ))}
+          </div>
+          <div className="mt-5"><ArrowLink to={LINKS.github} external>GitHub</ArrowLink></div>
         </div>
       </section>
     </main>
@@ -775,22 +724,21 @@ function HeelaPage() {
   return (
     <main className="bg-sand">
       <PageMeta title="Heela" description="Heela is a nonprofit supporting refugee students on the path toward higher education." />
-      <section className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-22">
-        <SectionEyebrow>Heela · Nonprofit Organization</SectionEyebrow>
-        <h1 className="mt-6 font-display text-7xl sm:text-8xl">Heela</h1>
-        <p className="mt-4 font-display text-3xl italic text-pink sm:text-4xl">Hope, in Pashto.</p>
-        <div className="mt-12 grid gap-10 lg:grid-cols-[1.1fr_.9fr]">
-          <p className="font-display text-4xl leading-tight sm:text-5xl">Some access problems don’t need another model.</p>
+      <section className="mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-12">
+        <div className="grid gap-8 lg:grid-cols-[.7fr_1.3fr]">
           <div>
-            <p className="text-xl leading-relaxed text-clay">Heela helps refugee students navigate the path toward higher education through mentorship, guidance, and sustained support.</p>
-            <p className="mt-8 font-mono text-xs uppercase tracking-[0.2em] text-pink">Vice Chair & Director</p>
-            <p className="mt-5 text-[17px] leading-relaxed text-clay">My role spans leadership, governance, people, and continuity: helping the organization remain useful to students and dependable for the people who support them.</p>
-            <div className="mt-10"><ArrowLink to={LINKS.heela} external>Visit Heela</ArrowLink></div>
+            <SectionEyebrow>Nonprofit organization</SectionEyebrow>
+            <h1 className="mt-3 font-display text-6xl">Heela</h1>
+            <p className="mt-2 font-display text-2xl italic text-pink">Hope, in Pashto.</p>
           </div>
-        </div>
-
-        <div className="mt-16 grid gap-px bg-ink sm:grid-cols-3">
-          {['Governance', 'People', 'Continuity'].map((word) => <div key={word} className="bg-sand p-9 font-display text-3xl">{word}</div>)}
+          <div>
+            <p className="font-display text-3xl leading-tight">Higher-education guidance for refugee students.</p>
+            <p className="mt-4 text-[15px] leading-relaxed text-clay">Heela supports refugee students through mentorship, practical guidance, and sustained help navigating the path to higher education.</p>
+            <div className="mt-5 grid border-l border-t border-ink sm:grid-cols-3">
+              {['Vice Chair & Director', 'Governance & people', 'Organizational continuity'].map((word) => <div key={word} className="border-b border-r border-ink p-4 font-mono text-xs">{word}</div>)}
+            </div>
+            <div className="mt-6"><ArrowLink to={LINKS.heela} external>Visit Heela</ArrowLink></div>
+          </div>
         </div>
       </section>
     </main>
@@ -801,25 +749,19 @@ function StoryPage() {
   return (
     <main>
       <PageMeta title="Story" description="The visual questions that preceded Waiz Khan’s work in language, memory, and intelligent systems." />
-      <section className="mx-auto max-w-7xl px-5 py-18 sm:px-8 sm:py-26">
-        <SectionEyebrow>Story</SectionEyebrow>
-        <h1 className="mt-12 max-w-6xl font-display text-6xl uppercase leading-[0.92] sm:text-8xl">Before models,<br />I thought in frames.</h1>
-      </section>
-      <section className="border-y border-ink bg-sand">
-        <div className="mx-auto max-w-5xl px-5 py-18 text-center sm:px-8 sm:py-26">
-          <p className="font-display text-4xl sm:text-6xl">I was once drawn to filmmaking.</p>
+      <section className="mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-12">
+        <div className="grid gap-8 lg:grid-cols-[.8fr_1.2fr]">
+          <div><SectionEyebrow>About</SectionEyebrow><h1 className="mt-3 font-display text-5xl">From frames to models.</h1></div>
+          <div>
+            <p className="font-display text-3xl leading-tight">Filmmaking came first. The questions about representation stayed.</p>
+            <p className="mt-4 text-[15px] leading-relaxed text-clay">Stories decide what to preserve, what to remove, and what a viewer carries forward. The same questions now shape work in language, memory, and intelligent systems.</p>
+          </div>
         </div>
-      </section>
-      <section className="mx-auto max-w-7xl px-5 py-18 sm:px-8 sm:py-26">
-        <p className="max-w-4xl font-display text-4xl leading-tight sm:text-6xl">Stories are representations too.</p>
-        <p className="mt-10 max-w-2xl text-xl leading-relaxed text-clay">They decide what to preserve, what to remove, and what a viewer carries forward.</p>
-        <p className="mt-16 font-display text-3xl sm:text-4xl">I stopped making films.<br /><em className="text-pink">The questions stayed.</em></p>
-
-        <div className="mt-18 grid gap-6 sm:grid-cols-4">
+        <div className="mt-8 grid gap-4 sm:grid-cols-4">
           {['Image', 'Language', 'Memory', 'World'].map((word, index) => (
-            <div key={word} className="border-t border-ink pt-5">
-              <p className="font-mono text-xs text-pink">0{index + 1}</p>
-              <p className="mt-4 font-display text-4xl">{word}</p>
+            <div key={word} className="border-t border-ink pt-3">
+              <p className="font-mono text-[10px] text-pink">0{index + 1}</p>
+              <p className="mt-2 font-display text-2xl">{word}</p>
             </div>
           ))}
         </div>
