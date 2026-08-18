@@ -16,7 +16,6 @@ const LINKS = {
   linkedin: 'https://www.linkedin.com/in/waiz-khan-024529223',
   email: 'mailto:wkhan12@jh.edu',
   resumePdf: '/myportfolio/Waiz_Khan.pdf',
-  heela: 'https://heela.org',
 }
 
 const RESEARCH = [
@@ -399,7 +398,6 @@ function Header() {
           <nav className="flex items-center gap-5 sm:gap-6" aria-label="Primary navigation">
             <NavLink to="/research" className={navClass}>Research</NavLink>
             <NavLink to="/build" className={navClass}>Work</NavLink>
-            <NavLink to="/heela" className={navClass}>Heela</NavLink>
             <NavLink to="/story" className={navClass}>About</NavLink>
             <NavLink to="/resume" className={navClass}>CV</NavLink>
           </nav>
@@ -539,7 +537,7 @@ function HomePage() {
 
       <section className="mx-auto max-w-7xl border-t border-ink px-5 py-10 sm:px-8 sm:py-12">
         <div className="mb-7 flex items-end justify-between gap-6">
-          <div><SectionEyebrow>Research</SectionEyebrow><h2 className="mt-2 font-display text-4xl">Four research programs</h2></div>
+          <div><SectionEyebrow>Selected work</SectionEyebrow><h2 className="mt-2 font-display text-4xl">Research</h2></div>
           <ArrowLink to="/research">Full research profile</ArrowLink>
         </div>
         <ResearchGrid />
@@ -690,7 +688,7 @@ function BuildPage() {
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-7xl gap-10 px-5 py-10 sm:px-8 sm:py-12 lg:grid-cols-[1.4fr_.6fr]">
+      <section id="experience" className="mx-auto grid max-w-7xl gap-10 px-5 py-10 sm:px-8 sm:py-12 lg:grid-cols-[1.4fr_.6fr]">
         <div>
           <SectionEyebrow>Experience</SectionEyebrow>
           <div className="mt-5 border-t border-ink">
@@ -714,31 +712,6 @@ function BuildPage() {
             ))}
           </div>
           <div className="mt-5"><ArrowLink to={LINKS.github} external>GitHub</ArrowLink></div>
-        </div>
-      </section>
-    </main>
-  )
-}
-
-function HeelaPage() {
-  return (
-    <main className="bg-sand">
-      <PageMeta title="Heela" description="Heela is a nonprofit supporting refugee students on the path toward higher education." />
-      <section className="mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-12">
-        <div className="grid gap-8 lg:grid-cols-[.7fr_1.3fr]">
-          <div>
-            <SectionEyebrow>Nonprofit organization</SectionEyebrow>
-            <h1 className="mt-3 font-display text-6xl">Heela</h1>
-            <p className="mt-2 font-display text-2xl italic text-pink">Hope, in Pashto.</p>
-          </div>
-          <div>
-            <p className="font-display text-3xl leading-tight">Higher-education guidance for refugee students.</p>
-            <p className="mt-4 text-[15px] leading-relaxed text-clay">Heela supports refugee students through mentorship, practical guidance, and sustained help navigating the path to higher education.</p>
-            <div className="mt-5 grid border-l border-t border-ink sm:grid-cols-3">
-              {['Vice Chair & Director', 'Governance & people', 'Organizational continuity'].map((word) => <div key={word} className="border-b border-r border-ink p-4 font-mono text-xs">{word}</div>)}
-            </div>
-            <div className="mt-6"><ArrowLink to={LINKS.heela} external>Visit Heela</ArrowLink></div>
-          </div>
         </div>
       </section>
     </main>
@@ -799,7 +772,7 @@ export default function App() {
           <Route path="/research/:slug" element={<ResearchDetailPage />} />
           <Route path="/directions" element={<DirectionsPage />} />
           <Route path="/build" element={<BuildPage />} />
-          <Route path="/heela" element={<HeelaPage />} />
+          <Route path="/heela" element={<Navigate to="/build#experience" replace />} />
           <Route path="/story" element={<StoryPage />} />
           <Route path="/resume" element={<ResumePage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
