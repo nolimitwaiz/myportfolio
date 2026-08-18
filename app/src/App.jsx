@@ -502,7 +502,7 @@ function HomePage() {
   return (
     <main>
       <PageMeta
-        description="Waiz Khan studies multilingual language models, low-resource learning, computational decipherment, and reliable AI at Johns Hopkins University."
+        description="Waiz Khan is a student in the Department of Applied Mathematics and Statistics at Johns Hopkins University, researching multilingual language models, low-resource learning, and computational decipherment."
       />
 
       <section className="mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-12">
@@ -513,7 +513,7 @@ function HomePage() {
             <div className="mt-6 max-w-xl"><DotMatrix text="WAIZ KHAN" className="w-full cursor-crosshair" /></div>
           </div>
           <div>
-            <p className="font-display text-3xl leading-tight sm:text-4xl">Student at Johns Hopkins University.</p>
+            <p className="font-display text-3xl leading-tight">Student in the Department of Applied Mathematics and Statistics at Johns Hopkins University.</p>
             <p className="mt-3 text-[15px] leading-relaxed text-clay">M.S.E. Data Science. Research in multilingual language models, low-resource NLP, and computational decipherment.</p>
             <div className="mt-5 flex gap-6"><ArrowLink to="/research">Research</ArrowLink><ArrowLink to="/resume">CV</ArrowLink></div>
           </div>
@@ -521,7 +521,7 @@ function HomePage() {
 
         <div className="mt-9 grid border-l border-t border-line sm:grid-cols-2 lg:grid-cols-4">
           {[
-            ['Education', 'Johns Hopkins', 'M.S.E. Data Science · 2027'],
+            ['Education', 'Johns Hopkins University', 'Applied Mathematics & Statistics · M.S.E. Data Science · 2027'],
             ['Research', 'Graduate Researcher', 'Prof. Philipp Koehn · 2025–Present'],
             ['Arzaic', 'Co-Founder & Founding Engineer', 'Iris · Healthcare agents'],
             ['Heela', 'Vice Chair & Director', 'Nonprofit · Refugee education'],
