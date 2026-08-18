@@ -215,28 +215,37 @@ const GLYPHS = {
   K: ['10001', '10010', '10100', '11000', '10100', '10010', '10001'],
   H: ['10001', '10001', '10001', '11111', '10001', '10001', '10001'],
   N: ['10001', '11001', '10101', '10011', '10001', '10001', '10001'],
+  ' ': ['000', '000', '000', '000', '000', '000', '000'],
 }
 
 const CELL = 10
 const ON = 7.4
 const OFF = 4.2
+const HOVER_RADIUS = 85
 
 function buildDots(text) {
-  const glyphs = [...text].map((letter) => GLYPHS[letter])
+  const glyphs = [...text.toUpperCase()].map((letter) => GLYPHS[letter] ?? GLYPHS[' '])
   const dots = []
   let offset = 0
   glyphs.forEach((glyph, glyphIndex) => {
+    const width = glyph[0].length
     glyph.forEach((row, y) => {
       ;[...row].forEach((bit, x) => {
-        dots.push({ on: bit === '1', cx: (offset + x + 0.5) * CELL, cy: (y + 0.5) * CELL })
+        dots.push({
+          on: bit === '1',
+          cx: (offset + x + 0.5) * CELL,
+          cy: (y + 0.5) * CELL,
+          delay: (offset + x) * 18 + y * 26,
+        })
       })
     })
-    offset += 5 + (glyphIndex < glyphs.length - 1 ? 1 : 0)
+    offset += width + (glyphIndex < glyphs.length - 1 ? 1 : 0)
   })
   return { dots, cols: offset }
 }
 
-function DotWord({ text }) {
+function DotMatrix({ text, className = '' }) {
+  const svgRef = useRef(null)
   const rects = useRef([])
   const { dots, cols } = buildDots(text)
 
@@ -248,17 +257,65 @@ function DotWord({ text }) {
         element.style.opacity = 1
         return
       }
-      element.animate([{ opacity: 0, transform: 'scale(.65)' }, { opacity: 1, transform: 'scale(1)' }], {
-        duration: 360,
-        delay: index * 9,
-        fill: 'both',
-        easing: 'cubic-bezier(.2,.9,.2,1)',
+      element.style.opacity = 0
+      element.animate([{ opacity: 0 }, { opacity: 1 }], {
+        duration: 380,
+        delay: dots[index].delay,
+        fill: 'forwards',
+        easing: 'ease-out',
       })
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    const svg = svgRef.current
+    if (!svg) return undefined
+    let frame = null
+    let pointer = null
+
+    const update = () => {
+      frame = null
+      rects.current.forEach((element, index) => {
+        if (!element) return
+        const dot = dots[index]
+        const distance = pointer ? Math.hypot(dot.cx - pointer.x, dot.cy - pointer.y) : Infinity
+        const nearby = distance < HOVER_RADIUS
+        const scale = nearby ? 1 + (1 - distance / HOVER_RADIUS) * 0.55 : 1
+        const size = (dot.on ? ON : OFF) * scale
+        element.setAttribute('width', size.toFixed(2))
+        element.setAttribute('height', size.toFixed(2))
+        element.setAttribute('x', (dot.cx - size / 2).toFixed(2))
+        element.setAttribute('y', (dot.cy - size / 2).toFixed(2))
+        element.setAttribute('fill', dot.on ? (nearby ? '#e64980' : '#171310') : '#e0d4b6')
+      })
+    }
+
+    const onMove = (event) => {
+      const bounds = svg.getBoundingClientRect()
+      pointer = {
+        x: ((event.clientX - bounds.left) / bounds.width) * cols * CELL,
+        y: ((event.clientY - bounds.top) / bounds.height) * 7 * CELL,
+      }
+      if (!frame) frame = requestAnimationFrame(update)
+    }
+    const onLeave = () => {
+      pointer = null
+      if (!frame) frame = requestAnimationFrame(update)
+    }
+
+    svg.addEventListener('pointermove', onMove)
+    svg.addEventListener('pointerleave', onLeave)
+    return () => {
+      svg.removeEventListener('pointermove', onMove)
+      svg.removeEventListener('pointerleave', onLeave)
+      if (frame) cancelAnimationFrame(frame)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
-    <svg viewBox={`0 0 ${cols * CELL} 70`} className="w-full" aria-hidden="true">
+    <svg ref={svgRef} viewBox={`0 0 ${cols * CELL} 70`} className={className} aria-hidden="true">
       {dots.map((dot, index) => {
         const size = dot.on ? ON : OFF
         return (
@@ -270,7 +327,6 @@ function DotWord({ text }) {
             width={size}
             height={size}
             fill={dot.on ? '#171310' : '#e0d4b6'}
-            style={{ transformOrigin: `${dot.cx}px ${dot.cy}px` }}
           />
         )
       })}
@@ -388,13 +444,13 @@ function Layout() {
 function ResearchRow({ item }) {
   return (
     <Reveal>
-      <article className="grid gap-6 border-t border-ink py-10 sm:grid-cols-[5rem_1fr_15rem] sm:gap-10 sm:py-14">
+      <article className="grid gap-5 border-t border-ink py-8 sm:grid-cols-[4rem_1fr_14rem] sm:gap-8 sm:py-10">
         <span className="font-mono text-sm text-pink">{item.index}</span>
         <div>
-          <h3 className="font-display text-4xl leading-tight sm:text-5xl">{item.title}</h3>
-          <p className="mt-4 max-w-3xl font-display text-2xl leading-snug text-clay sm:text-3xl">{item.question}</p>
-          <p className="mt-6 max-w-2xl text-[16px] leading-relaxed text-clay">{item.summary}</p>
-          <div className="mt-7"><ArrowLink to={`/research/${item.slug}`}>Explore research</ArrowLink></div>
+          <h3 className="font-display text-3xl leading-tight sm:text-4xl">{item.title}</h3>
+          <p className="mt-3 max-w-3xl font-display text-xl leading-snug text-clay sm:text-2xl">{item.question}</p>
+          <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-clay">{item.summary}</p>
+          <div className="mt-5"><ArrowLink to={`/research/${item.slug}`}>Explore research</ArrowLink></div>
         </div>
         <div className="space-y-5 border-line text-sm text-clay sm:border-l sm:pl-6">
           <div>
@@ -412,7 +468,7 @@ function ResearchRow({ item }) {
 
 function ResearchIndex({ compact = false }) {
   return (
-    <section className={compact ? '' : 'pb-20'}>
+    <section className={compact ? '' : 'pb-14'}>
       {RESEARCH.map((item) => <ResearchRow key={item.slug} item={item} />)}
       <div className="border-t border-ink" />
     </section>
@@ -430,39 +486,38 @@ function HomePage() {
         description="Waiz Khan studies multilingual language models, low-resource learning, computational decipherment, and reliable AI at Johns Hopkins University."
       />
 
-      <section className="mx-auto grid min-h-[78vh] max-w-7xl items-center gap-12 px-5 py-20 sm:px-8 lg:grid-cols-[1.6fr_1fr] lg:py-28">
+      <section className="mx-auto grid min-h-[58vh] max-w-7xl items-center gap-8 px-5 py-14 sm:px-8 sm:py-18 lg:grid-cols-[1.35fr_1fr]">
         <div>
           <SectionEyebrow>Baltimore · Johns Hopkins</SectionEyebrow>
           <h1 className="sr-only">Waiz Khan</h1>
-          <div className="mt-10 max-w-4xl space-y-3">
-            <DotWord text="WAIZ" />
-            <DotWord text="KHAN" />
+          <div className="mt-8 max-w-2xl">
+            <DotMatrix text="WAIZ KHAN" className="w-full cursor-crosshair" />
           </div>
         </div>
-        <Reveal className="lg:pt-24">
-          <p className="font-display text-4xl leading-[1.12] sm:text-5xl">I study how machines learn when information is incomplete.</p>
-          <p className="mt-7 font-mono text-sm leading-loose text-pink">Language. Representation. Memory. Worlds.</p>
-          <div className="mt-12"><ArrowLink to="/research">Research</ArrowLink></div>
+        <Reveal>
+          <p className="font-display text-3xl leading-[1.15] sm:text-4xl">Data science student at Johns Hopkins University.</p>
+          <p className="mt-5 text-[16px] leading-relaxed text-clay">Research in multilingual language models, low-resource learning, and computational decipherment.</p>
+          <div className="mt-8"><ArrowLink to="/research">Research</ArrowLink></div>
         </Reveal>
       </section>
 
-      <section className="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-28">
-        <div className="mb-14 flex items-end justify-between gap-8">
+      <section className="mx-auto max-w-7xl px-5 py-14 sm:px-8 sm:py-20">
+        <div className="mb-10 flex items-end justify-between gap-8">
           <div>
             <SectionEyebrow>01</SectionEyebrow>
-            <h2 className="mt-4 font-display text-6xl sm:text-7xl">Research</h2>
+            <h2 className="mt-3 font-display text-5xl sm:text-6xl">Research</h2>
           </div>
           <span className="hidden font-mono text-xs text-clay sm:block">Questions, methods, evidence</span>
         </div>
         <ResearchIndex compact />
-        <div className="pt-10 text-right"><ArrowLink to="/research">Explore all research</ArrowLink></div>
+        <div className="pt-8 text-right"><ArrowLink to="/research">Explore all research</ArrowLink></div>
       </section>
 
       <section className="bg-ink text-cream">
-        <div className="mx-auto max-w-7xl px-5 py-24 sm:px-8 sm:py-32">
+        <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-22">
           <SectionEyebrow light>02 · Directions</SectionEyebrow>
-          <p className="mt-6 font-display text-4xl sm:text-6xl">Questions I haven’t finished asking.</p>
-          <div className="mt-16 grid gap-px bg-cream/20 sm:grid-cols-2 lg:grid-cols-5">
+          <p className="mt-5 font-display text-4xl sm:text-5xl">Questions I haven’t finished asking.</p>
+          <div className="mt-10 grid gap-px bg-cream/20 sm:grid-cols-2 lg:grid-cols-5">
             {DIRECTIONS.map((direction) => (
               <div key={direction.title} className="bg-ink p-6">
                 <p className="font-mono text-xs uppercase tracking-widest text-blush">{direction.title}</p>
@@ -470,16 +525,16 @@ function HomePage() {
               </div>
             ))}
           </div>
-          <div className="mt-10"><ArrowLink to="/directions" className="text-cream">Explore directions</ArrowLink></div>
+          <div className="mt-8"><ArrowLink to="/directions" className="text-cream">Explore directions</ArrowLink></div>
         </div>
       </section>
 
       <section className="bg-ink text-cream">
-        <div className="mx-auto max-w-7xl border-t border-cream/20 px-5 py-28 sm:px-8 sm:py-40">
+        <div className="mx-auto max-w-7xl border-t border-cream/20 px-5 py-18 sm:px-8 sm:py-24">
           <SectionEyebrow light>03 · Build</SectionEyebrow>
-          <p className="mt-10 font-display text-7xl sm:text-8xl">Arzaic</p>
-          <p className="mt-10 max-w-3xl font-display text-3xl leading-snug text-sand sm:text-5xl">Useful AI is not enough when being wrong has consequences.</p>
-          <div className="mt-16 grid gap-12 lg:grid-cols-[1fr_1.2fr]">
+          <p className="mt-7 font-display text-6xl sm:text-7xl">Arzaic</p>
+          <p className="mt-7 max-w-3xl font-display text-3xl leading-snug text-sand sm:text-4xl">Useful AI is not enough when being wrong has consequences.</p>
+          <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_1.2fr]">
             <div>
               <p className="font-mono text-xs uppercase tracking-[0.25em] text-blush">Iris</p>
               <p className="mt-4 font-display text-4xl">What happens between clinic visits?</p>
@@ -494,14 +549,14 @@ function HomePage() {
       </section>
 
       <section className="bg-sand">
-        <div className="mx-auto grid max-w-7xl gap-16 px-5 py-28 sm:px-8 sm:py-36 lg:grid-cols-[1fr_1fr]">
+        <div className="mx-auto grid max-w-7xl gap-10 px-5 py-18 sm:px-8 sm:py-24 lg:grid-cols-[1fr_1fr]">
           <div>
             <SectionEyebrow>04 · Heela</SectionEyebrow>
-            <h2 className="mt-7 font-display text-7xl sm:text-8xl">Heela</h2>
+            <h2 className="mt-5 font-display text-6xl sm:text-7xl">Heela</h2>
             <p className="mt-3 font-display text-2xl italic text-pink">Hope, in Pashto.</p>
           </div>
           <Reveal>
-            <p className="font-display text-4xl leading-tight sm:text-5xl">Some access problems don’t need another model.</p>
+            <p className="font-display text-3xl leading-tight sm:text-4xl">Some access problems don’t need another model.</p>
             <p className="mt-8 text-[17px] leading-relaxed text-clay">Heela is a nonprofit organization that helps refugee students navigate the path toward higher education through mentorship, guidance, and sustained support.</p>
             <p className="mt-6 font-mono text-xs uppercase tracking-[0.18em] text-pink">Vice Chair & Director · Governance · People · Continuity</p>
             <div className="mt-9"><ArrowLink to="/heela">More about Heela</ArrowLink></div>
@@ -509,16 +564,16 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-5 py-32 sm:px-8 sm:py-44">
+      <section className="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-28">
         <SectionEyebrow>05 · Story</SectionEyebrow>
         <Reveal>
-          <p className="mt-16 max-w-5xl font-display text-6xl uppercase leading-[0.95] sm:text-8xl">Before models,<br />I thought in frames.</p>
-          <p className="mt-14 max-w-2xl text-xl leading-relaxed text-clay">Stories are representations too. They decide what to preserve, what to remove, and what a viewer carries forward.</p>
+          <p className="mt-10 max-w-5xl font-display text-5xl uppercase leading-[0.95] sm:text-7xl">Before models,<br />I thought in frames.</p>
+          <p className="mt-9 max-w-2xl text-lg leading-relaxed text-clay">Stories are representations too. They decide what to preserve, what to remove, and what a viewer carries forward.</p>
           <div className="mt-10"><ArrowLink to="/story">Continue the story</ArrowLink></div>
         </Reveal>
       </section>
 
-      <section className="mx-auto max-w-7xl border-t border-ink px-5 py-20 sm:px-8 sm:py-28">
+      <section className="mx-auto max-w-7xl border-t border-ink px-5 py-14 sm:px-8 sm:py-20">
         <div className="flex items-end justify-between gap-8">
           <div><SectionEyebrow>06</SectionEyebrow><h2 className="mt-4 font-display text-5xl sm:text-6xl">Selected systems</h2></div>
           <span className="hidden font-mono text-xs text-clay sm:block">Three, not twenty</span>
@@ -540,12 +595,12 @@ function HomePage() {
 
 function ResearchPage() {
   return (
-    <main className="mx-auto max-w-7xl px-5 pb-24 pt-20 sm:px-8 sm:pt-28">
+    <main className="mx-auto max-w-7xl px-5 pb-18 pt-14 sm:px-8 sm:pt-20">
       <PageMeta title="Research" description="Research by Waiz Khan in multilingual representation, low-resource learning, computational decipherment, and causal ML." />
       <SectionEyebrow>Research</SectionEyebrow>
-      <h1 className="mt-6 max-w-5xl font-display text-6xl leading-[1.02] sm:text-8xl">Questions first.<br />Evidence close behind.</h1>
-      <p className="mt-10 max-w-2xl text-lg leading-relaxed text-clay">Four connected research programs spanning language, representation, ancient scripts, and human systems.</p>
-      <div className="mt-20"><ResearchIndex /></div>
+      <h1 className="mt-5 max-w-5xl font-display text-5xl leading-[1.02] sm:text-7xl">Questions first.<br />Evidence close behind.</h1>
+      <p className="mt-7 max-w-2xl text-[17px] leading-relaxed text-clay">Four connected research programs spanning language, representation, ancient scripts, and human systems.</p>
+      <div className="mt-12"><ResearchIndex /></div>
     </main>
   )
 }
@@ -558,13 +613,13 @@ function ResearchDetailPage() {
   return (
     <main>
       <PageMeta title={item.title} description={`${item.title}: ${item.question}`} />
-      <section className="mx-auto max-w-7xl px-5 pb-20 pt-16 sm:px-8 sm:pb-28 sm:pt-24">
+      <section className="mx-auto max-w-7xl px-5 pb-14 pt-12 sm:px-8 sm:pb-20 sm:pt-16">
         <Link to="/research" className="font-mono text-xs uppercase tracking-wider text-clay hover:text-pink">← All research</Link>
-        <div className="mt-14 grid gap-12 lg:grid-cols-[1.4fr_.6fr]">
+        <div className="mt-10 grid gap-10 lg:grid-cols-[1.4fr_.6fr]">
           <div>
             <SectionEyebrow>{item.index} · Research</SectionEyebrow>
-            <h1 className="mt-6 font-display text-6xl leading-none sm:text-8xl">{item.title}</h1>
-            <p className="mt-10 max-w-4xl font-display text-3xl leading-snug text-clay sm:text-5xl">{item.question}</p>
+            <h1 className="mt-5 font-display text-5xl leading-none sm:text-7xl">{item.title}</h1>
+            <p className="mt-7 max-w-4xl font-display text-2xl leading-snug text-clay sm:text-4xl">{item.question}</p>
           </div>
           <div className="border-t border-ink pt-5 lg:mt-12">
             <p className="font-medium">{item.institution}</p>
@@ -572,13 +627,13 @@ function ResearchDetailPage() {
           </div>
         </div>
 
-        <div className="mt-20 grid gap-px bg-line sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-12 grid gap-px bg-line sm:grid-cols-2 lg:grid-cols-4">
           {item.anchors.map((anchor) => <div key={anchor} className="bg-cream p-6 font-mono text-sm text-ink">{anchor}</div>)}
         </div>
       </section>
 
       <section className="border-y border-ink bg-sand">
-        <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-28">
+        <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8 sm:py-20">
           {[
             ['Question', item.why],
             ['Method', item.method],
@@ -586,9 +641,9 @@ function ResearchDetailPage() {
             ['What changed', item.changed],
           ].map(([label, copy]) => (
             <Reveal key={label}>
-              <div className="grid gap-6 border-t border-ink py-10 sm:grid-cols-[11rem_1fr] sm:py-14">
+              <div className="grid gap-5 border-t border-ink py-8 sm:grid-cols-[10rem_1fr] sm:py-10">
                 <SectionEyebrow>{label}</SectionEyebrow>
-                <p className="max-w-4xl font-display text-3xl leading-snug sm:text-4xl">{copy}</p>
+                <p className="max-w-4xl font-display text-2xl leading-snug sm:text-3xl">{copy}</p>
               </div>
             </Reveal>
           ))}
@@ -601,9 +656,9 @@ function ResearchDetailPage() {
             </ul>
           </details>
 
-          <div className="grid gap-6 pt-14 sm:grid-cols-[11rem_1fr]">
+          <div className="grid gap-5 pt-10 sm:grid-cols-[10rem_1fr]">
             <SectionEyebrow>Where next</SectionEyebrow>
-            <p className="max-w-4xl font-display text-4xl leading-snug sm:text-5xl">{item.future}</p>
+            <p className="max-w-4xl font-display text-3xl leading-snug sm:text-4xl">{item.future}</p>
           </div>
 
           {item.links.length > 0 && (
@@ -621,18 +676,18 @@ function DirectionsPage() {
   return (
     <main className="bg-ink text-cream">
       <PageMeta title="Directions" description="Research directions in memory, world models, language, NeuroAI, and continual learning." />
-      <section className="mx-auto max-w-7xl px-5 py-24 sm:px-8 sm:py-32">
+      <section className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-22">
         <SectionEyebrow light>Directions</SectionEyebrow>
-        <h1 className="mt-7 font-display text-6xl sm:text-8xl">Questions I haven’t finished asking.</h1>
-        <div className="mt-24">
+        <h1 className="mt-5 font-display text-5xl sm:text-7xl">Questions I haven’t finished asking.</h1>
+        <div className="mt-14">
           {DIRECTIONS.map((direction, index) => (
             <Reveal key={direction.title}>
-              <section className="grid gap-8 border-t border-cream/25 py-16 sm:grid-cols-[5rem_1fr] sm:py-24">
+              <section className="grid gap-6 border-t border-cream/25 py-10 sm:grid-cols-[4rem_1fr] sm:py-14">
                 <span className="font-mono text-xs text-blush">{String(index + 1).padStart(2, '0')}</span>
                 <div>
-                  <h2 className="font-display text-6xl uppercase sm:text-8xl">{direction.title}</h2>
-                  <p className="mt-8 max-w-4xl font-display text-3xl leading-snug text-sand sm:text-5xl">{direction.question}</p>
-                  <p className="mt-8 font-mono text-xs uppercase tracking-[0.16em] text-blush">{direction.terms}</p>
+                  <h2 className="font-display text-5xl uppercase sm:text-7xl">{direction.title}</h2>
+                  <p className="mt-5 max-w-4xl font-display text-2xl leading-snug text-sand sm:text-4xl">{direction.question}</p>
+                  <p className="mt-5 font-mono text-xs uppercase tracking-[0.16em] text-blush">{direction.terms}</p>
                 </div>
               </section>
             </Reveal>
@@ -649,19 +704,19 @@ function BuildPage() {
     <main>
       <PageMeta title="Build" description="Arzaic, Iris, and selected systems by Waiz Khan." />
       <section className="bg-ink text-cream">
-        <div className="mx-auto max-w-7xl px-5 py-24 sm:px-8 sm:py-36">
+        <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-22">
           <SectionEyebrow light>Build</SectionEyebrow>
-          <h1 className="mt-8 font-display text-7xl sm:text-9xl">Arzaic</h1>
-          <p className="mt-10 max-w-4xl font-display text-4xl leading-tight text-sand sm:text-6xl">Useful AI is not enough when being wrong has consequences.</p>
+          <h1 className="mt-6 font-display text-6xl sm:text-8xl">Arzaic</h1>
+          <p className="mt-7 max-w-4xl font-display text-3xl leading-tight text-sand sm:text-5xl">Useful AI is not enough when being wrong has consequences.</p>
         </div>
       </section>
 
       <section className="bg-ink text-cream">
-        <div className="mx-auto max-w-7xl border-t border-cream/20 px-5 py-24 sm:px-8 sm:py-32">
-          <div className="grid gap-16 lg:grid-cols-[.8fr_1.2fr]">
+        <div className="mx-auto max-w-7xl border-t border-cream/20 px-5 py-16 sm:px-8 sm:py-22">
+          <div className="grid gap-10 lg:grid-cols-[.8fr_1.2fr]">
             <div>
               <SectionEyebrow light>Iris</SectionEyebrow>
-              <h2 className="mt-6 font-display text-6xl sm:text-8xl">What happens between clinic visits?</h2>
+              <h2 className="mt-5 font-display text-5xl sm:text-7xl">What happens between clinic visits?</h2>
             </div>
             <div>
               <div className="grid gap-px bg-cream/20 sm:grid-cols-5">
@@ -674,18 +729,18 @@ function BuildPage() {
             </div>
           </div>
 
-          <div className="mt-28 border-t border-cream/20 pt-12">
+          <div className="mt-18 border-t border-cream/20 pt-9">
             <SectionEyebrow light>Next / Arzaic</SectionEyebrow>
-            <p className="mt-5 font-display text-6xl sm:text-8xl">Eve</p>
+            <p className="mt-4 font-display text-5xl sm:text-7xl">Eve</p>
             <p className="mt-6 font-display text-3xl text-sand sm:text-4xl">Can reliability itself be learned?</p>
           </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-5 py-24 sm:px-8 sm:py-32">
+      <section className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-22">
         <SectionEyebrow>Experience</SectionEyebrow>
-        <h2 className="mt-6 font-display text-5xl sm:text-7xl">The work around the work.</h2>
-        <div className="mt-16">
+        <h2 className="mt-5 font-display text-4xl sm:text-6xl">The work around the work.</h2>
+        <div className="mt-10">
           {EXPERIENCE.map((item) => (
             <Reveal key={`${item.place}-${item.role}`}>
               <div className="grid gap-4 border-t border-ink py-8 sm:grid-cols-[10rem_1fr_1fr] sm:gap-8">
@@ -699,7 +754,7 @@ function BuildPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl border-t border-ink px-5 py-20 sm:px-8 sm:py-28">
+      <section className="mx-auto max-w-7xl border-t border-ink px-5 py-14 sm:px-8 sm:py-20">
         <SectionEyebrow>Selected systems</SectionEyebrow>
         <div className="mt-10">
           {SYSTEMS.map((system) => (
@@ -720,12 +775,12 @@ function HeelaPage() {
   return (
     <main className="bg-sand">
       <PageMeta title="Heela" description="Heela is a nonprofit supporting refugee students on the path toward higher education." />
-      <section className="mx-auto max-w-7xl px-5 py-24 sm:px-8 sm:py-36">
+      <section className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-22">
         <SectionEyebrow>Heela · Nonprofit Organization</SectionEyebrow>
-        <h1 className="mt-8 font-display text-8xl sm:text-9xl">Heela</h1>
+        <h1 className="mt-6 font-display text-7xl sm:text-8xl">Heela</h1>
         <p className="mt-4 font-display text-3xl italic text-pink sm:text-4xl">Hope, in Pashto.</p>
-        <div className="mt-20 grid gap-14 lg:grid-cols-[1.1fr_.9fr]">
-          <p className="font-display text-5xl leading-tight sm:text-6xl">Some access problems don’t need another model.</p>
+        <div className="mt-12 grid gap-10 lg:grid-cols-[1.1fr_.9fr]">
+          <p className="font-display text-4xl leading-tight sm:text-5xl">Some access problems don’t need another model.</p>
           <div>
             <p className="text-xl leading-relaxed text-clay">Heela helps refugee students navigate the path toward higher education through mentorship, guidance, and sustained support.</p>
             <p className="mt-8 font-mono text-xs uppercase tracking-[0.2em] text-pink">Vice Chair & Director</p>
@@ -734,7 +789,7 @@ function HeelaPage() {
           </div>
         </div>
 
-        <div className="mt-24 grid gap-px bg-ink sm:grid-cols-3">
+        <div className="mt-16 grid gap-px bg-ink sm:grid-cols-3">
           {['Governance', 'People', 'Continuity'].map((word) => <div key={word} className="bg-sand p-9 font-display text-3xl">{word}</div>)}
         </div>
       </section>
@@ -746,21 +801,21 @@ function StoryPage() {
   return (
     <main>
       <PageMeta title="Story" description="The visual questions that preceded Waiz Khan’s work in language, memory, and intelligent systems." />
-      <section className="mx-auto max-w-7xl px-5 py-28 sm:px-8 sm:py-44">
+      <section className="mx-auto max-w-7xl px-5 py-18 sm:px-8 sm:py-26">
         <SectionEyebrow>Story</SectionEyebrow>
-        <h1 className="mt-20 max-w-6xl font-display text-7xl uppercase leading-[0.92] sm:text-9xl">Before models,<br />I thought in frames.</h1>
+        <h1 className="mt-12 max-w-6xl font-display text-6xl uppercase leading-[0.92] sm:text-8xl">Before models,<br />I thought in frames.</h1>
       </section>
       <section className="border-y border-ink bg-sand">
-        <div className="mx-auto max-w-5xl px-5 py-28 text-center sm:px-8 sm:py-44">
-          <p className="font-display text-5xl sm:text-7xl">I was once drawn to filmmaking.</p>
+        <div className="mx-auto max-w-5xl px-5 py-18 text-center sm:px-8 sm:py-26">
+          <p className="font-display text-4xl sm:text-6xl">I was once drawn to filmmaking.</p>
         </div>
       </section>
-      <section className="mx-auto max-w-7xl px-5 py-28 sm:px-8 sm:py-44">
-        <p className="max-w-4xl font-display text-5xl leading-tight sm:text-7xl">Stories are representations too.</p>
+      <section className="mx-auto max-w-7xl px-5 py-18 sm:px-8 sm:py-26">
+        <p className="max-w-4xl font-display text-4xl leading-tight sm:text-6xl">Stories are representations too.</p>
         <p className="mt-10 max-w-2xl text-xl leading-relaxed text-clay">They decide what to preserve, what to remove, and what a viewer carries forward.</p>
-        <p className="mt-24 font-display text-4xl sm:text-5xl">I stopped making films.<br /><em className="text-pink">The questions stayed.</em></p>
+        <p className="mt-16 font-display text-3xl sm:text-4xl">I stopped making films.<br /><em className="text-pink">The questions stayed.</em></p>
 
-        <div className="mt-28 grid gap-6 sm:grid-cols-4">
+        <div className="mt-18 grid gap-6 sm:grid-cols-4">
           {['Image', 'Language', 'Memory', 'World'].map((word, index) => (
             <div key={word} className="border-t border-ink pt-5">
               <p className="font-mono text-xs text-pink">0{index + 1}</p>
@@ -775,10 +830,10 @@ function StoryPage() {
 
 function ResumePage() {
   return (
-    <main className="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-28">
+    <main className="mx-auto max-w-7xl px-5 py-14 sm:px-8 sm:py-20">
       <PageMeta title="CV" description="Curriculum vitae for Waiz Khan." />
       <SectionEyebrow>CV</SectionEyebrow>
-      <h1 className="mt-6 font-display text-6xl sm:text-8xl">Curriculum vitae</h1>
+      <h1 className="mt-5 font-display text-5xl sm:text-7xl">Curriculum vitae</h1>
       <div className="mt-10 flex flex-wrap gap-4">
         <a href={LINKS.resumePdf} download="Waiz_Khan.pdf" className="border-2 border-ink bg-ink px-6 py-3 text-cream hover:border-pink hover:bg-pink">Download PDF</a>
         <a href={LINKS.resumePdf} target="_blank" rel="noopener noreferrer" className="border-2 border-ink px-6 py-3 hover:border-pink hover:text-pink">Open in new tab</a>
