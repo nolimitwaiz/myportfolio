@@ -161,21 +161,21 @@ const DIRECTIONS = [
   },
 ]
 
-const SYSTEMS = [
+const PROJECTS = [
   {
     title: 'OFX',
-    line: 'Market structure at event resolution.',
+    line: 'A replayable limit-order-book terminal for studying market structure.',
     href: 'https://github.com/nolimitwaiz/ofx-terminal',
   },
   {
     title: 'NavRover',
-    line: 'Learning to move through the world.',
+    line: 'ROS 2 navigation logs turned into labeled learning data.',
     href: 'https://github.com/nolimitwaiz/navrover',
   },
   {
     title: 'Klesis',
-    line: 'Communication without a network.',
-    href: 'https://nolimitwaiz.github.io/klesis/',
+    line: 'Text sent between nearby devices through sound.',
+    href: 'https://github.com/nolimitwaiz/klesis',
   },
 ]
 
@@ -379,7 +379,7 @@ function ScrollToTop() {
 }
 
 function ArrowLink({ to, children, external = false, className = '' }) {
-  const styles = `inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] underline decoration-blush decoration-2 underline-offset-4 transition-colors hover:text-pink ${className}`
+  const styles = `inline-flex items-center gap-2 border border-ink px-3 py-2 font-mono text-[11px] uppercase tracking-[0.14em] no-underline transition-colors hover:border-pink hover:bg-pink hover:text-cream ${className}`
   if (external) {
     return <a href={to} target="_blank" rel="noopener noreferrer" className={styles}>{children} ↗</a>
   }
@@ -388,20 +388,20 @@ function ArrowLink({ to, children, external = false, className = '' }) {
 
 function Header() {
   const navClass = ({ isActive }) =>
-    `whitespace-nowrap transition-colors hover:text-pink ${isActive ? 'text-ink underline decoration-pink decoration-2 underline-offset-8' : ''}`
+    `whitespace-nowrap border px-2 py-2 transition-colors hover:border-pink hover:text-pink sm:px-3 ${isActive ? 'border-ink bg-ink text-cream' : 'border-line text-clay'}`
 
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-cream/92 backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl flex-col items-start gap-2 px-5 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-7 sm:px-8">
         <Link to="/" className="font-display text-xl italic text-ink">Waiz Khan</Link>
-        <div className="flex w-full min-w-0 items-center justify-start gap-5 overflow-x-auto pb-1 text-[13px] text-clay sm:w-auto sm:flex-1 sm:justify-end sm:gap-6 sm:pb-0 sm:text-[14px]">
-          <nav className="flex items-center gap-5 sm:gap-6" aria-label="Primary navigation">
+        <div className="flex w-full min-w-0 items-center justify-start gap-1 overflow-x-auto pb-1 text-[11px] sm:w-auto sm:flex-1 sm:justify-end sm:gap-2 sm:pb-0 sm:text-[12px]">
+          <nav className="flex items-center gap-1 sm:gap-2" aria-label="Primary navigation">
             <NavLink to="/research" className={navClass}>Research</NavLink>
             <NavLink to="/build" className={navClass}>Work</NavLink>
             <NavLink to="/story" className={navClass}>About</NavLink>
             <NavLink to="/resume" className={navClass}>CV</NavLink>
           </nav>
-          <a href={LINKS.github} target="_blank" rel="noopener noreferrer" className="whitespace-nowrap font-mono text-xs text-ink hover:text-pink">GitHub ↗</a>
+          <a href={LINKS.github} target="_blank" rel="noopener noreferrer" className="whitespace-nowrap border border-ink px-2 py-2 font-mono text-[10px] uppercase tracking-wider text-ink hover:border-pink hover:bg-pink hover:text-cream sm:px-3 sm:text-[11px]">GitHub ↗</a>
         </div>
       </div>
     </header>
@@ -416,11 +416,11 @@ function Footer() {
           <p className="font-display text-3xl text-ink">Waiz Khan</p>
           <p className="mt-2 text-sm leading-relaxed text-clay">Johns Hopkins University · M.S.E. Data Science</p>
         </div>
-        <div className="flex flex-wrap gap-5 font-mono text-xs uppercase tracking-wider text-ink">
-          <a href={LINKS.email} className="hover:text-pink">Email</a>
-          <a href={LINKS.github} target="_blank" rel="noopener noreferrer" className="hover:text-pink">GitHub ↗</a>
-          <a href={LINKS.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-pink">LinkedIn ↗</a>
-          <Link to="/resume" className="hover:text-pink">CV</Link>
+        <div className="flex flex-wrap gap-2 font-mono text-[11px] uppercase tracking-wider text-ink">
+          <a href={LINKS.email} className="border border-ink px-3 py-2 hover:border-pink hover:bg-pink hover:text-cream">Email</a>
+          <a href={LINKS.github} target="_blank" rel="noopener noreferrer" className="border border-ink px-3 py-2 hover:border-pink hover:bg-pink hover:text-cream">GitHub ↗</a>
+          <a href={LINKS.linkedin} target="_blank" rel="noopener noreferrer" className="border border-ink px-3 py-2 hover:border-pink hover:bg-pink hover:text-cream">LinkedIn ↗</a>
+          <Link to="/resume" className="border border-ink px-3 py-2 hover:border-pink hover:bg-pink hover:text-cream">CV</Link>
         </div>
       </div>
     </footer>
@@ -476,18 +476,18 @@ function ResearchGrid() {
   return (
     <div className="grid border-l border-t border-ink md:grid-cols-2">
       {RESEARCH.map((item) => (
-        <article key={item.slug} className="border-b border-r border-ink p-5 sm:p-6">
+        <article key={item.slug} className="border-b border-r border-ink p-4 sm:p-5">
           <div className="flex items-start justify-between gap-4">
             <SectionEyebrow>{item.index}</SectionEyebrow>
             <span className="font-mono text-[11px] text-clay">{item.dates}</span>
           </div>
-          <h3 className="mt-4 font-display text-3xl leading-tight">{item.title}</h3>
-          <p className="mt-2 font-display text-xl leading-snug text-clay">{item.question}</p>
-          <p className="mt-4 text-[13px] font-medium text-ink">{item.institution}</p>
-          <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1 font-mono text-[11px] text-pink">
+          <h3 className="mt-3 font-display text-2xl leading-tight">{item.title}</h3>
+          <p className="mt-2 text-sm leading-relaxed text-clay">{item.question}</p>
+          <p className="mt-3 text-[12px] font-medium text-ink">{item.institution}</p>
+          <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 font-mono text-[10px] text-pink">
             {item.anchors.slice(0, 3).map((anchor) => <span key={anchor}>{anchor}</span>)}
           </div>
-          <div className="mt-5"><ArrowLink to={`/research/${item.slug}`}>Details</ArrowLink></div>
+          <div className="mt-4"><ArrowLink to={`/research/${item.slug}`}>Details</ArrowLink></div>
         </article>
       ))}
     </div>
@@ -505,7 +505,7 @@ function HomePage() {
         description="Waiz Khan is a student in the Department of Applied Mathematics and Statistics at Johns Hopkins University, researching multilingual language models, low-resource learning, and computational decipherment."
       />
 
-      <section className="mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-12">
+      <section className="mx-auto max-w-7xl px-5 py-8 sm:px-8 sm:py-10">
         <div className="grid items-center gap-8 lg:grid-cols-[1.25fr_.75fr]">
           <div>
             <SectionEyebrow>Baltimore · Johns Hopkins</SectionEyebrow>
@@ -513,13 +513,13 @@ function HomePage() {
             <div className="mt-6 max-w-xl"><DotMatrix text="WAIZ KHAN" className="w-full cursor-crosshair" /></div>
           </div>
           <div>
-            <p className="font-display text-3xl leading-tight">Student in the Department of Applied Mathematics and Statistics at Johns Hopkins University.</p>
+            <p className="font-display text-2xl leading-tight sm:text-3xl">Student in the Department of Applied Mathematics and Statistics at Johns Hopkins University.</p>
             <p className="mt-3 text-[15px] leading-relaxed text-clay">M.S.E. Data Science. Research in multilingual language models, low-resource NLP, and computational decipherment.</p>
             <div className="mt-5 flex gap-6"><ArrowLink to="/research">Research</ArrowLink><ArrowLink to="/resume">CV</ArrowLink></div>
           </div>
         </div>
 
-        <div className="mt-9 grid border-l border-t border-line sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-7 grid grid-cols-2 border-l border-t border-line lg:grid-cols-4">
           {[
             ['Education', 'Johns Hopkins University', 'Applied Mathematics & Statistics · M.S.E. Data Science · 2027'],
             ['Research', 'Graduate Researcher', 'Prof. Philipp Koehn · 2025–Present'],
@@ -535,30 +535,31 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl border-t border-ink px-5 py-10 sm:px-8 sm:py-12">
-        <div className="mb-7 flex items-end justify-between gap-6">
+      <section className="mx-auto max-w-7xl border-t border-ink px-5 py-8 sm:px-8 sm:py-10">
+        <div className="mb-5 flex items-end justify-between gap-4">
           <div><SectionEyebrow>Selected work</SectionEyebrow><h2 className="mt-2 font-display text-4xl">Research</h2></div>
-          <ArrowLink to="/research">Full research profile</ArrowLink>
+          <ArrowLink to="/research">Research notes</ArrowLink>
         </div>
         <ResearchGrid />
       </section>
 
-      <section className="bg-ink text-cream">
-        <div className="mx-auto max-w-7xl px-5 py-9 sm:px-8">
-          <div className="grid gap-px bg-cream/20 md:grid-cols-4">
-            <Link to="/build" className="bg-ink p-5 hover:bg-white/5">
-              <p className="font-mono text-[10px] uppercase tracking-widest text-blush">Current build</p>
-              <p className="mt-2 font-display text-2xl">Iris / Arzaic</p>
-              <p className="mt-2 text-xs leading-relaxed text-sand">Auditable healthcare agents for longitudinal support.</p>
-            </Link>
-            {SYSTEMS.map((system) => (
-              <a key={system.title} href={system.href} target="_blank" rel="noopener noreferrer" className="bg-ink p-5 hover:bg-white/5">
-                <p className="font-mono text-[10px] uppercase tracking-widest text-blush">Selected system ↗</p>
-                <p className="mt-2 font-display text-2xl">{system.title}</p>
-                <p className="mt-2 text-xs leading-relaxed text-sand">{system.line}</p>
-              </a>
-            ))}
-          </div>
+      <section className="mx-auto max-w-7xl border-t border-ink px-5 py-8 sm:px-8 sm:py-10">
+        <div className="mb-5 flex items-end justify-between gap-4">
+          <div><SectionEyebrow>Personal GitHub</SectionEyebrow><h2 className="mt-2 font-display text-4xl">Projects</h2></div>
+          <ArrowLink to={LINKS.github} external>All repositories</ArrowLink>
+        </div>
+        <div className="grid border-l border-t border-ink md:grid-cols-3">
+          {PROJECTS.map((project) => (
+            <article key={project.title} className="border-b border-r border-ink p-4 sm:p-5">
+              <h3 className="font-display text-2xl">{project.title}</h3>
+              <p className="mt-2 min-h-10 text-sm leading-relaxed text-clay">{project.line}</p>
+              <div className="mt-4"><ArrowLink to={project.href} external>Code</ArrowLink></div>
+            </article>
+          ))}
+        </div>
+        <div className="mt-5 flex items-center justify-between gap-4 border-t border-line pt-5">
+          <p className="text-xs text-clay">Arzaic and Iris appear under Work. Research infrastructure appears with the relevant research.</p>
+          <ArrowLink to="/build">Work</ArrowLink>
         </div>
       </section>
     </main>
@@ -570,8 +571,8 @@ function ResearchPage() {
     <main className="mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-12">
       <PageMeta title="Research" description="Research by Waiz Khan in multilingual representation, low-resource learning, computational decipherment, and causal ML." />
       <div className="grid gap-5 border-b border-ink pb-8 lg:grid-cols-[1fr_.8fr] lg:items-end">
-        <div><SectionEyebrow>Research</SectionEyebrow><h1 className="mt-3 font-display text-5xl sm:text-6xl">Research profile</h1></div>
-        <p className="text-[15px] leading-relaxed text-clay">Four programs spanning multilingual representation, low-resource learning, ancient scripts, and causal machine learning.</p>
+        <div><SectionEyebrow>Current work</SectionEyebrow><h1 className="mt-3 font-display text-5xl sm:text-6xl">Research</h1></div>
+        <p className="text-[15px] leading-relaxed text-clay">Questions in multilingual representation, low-resource learning, ancient scripts, and causal machine learning.</p>
       </div>
       <div className="mt-8"><ResearchGrid /></div>
 
@@ -599,7 +600,7 @@ function ResearchDetailPage() {
     <main>
       <PageMeta title={item.title} description={`${item.title}: ${item.question}`} />
       <section className="mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-12">
-        <Link to="/research" className="font-mono text-xs uppercase tracking-wider text-clay hover:text-pink">← All research</Link>
+        <Link to="/research" className="inline-flex border border-ink px-3 py-2 font-mono text-[11px] uppercase tracking-wider text-clay hover:border-pink hover:bg-pink hover:text-cream">← Research</Link>
         <div className="mt-7 grid gap-7 lg:grid-cols-[1.4fr_.6fr]">
           <div>
             <SectionEyebrow>{item.index} · Research</SectionEyebrow>
@@ -702,16 +703,18 @@ function BuildPage() {
           </div>
         </div>
         <div>
-          <SectionEyebrow>Selected systems</SectionEyebrow>
+          <SectionEyebrow>Personal GitHub</SectionEyebrow>
           <div className="mt-5 border-t border-ink">
-            {SYSTEMS.map((system) => (
-              <a key={system.title} href={system.href} target="_blank" rel="noopener noreferrer" className="group block border-b border-line py-4">
-                <span className="font-display text-2xl group-hover:text-pink">{system.title}</span>
-                <span className="ml-3 text-xs text-clay">{system.line}</span>
-              </a>
+            {PROJECTS.map((project) => (
+              <div key={project.title} className="border-b border-line py-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div><p className="font-display text-2xl">{project.title}</p><p className="mt-1 text-xs leading-relaxed text-clay">{project.line}</p></div>
+                  <ArrowLink to={project.href} external>Code</ArrowLink>
+                </div>
+              </div>
             ))}
           </div>
-          <div className="mt-5"><ArrowLink to={LINKS.github} external>GitHub</ArrowLink></div>
+          <div className="mt-5"><ArrowLink to={LINKS.github} external>All repositories</ArrowLink></div>
         </div>
       </section>
     </main>
