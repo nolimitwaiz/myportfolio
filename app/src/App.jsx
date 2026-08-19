@@ -388,7 +388,7 @@ function ArrowLink({ to, children, external = false, className = '' }) {
 
 function Header() {
   const navClass = ({ isActive }) =>
-    `whitespace-nowrap border px-2 py-2 transition-colors hover:border-pink hover:text-pink sm:px-3 ${isActive ? 'border-ink bg-ink text-cream' : 'border-line text-clay'}`
+    `whitespace-nowrap border bg-transparent px-2 py-2 transition-colors hover:border-pink hover:text-ink sm:px-3 ${isActive ? 'border-pink text-ink' : 'border-line text-clay'}`
 
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-cream/92 backdrop-blur-md">
@@ -724,20 +724,26 @@ function BuildPage() {
 function StoryPage() {
   return (
     <main>
-      <PageMeta title="Story" description="The visual questions that preceded Waiz Khan’s work in language, memory, and intelligent systems." />
+      <PageMeta title="About" description="Waiz Khan is a data science student and machine learning researcher at Johns Hopkins University." />
       <section className="mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-12">
         <div className="grid gap-8 lg:grid-cols-[.8fr_1.2fr]">
-          <div><SectionEyebrow>About</SectionEyebrow><h1 className="mt-3 font-display text-5xl">From frames to models.</h1></div>
+          <div><SectionEyebrow>About</SectionEyebrow><h1 className="mt-3 font-display text-5xl">Waiz Khan</h1></div>
           <div>
-            <p className="font-display text-3xl leading-tight">Filmmaking came first. The questions about representation stayed.</p>
-            <p className="mt-4 text-[15px] leading-relaxed text-clay">Stories decide what to preserve, what to remove, and what a viewer carries forward. The same questions now shape work in language, memory, and intelligent systems.</p>
+            <p className="font-display text-2xl leading-tight sm:text-3xl">M.S.E. Data Science student in the Department of Applied Mathematics and Statistics at Johns Hopkins University.</p>
+            <p className="mt-4 text-[15px] leading-relaxed text-clay">Current research covers multilingual language models, low-resource learning, and computational decipherment. Other interests include memory, world models, vision, robotics, and scientific machine learning.</p>
+            <p className="mt-3 text-[15px] leading-relaxed text-clay">Filmmaking came before machine learning. It still shapes an interest in images, events, and memory.</p>
+            <div className="mt-5"><ArrowLink to="/resume">CV</ArrowLink></div>
           </div>
         </div>
-        <div className="mt-8 grid gap-4 sm:grid-cols-4">
-          {['Image', 'Language', 'Memory', 'World'].map((word, index) => (
-            <div key={word} className="border-t border-ink pt-3">
-              <p className="font-mono text-[10px] text-pink">0{index + 1}</p>
-              <p className="mt-2 font-display text-2xl">{word}</p>
+        <div className="mt-8 grid border-l border-t border-ink sm:grid-cols-3">
+          {[
+            ['Scarcity', 'Learning from limited evidence.'],
+            ['Representation', 'What a model preserves.'],
+            ['Time', 'How systems change and remember.'],
+          ].map(([word, line]) => (
+            <div key={word} className="border-b border-r border-ink p-4">
+              <p className="font-display text-2xl">{word}</p>
+              <p className="mt-2 text-sm text-clay">{line}</p>
             </div>
           ))}
         </div>
@@ -753,7 +759,7 @@ function ResumePage() {
       <SectionEyebrow>CV</SectionEyebrow>
       <h1 className="mt-5 font-display text-5xl sm:text-7xl">Curriculum vitae</h1>
       <div className="mt-10 flex flex-wrap gap-4">
-        <a href={LINKS.resumePdf} download="Waiz_Khan.pdf" className="border-2 border-ink bg-ink px-6 py-3 text-cream hover:border-pink hover:bg-pink">Download PDF</a>
+        <a href={LINKS.resumePdf} download="Waiz_Khan.pdf" className="border-2 border-ink px-6 py-3 hover:border-pink hover:bg-pink hover:text-cream">Download PDF</a>
         <a href={LINKS.resumePdf} target="_blank" rel="noopener noreferrer" className="border-2 border-ink px-6 py-3 hover:border-pink hover:text-pink">Open in new tab</a>
       </div>
       <div className="my-10 border-2 border-ink">
