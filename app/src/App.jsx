@@ -173,6 +173,8 @@ const THOUGHT_NODES = [
     x: 50,
     y: 45,
     note: 'What information survives a change in language, modality, model family, or training method?',
+    view: 'A useful representation should preserve task-relevant structure while making nuisance variation measurable. A clean metric is not automatically a safe training objective; intervention can expose shortcuts.',
+    open: 'Which measurements remain meaningful after a model is trained to optimize them?',
     terms: ['representation learning', 'invariance', 'transfer'],
     to: '/research/multilingual-representation',
   },
@@ -183,6 +185,8 @@ const THOUGHT_NODES = [
     x: 20,
     y: 24,
     note: 'How much structure is shared across languages, and where does language-specific variation remain?',
+    view: 'Shared meaning does not require identical geometry at every layer. Language family, model family, and training recipe may shape different parts of the representation.',
+    open: 'Which differences predict downstream transfer, and which are only signatures of the training process?',
     terms: ['multilingual LLMs', 'cross-lingual structure', 'model depth'],
     to: '/research/multilingual-representation',
   },
@@ -193,6 +197,8 @@ const THOUGHT_NODES = [
     x: 18,
     y: 62,
     note: 'What can transfer from abundant languages without erasing the structure of languages with less data?',
+    view: 'Transfer is useful only when the source of the gain is clear. Benchmark coverage, supervision, and data provenance matter as much as the final translation score.',
+    open: 'How can transfer supply useful structure without flattening the language receiving it?',
     terms: ['machine translation', 'cross-lingual transfer', 'scarce supervision'],
     to: '/research/low-resource-language-learning',
   },
@@ -203,6 +209,8 @@ const THOUGHT_NODES = [
     x: 36,
     y: 84,
     note: 'Can visual, distributional, and graph evidence support one another when the language itself has been lost?',
+    view: 'Visual form, sign co-occurrence, translation, and archaeological context provide incomplete but complementary evidence. Evaluation must be fixed before model selection begins.',
+    open: 'How can these signals agree without importing answers from pretrained systems?',
     terms: ['ancient scripts', 'multimodal learning', 'graph learning'],
     to: '/research/computational-decipherment',
   },
@@ -213,6 +221,8 @@ const THOUGHT_NODES = [
     x: 72,
     y: 69,
     note: 'Which results survive frozen splits, contamination audits, held-out model families, and intervention?',
+    view: 'Evaluation is part of the research object, not a final reporting step. A result becomes more useful when its provenance, failure conditions, and sensitivity are visible.',
+    open: 'What should replace a metric when optimizing it changes the behavior the metric was meant to describe?',
     terms: ['robustness', 'data provenance', 'reproducibility'],
     to: '/research',
   },
@@ -223,6 +233,8 @@ const THOUGHT_NODES = [
     x: 50,
     y: 12,
     note: 'How should a machine preserve useful experience without turning memory into uncontrolled context?',
+    view: 'Memory should be selective, inspectable, and tied to decisions. More context is not necessarily better memory; retention and forgetting both need a purpose.',
+    open: 'What deserves consolidation, what should remain episodic, and what should be forgotten?',
     terms: ['episodic memory', 'retrieval', 'consolidation'],
   },
   {
@@ -232,6 +244,8 @@ const THOUGHT_NODES = [
     x: 82,
     y: 23,
     note: 'When does a learned representation become predictive enough to support planning and action?',
+    view: 'A world model should expose what it expects to happen next and where that expectation is uncertain. Prediction matters when it changes an agent’s possible actions.',
+    open: 'How much structure must be learned before planning becomes reliable outside the training distribution?',
     terms: ['multimodal learning', 'prediction', 'embodied intelligence'],
   },
   {
@@ -241,6 +255,8 @@ const THOUGHT_NODES = [
     x: 86,
     y: 49,
     note: 'Which principles of human event memory are useful computational ideas rather than loose analogies?',
+    view: 'Human memory segments continuous experience, compresses events, and reconstructs rather than replays. Those mechanisms suggest testable designs, but biological language alone is not evidence.',
+    open: 'Which memory principles produce measurable computational advantages under controlled comparison?',
     terms: ['human memory', 'event segmentation', 'naturalistic fMRI'],
   },
   {
@@ -250,6 +266,8 @@ const THOUGHT_NODES = [
     x: 68,
     y: 88,
     note: 'How can a system keep changing after deployment without forgetting, drifting, or hiding failure?',
+    view: 'Adaptation needs boundaries: what may change, what must remain stable, and how the change becomes observable. Reliability requires a record of learning, not only a new checkpoint.',
+    open: 'Can a system learn continuously while preserving calibrated uncertainty and an auditable history?',
     terms: ['adaptation', 'stability', 'alternative learning systems'],
   },
 ]
@@ -626,6 +644,9 @@ function ThoughtsPage() {
   const [selectedId, setSelectedId] = useState('representation')
   const selected = THOUGHT_NODES.find((node) => node.id === selectedId)
   const nodeById = Object.fromEntries(THOUGHT_NODES.map((node) => [node.id, node]))
+  const connected = THOUGHT_EDGES
+    .filter(([from, to]) => from === selectedId || to === selectedId)
+    .map(([from, to]) => nodeById[from === selectedId ? to : from])
 
   return (
     <main className="mx-auto max-w-6xl px-5 py-8 sm:px-8 sm:py-10">
@@ -635,10 +656,10 @@ function ThoughtsPage() {
           <SectionEyebrow>Connected questions</SectionEyebrow>
           <h1 className="mt-2 font-display text-5xl sm:text-6xl">Thoughts</h1>
         </div>
-        <p className="text-[14px] leading-relaxed text-clay">A working map of questions connecting current research to longer-term directions. Select a square to read the note.</p>
+        <p className="text-[15px] leading-relaxed text-clay">A working map of questions connecting current research to longer-term directions. Each node holds a question, a current view, and the part that remains unresolved.</p>
       </div>
 
-      <div className="mt-6 grid gap-5 lg:grid-cols-[1.55fr_.45fr]">
+      <div className="mt-6 grid gap-5 lg:grid-cols-[1.35fr_.65fr]">
         <section aria-label="Research thought graph">
           <div
             className="relative h-[25rem] overflow-hidden border border-ink bg-cream sm:h-[31rem]"
@@ -670,9 +691,10 @@ function ThoughtsPage() {
                 <button
                   key={node.id}
                   type="button"
+                  aria-label={`Open thought: ${node.label}`}
                   aria-pressed={active}
                   onClick={() => setSelectedId(node.id)}
-                  className={`absolute z-10 -translate-x-1/2 -translate-y-1/2 border bg-cream px-2 py-1.5 font-mono text-[9px] leading-none shadow-[2px_2px_0_#fff] transition-colors sm:px-2.5 sm:py-2 sm:text-[10px] ${active ? 'border-pink bg-pink/10 text-ink' : 'border-ink text-clay hover:border-pink hover:text-ink'}`}
+                  className={`absolute z-10 -translate-x-1/2 -translate-y-1/2 border bg-cream px-2 py-1.5 font-mono text-[10px] leading-none shadow-[2px_2px_0_#fff] transition-colors sm:px-2.5 sm:py-2 sm:text-[11px] ${active ? 'border-pink bg-pink/10 text-ink' : 'border-ink text-clay hover:border-pink hover:text-ink'}`}
                   style={{ left: `${node.x}%`, top: `${node.y}%` }}
                 >
                   {node.label}
@@ -680,21 +702,43 @@ function ThoughtsPage() {
               )
             })}
 
-            <p className="absolute bottom-3 left-3 font-mono text-[9px] uppercase tracking-wider text-clay">{THOUGHT_NODES.length} notes · {THOUGHT_EDGES.length} links</p>
+            <p className="absolute bottom-3 left-3 font-mono text-[10px] uppercase tracking-wider text-clay">{THOUGHT_NODES.length} notes · {THOUGHT_EDGES.length} links</p>
           </div>
         </section>
 
-        <aside className="flex min-h-64 flex-col border border-ink p-5" aria-live="polite">
+        <aside className="flex min-h-64 flex-col border border-ink p-5 sm:p-6" aria-live="polite">
           <div className="flex items-start justify-between gap-4">
             <SectionEyebrow>{selected.category}</SectionEyebrow>
             <span className="h-3 w-3 border border-pink bg-pink/10" aria-hidden="true" />
           </div>
-          <h2 className="mt-4 font-display text-3xl leading-tight">{selected.label}</h2>
-          <p className="mt-3 text-[14px] leading-relaxed text-clay">{selected.note}</p>
-          <div className="mt-5 flex flex-wrap gap-2">
-            {selected.terms.map((term) => <span key={term} className="border border-line px-2 py-1 font-mono text-[9px] uppercase tracking-wider text-clay">{term}</span>)}
+          <h2 className="mt-3 font-display text-4xl leading-tight">{selected.label}</h2>
+
+          <div className="mt-4 border-t border-line pt-3">
+            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-pink">Question</p>
+            <p className="mt-2 text-[15px] leading-relaxed text-ink">{selected.note}</p>
           </div>
-          {selected.to && <div className="mt-auto pt-6"><ArrowLink to={selected.to}>Related work</ArrowLink></div>}
+          <div className="mt-4 border-t border-line pt-3">
+            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-pink">Working view</p>
+            <p className="mt-2 text-[14px] leading-relaxed text-clay">{selected.view}</p>
+          </div>
+          <div className="mt-4 border-t border-line pt-3">
+            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-pink">Still open</p>
+            <p className="mt-2 text-[14px] leading-relaxed text-clay">{selected.open}</p>
+          </div>
+
+          <div className="mt-4 border-t border-line pt-3">
+            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-pink">Connected to</p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {connected.map((node) => (
+                <button key={node.id} type="button" aria-label={`Follow connection: ${node.label}`} onClick={() => setSelectedId(node.id)} className="border border-line px-2 py-1 text-[11px] text-clay hover:border-pink hover:text-ink">{node.label}</button>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-4 flex flex-wrap gap-2">
+            {selected.terms.map((term) => <span key={term} className="border border-line px-2 py-1 font-mono text-[10px] uppercase tracking-wider text-clay">{term}</span>)}
+          </div>
+          {selected.to && <div className="mt-auto pt-5"><ArrowLink to={selected.to}>Related work</ArrowLink></div>}
         </aside>
       </div>
     </main>
