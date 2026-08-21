@@ -29,6 +29,7 @@ const RESEARCH = [
     summary:
       'Language-specific variation inside multilingual language models, studied across layers, languages, model families, and training methods.',
     anchors: ['17 open models', '128 languages', '0.6B–8B parameters', 'held-out model families'],
+    keywords: ['multilingual LLMs', 'representation learning', 'NTREX-128', 'Belebele'],
     why:
       'Multilingual models can express the same meaning in many languages, but their internal representations still carry language-specific structure. Understanding that structure can clarify what transfers across languages and what does not.',
     method:
@@ -56,6 +57,7 @@ const RESEARCH = [
     summary:
       'Representation, transfer, translation, and evaluation when training data is uneven or scarce.',
     anchors: ['representation', 'cross-lingual transfer', 'machine translation', 'evaluation'],
+    keywords: ['low-resource NLP', 'machine translation', 'cross-lingual transfer', 'evaluation'],
     why:
       'Modern language models learn from abundance. Most languages do not have it. Low-resource research asks what fails first, what can transfer, and how improvement should be measured when benchmarks are small.',
     method:
@@ -83,6 +85,7 @@ const RESEARCH = [
     summary:
       'Multimodal translation, unsupervised sign structure, and evaluation infrastructure for ancient scripts.',
     anchors: ['61k examples', '15+ architectures', 'vision + language', '≈34% duplicate leakage'],
+    keywords: ['computational decipherment', 'multimodal learning', 'graph learning', 'data provenance'],
     why:
       'Computational decipherment is low-resource learning at its limit. Data is scarce, scripts may be only partly understood, and evaluation can fail before the model does.',
     method:
@@ -112,6 +115,7 @@ const RESEARCH = [
     summary:
       'Prediction, causal inference, and fixed-budget allocation for chronic absenteeism.',
     anchors: ['47,027 students', 'ROC-AUC 0.841', '0.699 baseline', 'causal inference + optimization'],
+    keywords: ['causal ML', 'gradient boosting', 'DoWhy', 'integer optimization'],
     why:
       'One of my first research questions concerned students who stop showing up. Predicting risk is only the beginning when the result may influence where limited support is sent.',
     method:
@@ -165,17 +169,26 @@ const PROJECTS = [
   {
     title: 'OFX',
     line: 'A replayable limit-order-book terminal for studying market structure.',
+    terms: ['TypeScript', 'WebGL', 'market microstructure', 'event replay'],
     href: 'https://github.com/nolimitwaiz/ofx-terminal',
   },
   {
     title: 'NavRover',
     line: 'ROS 2 navigation logs turned into labeled learning data.',
+    terms: ['ROS 2', 'Python', 'robot navigation', 'dataset generation'],
     href: 'https://github.com/nolimitwaiz/navrover',
   },
   {
     title: 'Klesis',
     line: 'Text sent between nearby devices through sound.',
+    terms: ['PWA', 'Web Audio', 'ggwave', 'offline communication'],
     href: 'https://github.com/nolimitwaiz/klesis',
+  },
+  {
+    title: 'Glyphos',
+    line: 'Leakage-controlled evaluation infrastructure for ancient-script decipherment.',
+    terms: ['Python', 'PyTorch', 'data provenance', 'frozen evaluation'],
+    href: 'https://github.com/nolimitwaiz/glyphos',
   },
 ]
 
@@ -286,7 +299,7 @@ function DotMatrix({ text, className = '' }) {
         element.setAttribute('height', size.toFixed(2))
         element.setAttribute('x', (dot.cx - size / 2).toFixed(2))
         element.setAttribute('y', (dot.cy - size / 2).toFixed(2))
-        element.setAttribute('fill', dot.on ? (nearby ? '#e64980' : '#171310') : '#e0d4b6')
+        element.setAttribute('fill', dot.on ? (nearby ? '#e60063' : '#090909') : '#dedede')
       })
     }
 
@@ -325,7 +338,7 @@ function DotMatrix({ text, className = '' }) {
             y={dot.cy - size / 2}
             width={size}
             height={size}
-            fill={dot.on ? '#171310' : '#e0d4b6'}
+            fill={dot.on ? '#090909' : '#dedede'}
           />
         )
       })}
@@ -392,7 +405,7 @@ function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-cream/92 backdrop-blur-md">
-      <div className="mx-auto flex max-w-7xl flex-col items-start gap-2 px-5 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-7 sm:px-8">
+      <div className="mx-auto flex max-w-6xl flex-col items-start gap-2 px-5 py-2.5 sm:flex-row sm:items-center sm:justify-between sm:gap-7 sm:px-8">
         <Link to="/" className="font-display text-xl italic text-ink">Waiz Khan</Link>
         <div className="flex w-full min-w-0 items-center justify-start gap-1 overflow-x-auto pb-1 text-[11px] sm:w-auto sm:flex-1 sm:justify-end sm:gap-2 sm:pb-0 sm:text-[12px]">
           <nav className="flex items-center gap-1 sm:gap-2" aria-label="Primary navigation">
@@ -411,10 +424,10 @@ function Header() {
 function Footer() {
   return (
     <footer className="border-t border-ink bg-cream">
-      <div className="mx-auto flex max-w-7xl flex-wrap items-end justify-between gap-6 px-5 py-7 sm:px-8">
+      <div className="mx-auto flex max-w-6xl flex-wrap items-end justify-between gap-5 px-5 py-5 sm:px-8">
         <div>
-          <p className="font-display text-3xl text-ink">Waiz Khan</p>
-          <p className="mt-2 text-sm leading-relaxed text-clay">Johns Hopkins University · M.S.E. Data Science</p>
+          <p className="font-display text-2xl text-ink">Waiz Khan</p>
+          <p className="mt-1 text-xs leading-relaxed text-clay">Johns Hopkins University · Applied Mathematics & Statistics</p>
         </div>
         <div className="flex flex-wrap gap-2 font-mono text-[11px] uppercase tracking-wider text-ink">
           <a href={LINKS.email} className="border border-ink px-3 py-2 hover:border-pink hover:bg-pink hover:text-cream">Email</a>
@@ -481,13 +494,17 @@ function ResearchGrid() {
             <SectionEyebrow>{item.index}</SectionEyebrow>
             <span className="font-mono text-[11px] text-clay">{item.dates}</span>
           </div>
-          <h3 className="mt-3 font-display text-2xl leading-tight">{item.title}</h3>
-          <p className="mt-2 text-sm leading-relaxed text-clay">{item.question}</p>
-          <p className="mt-3 text-[12px] font-medium text-ink">{item.institution}</p>
-          <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 font-mono text-[10px] text-pink">
+          <h3 className="mt-2 font-display text-2xl leading-tight">{item.title}</h3>
+          <p className="mt-2 text-[13px] leading-relaxed text-clay">{item.summary}</p>
+          <p className="mt-3 text-[11px] font-semibold text-ink">{item.institution}</p>
+          <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 font-mono text-[10px] text-pink">
             {item.anchors.slice(0, 3).map((anchor) => <span key={anchor}>{anchor}</span>)}
           </div>
-          <div className="mt-4"><ArrowLink to={`/research/${item.slug}`}>Details</ArrowLink></div>
+          <p className="mt-3 font-mono text-[9px] uppercase leading-relaxed tracking-[0.08em] text-clay">{item.keywords.join(' · ')}</p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <ArrowLink to={`/research/${item.slug}`}>Details</ArrowLink>
+            {item.links.map((link) => <ArrowLink key={link.href} to={link.href} external>Code</ArrowLink>)}
+          </div>
         </article>
       ))}
     </div>
@@ -505,28 +522,28 @@ function HomePage() {
         description="Waiz Khan is a student in the Department of Applied Mathematics and Statistics at Johns Hopkins University, researching multilingual language models, low-resource learning, and computational decipherment."
       />
 
-      <section className="mx-auto max-w-7xl px-5 py-8 sm:px-8 sm:py-10">
-        <div className="grid items-center gap-8 lg:grid-cols-[1.25fr_.75fr]">
+      <section className="mx-auto max-w-6xl px-5 py-6 sm:px-8 sm:py-8">
+        <div className="grid items-center gap-6 lg:grid-cols-[1.18fr_.82fr]">
           <div>
             <SectionEyebrow>Baltimore · Johns Hopkins</SectionEyebrow>
             <h1 className="sr-only">Waiz Khan</h1>
-            <div className="mt-6 max-w-xl"><DotMatrix text="WAIZ KHAN" className="w-full cursor-crosshair" /></div>
+            <div className="mt-4 max-w-lg"><DotMatrix text="WAIZ KHAN" className="w-full cursor-crosshair" /></div>
           </div>
           <div>
-            <p className="font-display text-2xl leading-tight sm:text-3xl">Student in the Department of Applied Mathematics and Statistics at Johns Hopkins University.</p>
-            <p className="mt-3 text-[15px] leading-relaxed text-clay">M.S.E. Data Science. Research in multilingual language models, low-resource NLP, and computational decipherment.</p>
-            <div className="mt-5 flex gap-6"><ArrowLink to="/research">Research</ArrowLink><ArrowLink to="/resume">CV</ArrowLink></div>
+            <p className="font-display text-2xl leading-tight">Student in the Department of Applied Mathematics and Statistics at Johns Hopkins University.</p>
+            <p className="mt-2 text-[14px] leading-relaxed text-clay">M.S.E. Data Science · Multilingual language models · Low-resource NLP · Computational decipherment</p>
+            <div className="mt-4 flex gap-2"><ArrowLink to="/research">Research</ArrowLink><ArrowLink to="/resume">CV</ArrowLink></div>
           </div>
         </div>
 
-        <div className="mt-7 grid grid-cols-2 border-l border-t border-line lg:grid-cols-4">
+        <div className="mt-6 grid grid-cols-2 border-l border-t border-line lg:grid-cols-4">
           {[
             ['Education', 'Johns Hopkins University', 'Applied Mathematics & Statistics · M.S.E. Data Science · 2027'],
             ['Research', 'Graduate Researcher', 'Prof. Philipp Koehn · 2025–Present'],
             ['Arzaic', 'Co-Founder & Founding Engineer', 'Iris · Healthcare agents'],
             ['Heela', 'Vice Chair & Director', 'Nonprofit · Refugee education'],
           ].map(([label, title, detail]) => (
-            <div key={label} className="border-b border-r border-line p-4">
+            <div key={label} className="border-b border-r border-line p-3.5">
               <p className="font-mono text-[10px] uppercase tracking-widest text-pink">{label}</p>
               <p className="mt-2 text-sm font-semibold">{title}</p>
               <p className="mt-1 text-xs leading-relaxed text-clay">{detail}</p>
@@ -535,29 +552,30 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl border-t border-ink px-5 py-8 sm:px-8 sm:py-10">
-        <div className="mb-5 flex items-end justify-between gap-4">
-          <div><SectionEyebrow>Selected work</SectionEyebrow><h2 className="mt-2 font-display text-4xl">Research</h2></div>
+      <section className="mx-auto max-w-6xl border-t border-ink px-5 py-6 sm:px-8 sm:py-8">
+        <div className="mb-4 flex items-end justify-between gap-4">
+          <div><SectionEyebrow>Selected work</SectionEyebrow><h2 className="mt-1 font-display text-3xl">Research</h2></div>
           <ArrowLink to="/research">Research notes</ArrowLink>
         </div>
         <ResearchGrid />
       </section>
 
-      <section className="mx-auto max-w-7xl border-t border-ink px-5 py-8 sm:px-8 sm:py-10">
-        <div className="mb-5 flex items-end justify-between gap-4">
-          <div><SectionEyebrow>Personal GitHub</SectionEyebrow><h2 className="mt-2 font-display text-4xl">Projects</h2></div>
+      <section className="mx-auto max-w-6xl border-t border-ink px-5 py-6 sm:px-8 sm:py-8">
+        <div className="mb-4 flex items-end justify-between gap-4">
+          <div><SectionEyebrow>Personal GitHub</SectionEyebrow><h2 className="mt-1 font-display text-3xl">Projects</h2></div>
           <ArrowLink to={LINKS.github} external>All repositories</ArrowLink>
         </div>
-        <div className="grid border-l border-t border-ink md:grid-cols-3">
+        <div className="grid border-l border-t border-ink md:grid-cols-2 lg:grid-cols-4">
           {PROJECTS.map((project) => (
             <article key={project.title} className="border-b border-r border-ink p-4 sm:p-5">
               <h3 className="font-display text-2xl">{project.title}</h3>
-              <p className="mt-2 min-h-10 text-sm leading-relaxed text-clay">{project.line}</p>
-              <div className="mt-4"><ArrowLink to={project.href} external>Code</ArrowLink></div>
+              <p className="mt-2 text-[13px] leading-relaxed text-clay">{project.line}</p>
+              <p className="mt-3 font-mono text-[9px] uppercase leading-relaxed tracking-[0.08em] text-pink">{project.terms.join(' · ')}</p>
+              <div className="mt-3"><ArrowLink to={project.href} external>Code</ArrowLink></div>
             </article>
           ))}
         </div>
-        <div className="mt-5 flex items-center justify-between gap-4 border-t border-line pt-5">
+        <div className="mt-4 flex items-center justify-between gap-4 border-t border-line pt-4">
           <p className="text-xs text-clay">Arzaic and Iris appear under Work. Research infrastructure appears with the relevant research.</p>
           <ArrowLink to="/build">Work</ArrowLink>
         </div>
@@ -568,7 +586,7 @@ function HomePage() {
 
 function ResearchPage() {
   return (
-    <main className="mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-12">
+    <main className="mx-auto max-w-6xl px-5 py-8 sm:px-8 sm:py-10">
       <PageMeta title="Research" description="Research by Waiz Khan in multilingual representation, low-resource learning, computational decipherment, and causal ML." />
       <div className="grid gap-5 border-b border-ink pb-8 lg:grid-cols-[1fr_.8fr] lg:items-end">
         <div><SectionEyebrow>Current work</SectionEyebrow><h1 className="mt-3 font-display text-5xl sm:text-6xl">Research</h1></div>
@@ -599,7 +617,7 @@ function ResearchDetailPage() {
   return (
     <main>
       <PageMeta title={item.title} description={`${item.title}: ${item.question}`} />
-      <section className="mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-12">
+      <section className="mx-auto max-w-6xl px-5 py-8 sm:px-8 sm:py-10">
         <Link to="/research" className="inline-flex border border-ink px-3 py-2 font-mono text-[11px] uppercase tracking-wider text-clay hover:border-pink hover:bg-pink hover:text-cream">← Research</Link>
         <div className="mt-7 grid gap-7 lg:grid-cols-[1.4fr_.6fr]">
           <div>
@@ -619,7 +637,7 @@ function ResearchDetailPage() {
       </section>
 
       <section className="border-y border-ink bg-sand">
-        <div className="mx-auto max-w-7xl px-5 py-9 sm:px-8 sm:py-12">
+        <div className="mx-auto max-w-6xl px-5 py-8 sm:px-8 sm:py-10">
           <div className="grid border-l border-t border-ink md:grid-cols-2">
             {[
             ['Question', item.why],
@@ -667,7 +685,7 @@ function BuildPage() {
     <main>
       <PageMeta title="Build" description="Arzaic, Iris, and selected systems by Waiz Khan." />
       <section className="bg-ink text-cream">
-        <div className="mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-12">
+        <div className="mx-auto max-w-6xl px-5 py-8 sm:px-8 sm:py-10">
           <div className="grid gap-8 lg:grid-cols-[.75fr_1.25fr]">
             <div>
               <SectionEyebrow light>Arzaic · Current</SectionEyebrow>
@@ -675,8 +693,8 @@ function BuildPage() {
               <p className="mt-3 text-sm text-blush">Co-Founder & Founding Engineer</p>
             </div>
             <div>
-              <h2 className="font-display text-3xl leading-tight text-sand">Healthcare agents for the time between clinic visits.</h2>
-              <p className="mt-4 text-[15px] leading-relaxed text-sand">An architecture for longitudinal patient support built around auditable state, retrieval, tools, and safety checks.</p>
+              <h2 className="font-display text-3xl leading-tight text-sand">Longitudinal patient-support architecture.</h2>
+              <p className="mt-3 text-[14px] leading-relaxed text-sand">Auditable state · retrieval · tool use · safety checks</p>
               <div className="mt-5 grid gap-px bg-cream/20 sm:grid-cols-5">
                 {['Gate', 'Route', 'Retrieve', 'Generate', 'Guard'].map((stage) => <div key={stage} className="bg-ink p-3 text-center font-mono text-[10px] uppercase tracking-wider text-blush">{stage}</div>)}
               </div>
@@ -684,12 +702,12 @@ function BuildPage() {
           </div>
           <div className="mt-8 flex items-center gap-5 border-t border-cream/20 pt-6">
             <SectionEyebrow light>Next · Eve</SectionEyebrow>
-            <p className="font-display text-xl text-sand">Researching whether reliability can be learned.</p>
+            <p className="font-display text-xl text-sand">Reliability-focused learning system under research.</p>
           </div>
         </div>
       </section>
 
-      <section id="experience" className="mx-auto grid max-w-7xl gap-10 px-5 py-10 sm:px-8 sm:py-12 lg:grid-cols-[1.4fr_.6fr]">
+      <section id="experience" className="mx-auto grid max-w-6xl gap-8 px-5 py-8 sm:px-8 sm:py-10 lg:grid-cols-[1.35fr_.65fr]">
         <div>
           <SectionEyebrow>Experience</SectionEyebrow>
           <div className="mt-5 border-t border-ink">
@@ -708,7 +726,11 @@ function BuildPage() {
             {PROJECTS.map((project) => (
               <div key={project.title} className="border-b border-line py-4">
                 <div className="flex items-start justify-between gap-3">
-                  <div><p className="font-display text-2xl">{project.title}</p><p className="mt-1 text-xs leading-relaxed text-clay">{project.line}</p></div>
+                  <div>
+                    <p className="font-display text-2xl">{project.title}</p>
+                    <p className="mt-1 text-xs leading-relaxed text-clay">{project.line}</p>
+                    <p className="mt-2 font-mono text-[9px] uppercase leading-relaxed tracking-[0.08em] text-pink">{project.terms.join(' · ')}</p>
+                  </div>
                   <ArrowLink to={project.href} external>Code</ArrowLink>
                 </div>
               </div>
@@ -725,25 +747,26 @@ function StoryPage() {
   return (
     <main>
       <PageMeta title="About" description="Waiz Khan is a data science student and machine learning researcher at Johns Hopkins University." />
-      <section className="mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-12">
-        <div className="grid gap-8 lg:grid-cols-[.8fr_1.2fr]">
+      <section className="mx-auto max-w-6xl px-5 py-8 sm:px-8 sm:py-10">
+        <div className="grid gap-7 lg:grid-cols-[.72fr_1.28fr]">
           <div><SectionEyebrow>About</SectionEyebrow><h1 className="mt-3 font-display text-5xl">Waiz Khan</h1></div>
           <div>
-            <p className="font-display text-2xl leading-tight sm:text-3xl">M.S.E. Data Science student in the Department of Applied Mathematics and Statistics at Johns Hopkins University.</p>
-            <p className="mt-4 text-[15px] leading-relaxed text-clay">Current research covers multilingual language models, low-resource learning, and computational decipherment. Other interests include memory, world models, vision, robotics, and scientific machine learning.</p>
-            <p className="mt-3 text-[15px] leading-relaxed text-clay">Filmmaking came before machine learning. It still shapes an interest in images, events, and memory.</p>
-            <div className="mt-5"><ArrowLink to="/resume">CV</ArrowLink></div>
+            <p className="font-display text-2xl leading-tight sm:text-3xl">Student in the Department of Applied Mathematics and Statistics at Johns Hopkins University.</p>
+            <p className="mt-3 text-[14px] leading-relaxed text-clay">M.S.E. Data Science. Research in multilingual language models, low-resource NLP, computational decipherment, and causal machine learning.</p>
+            <div className="mt-4 flex flex-wrap gap-2"><ArrowLink to="/research">Research</ArrowLink><ArrowLink to="/resume">CV</ArrowLink></div>
           </div>
         </div>
-        <div className="mt-8 grid border-l border-t border-ink sm:grid-cols-3">
+        <div className="mt-7 grid border-l border-t border-ink sm:grid-cols-2 lg:grid-cols-4">
           {[
-            ['Scarcity', 'Learning from limited evidence.'],
-            ['Representation', 'What a model preserves.'],
-            ['Time', 'How systems change and remember.'],
-          ].map(([word, line]) => (
-            <div key={word} className="border-b border-r border-ink p-4">
-              <p className="font-display text-2xl">{word}</p>
-              <p className="mt-2 text-sm text-clay">{line}</p>
+            ['Education', 'Johns Hopkins University', 'M.S.E. Data Science · 2027'],
+            ['Research', 'Graduate Researcher', 'Prof. Philipp Koehn'],
+            ['Arzaic', 'Co-Founder & Founding Engineer', 'Iris · Healthcare agents'],
+            ['Heela', 'Vice Chair & Director', 'Nonprofit · Refugee education'],
+          ].map(([label, title, line]) => (
+            <div key={label} className="border-b border-r border-ink p-4">
+              <p className="font-mono text-[10px] uppercase tracking-widest text-pink">{label}</p>
+              <p className="mt-2 text-sm font-semibold">{title}</p>
+              <p className="mt-1 text-xs text-clay">{line}</p>
             </div>
           ))}
         </div>
@@ -754,7 +777,7 @@ function StoryPage() {
 
 function ResumePage() {
   return (
-    <main className="mx-auto max-w-7xl px-5 py-14 sm:px-8 sm:py-20">
+    <main className="mx-auto max-w-6xl px-5 py-10 sm:px-8 sm:py-12">
       <PageMeta title="CV" description="Curriculum vitae for Waiz Khan." />
       <SectionEyebrow>CV</SectionEyebrow>
       <h1 className="mt-5 font-display text-5xl sm:text-7xl">Curriculum vitae</h1>
