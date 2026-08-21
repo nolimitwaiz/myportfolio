@@ -93,7 +93,7 @@ const RESEARCH = [
     findings:
       'A hieroglyph translation study reached BLEU-4 30.3 on a 150-example held-out set. Unsupervised sign-function clustering reached ARI 0.262 against a 0.0016 random floor. A later audit found about 34% near-duplicate leakage in standard splits.',
     changed:
-      'The leakage audit changed the research program. Glyphos emerged as evaluation infrastructure: frozen partitions, preregistered runs, audit logs, and automated checks that block pretrained weights.',
+      'The leakage audit changed the research program. Decipherment Bench emerged as evaluation infrastructure: frozen partitions, preregistered runs, audit logs, and automated checks that block pretrained weights.',
     future:
       'Can translation, visual structure, and graph-based evidence support one another without importing an answer from pretrained systems?',
     technical: [
@@ -102,7 +102,7 @@ const RESEARCH = [
       'Evaluation: eleven corpora, 26 frozen partitions, preregistered runs, and contamination audits.',
     ],
     links: [
-      { label: 'Glyphos code', href: 'https://github.com/nolimitwaiz/glyphos' },
+      { label: 'Decipherment Bench code', href: 'https://github.com/nolimitwaiz/decipherment-bench' },
     ],
   },
   {
@@ -309,10 +309,10 @@ const PROJECTS = [
     href: 'https://github.com/nolimitwaiz/klesis',
   },
   {
-    title: 'Glyphos',
+    title: 'Decipherment Bench',
     line: 'Leakage-controlled evaluation infrastructure for ancient-script decipherment.',
     terms: ['Python', 'PyTorch', 'data provenance', 'frozen evaluation'],
-    href: 'https://github.com/nolimitwaiz/glyphos',
+    href: 'https://github.com/nolimitwaiz/decipherment-bench',
   },
 ]
 
