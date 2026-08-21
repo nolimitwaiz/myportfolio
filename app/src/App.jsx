@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   BrowserRouter,
   Link,
@@ -163,6 +163,112 @@ const DIRECTIONS = [
     question: 'Can a model continue changing after training ends?',
     terms: 'Continual adaptation · test-time learning · alternative learning systems',
   },
+]
+
+const THOUGHT_NODES = [
+  {
+    id: 'representation',
+    label: 'Representation',
+    category: 'Core question',
+    x: 50,
+    y: 45,
+    note: 'What information survives a change in language, modality, model family, or training method?',
+    terms: ['representation learning', 'invariance', 'transfer'],
+    to: '/research/multilingual-representation',
+  },
+  {
+    id: 'multilingual',
+    label: 'Multilingual AI',
+    category: 'Current research',
+    x: 20,
+    y: 24,
+    note: 'How much structure is shared across languages, and where does language-specific variation remain?',
+    terms: ['multilingual LLMs', 'cross-lingual structure', 'model depth'],
+    to: '/research/multilingual-representation',
+  },
+  {
+    id: 'low-resource',
+    label: 'Low-resource NLP',
+    category: 'Current research',
+    x: 18,
+    y: 62,
+    note: 'What can transfer from abundant languages without erasing the structure of languages with less data?',
+    terms: ['machine translation', 'cross-lingual transfer', 'scarce supervision'],
+    to: '/research/low-resource-language-learning',
+  },
+  {
+    id: 'decipherment',
+    label: 'Decipherment',
+    category: 'Current research',
+    x: 36,
+    y: 84,
+    note: 'Can visual, distributional, and graph evidence support one another when the language itself has been lost?',
+    terms: ['ancient scripts', 'multimodal learning', 'graph learning'],
+    to: '/research/computational-decipherment',
+  },
+  {
+    id: 'evaluation',
+    label: 'Evaluation',
+    category: 'Method',
+    x: 72,
+    y: 69,
+    note: 'Which results survive frozen splits, contamination audits, held-out model families, and intervention?',
+    terms: ['robustness', 'data provenance', 'reproducibility'],
+    to: '/research',
+  },
+  {
+    id: 'memory',
+    label: 'Memory',
+    category: 'Direction',
+    x: 50,
+    y: 12,
+    note: 'How should a machine preserve useful experience without turning memory into uncontrolled context?',
+    terms: ['episodic memory', 'retrieval', 'consolidation'],
+  },
+  {
+    id: 'world-models',
+    label: 'World models',
+    category: 'Direction',
+    x: 82,
+    y: 23,
+    note: 'When does a learned representation become predictive enough to support planning and action?',
+    terms: ['multimodal learning', 'prediction', 'embodied intelligence'],
+  },
+  {
+    id: 'neuroai',
+    label: 'NeuroAI',
+    category: 'Direction',
+    x: 86,
+    y: 49,
+    note: 'Which principles of human event memory are useful computational ideas rather than loose analogies?',
+    terms: ['human memory', 'event segmentation', 'naturalistic fMRI'],
+  },
+  {
+    id: 'continual',
+    label: 'Continual learning',
+    category: 'Direction',
+    x: 68,
+    y: 88,
+    note: 'How can a system keep changing after deployment without forgetting, drifting, or hiding failure?',
+    terms: ['adaptation', 'stability', 'alternative learning systems'],
+  },
+]
+
+const THOUGHT_EDGES = [
+  ['representation', 'multilingual'],
+  ['representation', 'low-resource'],
+  ['representation', 'decipherment'],
+  ['representation', 'evaluation'],
+  ['representation', 'memory'],
+  ['representation', 'world-models'],
+  ['multilingual', 'low-resource'],
+  ['low-resource', 'decipherment'],
+  ['decipherment', 'evaluation'],
+  ['evaluation', 'world-models'],
+  ['evaluation', 'continual'],
+  ['memory', 'neuroai'],
+  ['memory', 'continual'],
+  ['world-models', 'neuroai'],
 ]
 
 const PROJECTS = [
@@ -407,9 +513,10 @@ function Header() {
     <header className="sticky top-0 z-50 border-b border-line bg-cream/92 backdrop-blur-md">
       <div className="mx-auto flex max-w-6xl flex-col items-start gap-2 px-5 py-2.5 sm:flex-row sm:items-center sm:justify-between sm:gap-7 sm:px-8">
         <Link to="/" className="font-display text-xl italic text-ink">Waiz Khan</Link>
-        <div className="flex w-full min-w-0 items-center justify-start gap-1 overflow-x-auto pb-1 text-[11px] sm:w-auto sm:flex-1 sm:justify-end sm:gap-2 sm:pb-0 sm:text-[12px]">
-          <nav className="flex items-center gap-1 sm:gap-2" aria-label="Primary navigation">
+        <div className="flex w-full min-w-0 items-center justify-start gap-0.5 overflow-x-auto pb-1 text-[11px] sm:w-auto sm:flex-1 sm:justify-end sm:gap-2 sm:pb-0 sm:text-[12px]">
+          <nav className="flex items-center gap-0.5 sm:gap-2" aria-label="Primary navigation">
             <NavLink to="/research" className={navClass}>Research</NavLink>
+            <NavLink to="/thoughts" className={navClass}>Thoughts</NavLink>
             <NavLink to="/build" className={navClass}>Work</NavLink>
             <NavLink to="/story" className={navClass}>About</NavLink>
             <NavLink to="/resume" className={navClass}>CV</NavLink>
@@ -513,6 +620,85 @@ function ResearchGrid() {
 
 function SectionEyebrow({ children, light = false }) {
   return <p className={`font-mono text-xs uppercase tracking-[0.25em] ${light ? 'text-blush' : 'text-pink'}`}>{children}</p>
+}
+
+function ThoughtsPage() {
+  const [selectedId, setSelectedId] = useState('representation')
+  const selected = THOUGHT_NODES.find((node) => node.id === selectedId)
+  const nodeById = Object.fromEntries(THOUGHT_NODES.map((node) => [node.id, node]))
+
+  return (
+    <main className="mx-auto max-w-6xl px-5 py-8 sm:px-8 sm:py-10">
+      <PageMeta title="Thoughts" description="A connected map of Waiz Khan's research questions across language, representation, memory, evaluation, and intelligent systems." />
+      <div className="grid gap-4 border-b border-ink pb-6 lg:grid-cols-[.7fr_1.3fr] lg:items-end">
+        <div>
+          <SectionEyebrow>Connected questions</SectionEyebrow>
+          <h1 className="mt-2 font-display text-5xl sm:text-6xl">Thoughts</h1>
+        </div>
+        <p className="text-[14px] leading-relaxed text-clay">A working map of questions connecting current research to longer-term directions. Select a square to read the note.</p>
+      </div>
+
+      <div className="mt-6 grid gap-5 lg:grid-cols-[1.55fr_.45fr]">
+        <section aria-label="Research thought graph">
+          <div
+            className="relative h-[25rem] overflow-hidden border border-ink bg-cream sm:h-[31rem]"
+            style={{ backgroundImage: 'radial-gradient(#d8d8d8 1px, transparent 1px)', backgroundSize: '18px 18px' }}
+          >
+            <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+              {THOUGHT_EDGES.map(([from, to]) => {
+                const start = nodeById[from]
+                const end = nodeById[to]
+                const active = from === selectedId || to === selectedId
+                return (
+                  <line
+                    key={`${from}-${to}`}
+                    x1={start.x}
+                    y1={start.y}
+                    x2={end.x}
+                    y2={end.y}
+                    stroke={active ? '#e60063' : '#a8a8a8'}
+                    strokeWidth={active ? 1.5 : 1}
+                    vectorEffect="non-scaling-stroke"
+                  />
+                )
+              })}
+            </svg>
+
+            {THOUGHT_NODES.map((node) => {
+              const active = node.id === selectedId
+              return (
+                <button
+                  key={node.id}
+                  type="button"
+                  aria-pressed={active}
+                  onClick={() => setSelectedId(node.id)}
+                  className={`absolute z-10 -translate-x-1/2 -translate-y-1/2 border bg-cream px-2 py-1.5 font-mono text-[9px] leading-none shadow-[2px_2px_0_#fff] transition-colors sm:px-2.5 sm:py-2 sm:text-[10px] ${active ? 'border-pink bg-pink/10 text-ink' : 'border-ink text-clay hover:border-pink hover:text-ink'}`}
+                  style={{ left: `${node.x}%`, top: `${node.y}%` }}
+                >
+                  {node.label}
+                </button>
+              )
+            })}
+
+            <p className="absolute bottom-3 left-3 font-mono text-[9px] uppercase tracking-wider text-clay">{THOUGHT_NODES.length} notes · {THOUGHT_EDGES.length} links</p>
+          </div>
+        </section>
+
+        <aside className="flex min-h-64 flex-col border border-ink p-5" aria-live="polite">
+          <div className="flex items-start justify-between gap-4">
+            <SectionEyebrow>{selected.category}</SectionEyebrow>
+            <span className="h-3 w-3 border border-pink bg-pink/10" aria-hidden="true" />
+          </div>
+          <h2 className="mt-4 font-display text-3xl leading-tight">{selected.label}</h2>
+          <p className="mt-3 text-[14px] leading-relaxed text-clay">{selected.note}</p>
+          <div className="mt-5 flex flex-wrap gap-2">
+            {selected.terms.map((term) => <span key={term} className="border border-line px-2 py-1 font-mono text-[9px] uppercase tracking-wider text-clay">{term}</span>)}
+          </div>
+          {selected.to && <div className="mt-auto pt-6"><ArrowLink to={selected.to}>Related work</ArrowLink></div>}
+        </aside>
+      </div>
+    </main>
+  )
 }
 
 function HomePage() {
@@ -802,6 +988,7 @@ export default function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/research" element={<ResearchPage />} />
           <Route path="/research/:slug" element={<ResearchDetailPage />} />
+          <Route path="/thoughts" element={<ThoughtsPage />} />
           <Route path="/directions" element={<DirectionsPage />} />
           <Route path="/build" element={<BuildPage />} />
           <Route path="/heela" element={<Navigate to="/build#experience" replace />} />
