@@ -3,7 +3,6 @@ import {
   BrowserRouter,
   Link,
   Navigate,
-  NavLink,
   Outlet,
   Route,
   Routes,
@@ -28,6 +27,8 @@ const RESEARCH = [
     dates: '2025–Present',
     summary:
       'Language-specific variation inside multilingual language models, studied across layers, languages, model families, and training methods.',
+    brief: 'How language changes model representations across layers and training methods.',
+    highlight: '17 models · 128 languages · held-out model families',
     anchors: ['17 open models', '128 languages', '0.6B–8B parameters', 'held-out model families'],
     keywords: ['multilingual LLMs', 'representation learning', 'NTREX-128', 'Belebele'],
     why:
@@ -56,6 +57,8 @@ const RESEARCH = [
     dates: 'Ongoing',
     summary:
       'Representation, transfer, translation, and evaluation when training data is uneven or scarce.',
+    brief: 'Translation and cross-lingual transfer with limited training data.',
+    highlight: 'Ongoing · transfer, representation, and evaluation',
     anchors: ['representation', 'cross-lingual transfer', 'machine translation', 'evaluation'],
     keywords: ['low-resource NLP', 'machine translation', 'cross-lingual transfer', 'evaluation'],
     why:
@@ -84,6 +87,8 @@ const RESEARCH = [
     dates: '2026–Present',
     summary:
       'Multimodal translation, unsupervised sign structure, and evaluation infrastructure for ancient scripts.',
+    brief: 'Visual, distributional, and graph structure in ancient writing systems.',
+    highlight: '11 corpora · hieroglyph translation · contamination audits',
     anchors: ['61k examples', '15+ architectures', 'vision + language', '≈34% duplicate leakage'],
     keywords: ['computational decipherment', 'multimodal learning', 'graph learning', 'data provenance'],
     why:
@@ -108,16 +113,18 @@ const RESEARCH = [
   {
     index: '04',
     slug: 'human-systems',
-    title: 'Human Systems',
+    title: 'Causal ML & Education',
     question: 'What changes when a prediction affects a person?',
     institution: 'GD Goenka University · Dr. Yogesh Kumar',
     dates: '2022 · Revisited 2026',
     summary:
       'Prediction, causal inference, and fixed-budget allocation for chronic absenteeism.',
+    brief: 'Chronic absenteeism: prediction, causal inference, and allocation of support.',
+    highlight: '47,027 students · ROC-AUC 0.841 vs. 0.699 baseline',
     anchors: ['47,027 students', 'ROC-AUC 0.841', '0.699 baseline', 'causal inference + optimization'],
     keywords: ['causal ML', 'gradient boosting', 'DoWhy', 'integer optimization'],
     why:
-      'One of my first research questions concerned students who stop showing up. Predicting risk is only the beginning when the result may influence where limited support is sent.',
+      'Predicting chronic absenteeism is only the beginning when the result may influence where limited student support is sent.',
     method:
       'The original absenteeism study was revisited with calibrated models, a causal test of school distance, and an integer program that allocates a fixed intervention budget.',
     findings:
@@ -138,31 +145,13 @@ const RESEARCH = [
 ]
 
 const DIRECTIONS = [
-  {
-    title: 'Memory',
-    question: 'How should a machine remember?',
-    terms: 'Continual learning · episodic memory · consolidation · retrieval',
-  },
-  {
-    title: 'World Models',
-    question: 'How does a representation become a world?',
-    terms: 'Multimodal learning · prediction · embodied intelligence',
-  },
-  {
-    title: 'Language',
-    question: 'Can meaning survive changes in language, modality, and supervision?',
-    terms: 'Multilingual AI · low-resource learning · representation',
-  },
-  {
-    title: 'NeuroAI',
-    question: 'What should machine learning borrow from human cognition?',
-    terms: 'Memory · event segmentation · naturalistic fMRI',
-  },
-  {
-    title: 'Learning',
-    question: 'Can a model continue changing after training ends?',
-    terms: 'Continual adaptation · test-time learning · alternative learning systems',
-  },
+  { title: 'Language', terms: 'Multilingual models · low-resource NLP · decipherment' },
+  { title: 'Learning & memory', terms: 'Continual learning · episodic memory · consolidation' },
+  { title: 'World models', terms: 'Predictive representations · vision · spatial intelligence' },
+  { title: 'Embodied AI', terms: 'Robot perception · navigation · learning through action' },
+  { title: 'NeuroAI', terms: 'Human memory · event segmentation · fMRI' },
+  { title: 'Scientific AI', terms: 'Earth-system dynamics · rare events · uncertainty' },
+  { title: 'Reliable AI', terms: 'Evaluation · robustness · safety' },
 ]
 
 const THOUGHT_NODES = [
@@ -308,12 +297,6 @@ const PROJECTS = [
     terms: ['PWA', 'Web Audio', 'ggwave', 'offline communication'],
     href: 'https://github.com/nolimitwaiz/klesis',
   },
-  {
-    title: 'Ancient Script Decipherment',
-    line: 'Leakage-controlled evaluation infrastructure for ancient-script decipherment.',
-    terms: ['Python', 'PyTorch', 'data provenance', 'frozen evaluation'],
-    href: 'https://github.com/nolimitwaiz/ancient-script-decipherment',
-  },
 ]
 
 const EXPERIENCE = [
@@ -321,13 +304,13 @@ const EXPERIENCE = [
     when: '2026–Present',
     role: 'Co-Founder & Founding Engineer',
     place: 'Arzaic',
-    detail: 'Iris, a healthcare agent architecture for longitudinal patient support.',
+    detail: 'Iris, a healthcare agent for ongoing patient support.',
   },
   {
     when: '2026–Present',
     role: 'Vice Chair & Director',
     place: 'Heela',
-    detail: 'Leadership, governance, and continuity for a nonprofit supporting refugee students.',
+    detail: 'Nonprofit supporting refugee students.',
   },
   {
     when: '2025–Present',
@@ -470,30 +453,6 @@ function DotMatrix({ text, className = '' }) {
   )
 }
 
-function Reveal({ children, className = '' }) {
-  const ref = useRef(null)
-  useEffect(() => {
-    const element = ref.current
-    if (!element) return
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      element.classList.add('in')
-      return
-    }
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          element.classList.add('in')
-          observer.disconnect()
-        }
-      },
-      { threshold: 0.08 },
-    )
-    observer.observe(element)
-    return () => observer.disconnect()
-  }, [])
-  return <div ref={ref} className={`reveal ${className}`}>{children}</div>
-}
-
 function PageMeta({ title, description }) {
   useEffect(() => {
     document.title = title ? `${title} · Waiz Khan` : 'Waiz Khan'
@@ -504,19 +463,19 @@ function PageMeta({ title, description }) {
 }
 
 function ScrollToTop() {
-  const { pathname, hash } = useLocation()
+  const { pathname, hash, key } = useLocation()
   useEffect(() => {
     if (hash) {
-      requestAnimationFrame(() => document.querySelector(hash)?.scrollIntoView({ behavior: 'smooth' }))
-      return
+      const frame = requestAnimationFrame(() => document.getElementById(hash.slice(1))?.scrollIntoView())
+      return () => cancelAnimationFrame(frame)
     }
     window.scrollTo(0, 0)
-  }, [pathname, hash])
+  }, [pathname, hash, key])
   return null
 }
 
 function ArrowLink({ to, children, external = false, className = '' }) {
-  const styles = `inline-flex items-center gap-2 border border-ink px-3 py-2 font-mono text-[11px] uppercase tracking-[0.14em] no-underline transition-colors hover:border-pink hover:bg-pink hover:text-cream ${className}`
+  const styles = `inline-flex items-center gap-2 border border-line px-2.5 py-1.5 text-xs no-underline transition-colors hover:border-pink hover:bg-pink/5 hover:text-ink ${className}`
   if (external) {
     return <a href={to} target="_blank" rel="noopener noreferrer" className={styles}>{children} ↗</a>
   }
@@ -524,23 +483,22 @@ function ArrowLink({ to, children, external = false, className = '' }) {
 }
 
 function Header() {
-  const navClass = ({ isActive }) =>
-    `whitespace-nowrap border bg-transparent px-2 py-2 transition-colors hover:border-pink hover:text-ink sm:px-3 ${isActive ? 'border-pink text-ink' : 'border-line text-clay'}`
+  const { pathname, hash } = useLocation()
+  const navClass = (active) => `whitespace-nowrap border bg-cream px-2 py-2 text-[11px] transition-colors hover:border-pink hover:bg-pink/5 sm:px-2.5 ${active ? 'border-pink text-ink' : 'border-line text-clay'}`
 
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-cream/92 backdrop-blur-md">
-      <div className="mx-auto flex max-w-6xl flex-col items-start gap-2 px-5 py-2.5 sm:flex-row sm:items-center sm:justify-between sm:gap-7 sm:px-8">
+      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-5 gap-y-2 px-5 py-2.5 sm:px-8">
         <Link to="/" className="font-display text-xl italic text-ink">Waiz Khan</Link>
-        <div className="flex w-full min-w-0 items-center justify-start gap-0.5 overflow-x-auto pb-1 text-[11px] sm:w-auto sm:flex-1 sm:justify-end sm:gap-2 sm:pb-0 sm:text-[12px]">
-          <nav className="flex items-center gap-0.5 sm:gap-2" aria-label="Primary navigation">
-            <NavLink to="/research" className={navClass}>Research</NavLink>
-            <NavLink to="/thoughts" className={navClass}>Thoughts</NavLink>
-            <NavLink to="/build" className={navClass}>Work</NavLink>
-            <NavLink to="/story" className={navClass}>About</NavLink>
-            <NavLink to="/resume" className={navClass}>CV</NavLink>
-          </nav>
-          <a href={LINKS.github} target="_blank" rel="noopener noreferrer" className="whitespace-nowrap border border-ink px-2 py-2 font-mono text-[10px] uppercase tracking-wider text-ink hover:border-pink hover:bg-pink hover:text-cream sm:px-3 sm:text-[11px]">GitHub ↗</a>
-        </div>
+        <nav className="flex flex-wrap items-center gap-1 sm:gap-1.5" aria-label="Primary navigation">
+          {[
+            ['Research', '/#research', pathname.startsWith('/research/') || (pathname === '/' && hash === '#research')],
+            ['Projects', '/#projects', pathname === '/' && hash === '#projects'],
+            ['About', '/#about', pathname === '/' && ['#about', '#experience', '#interests'].includes(hash)],
+            ['Resume', '/resume', pathname === '/resume'],
+          ].map(([label, to, active]) => <Link key={label} to={to} aria-current={active ? 'location' : undefined} className={navClass(active)}>{label}</Link>)}
+          <a href={LINKS.github} target="_blank" rel="noopener noreferrer" className={navClass(false)}>GitHub ↗</a>
+        </nav>
       </div>
     </header>
   )
@@ -548,17 +506,12 @@ function Header() {
 
 function Footer() {
   return (
-    <footer className="border-t border-ink bg-cream">
-      <div className="mx-auto flex max-w-6xl flex-wrap items-end justify-between gap-5 px-5 py-5 sm:px-8">
-        <div>
-          <p className="font-display text-2xl text-ink">Waiz Khan</p>
-          <p className="mt-1 text-xs leading-relaxed text-clay">Johns Hopkins University · Applied Mathematics & Statistics</p>
-        </div>
-        <div className="flex flex-wrap gap-2 font-mono text-[11px] uppercase tracking-wider text-ink">
-          <a href={LINKS.email} className="border border-ink px-3 py-2 hover:border-pink hover:bg-pink hover:text-cream">Email</a>
-          <a href={LINKS.github} target="_blank" rel="noopener noreferrer" className="border border-ink px-3 py-2 hover:border-pink hover:bg-pink hover:text-cream">GitHub ↗</a>
-          <a href={LINKS.linkedin} target="_blank" rel="noopener noreferrer" className="border border-ink px-3 py-2 hover:border-pink hover:bg-pink hover:text-cream">LinkedIn ↗</a>
-          <Link to="/resume" className="border border-ink px-3 py-2 hover:border-pink hover:bg-pink hover:text-cream">CV</Link>
+    <footer className="border-t border-line bg-cream">
+      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-5 py-4 sm:px-8">
+        <p className="text-xs text-clay">Waiz Khan · Baltimore</p>
+        <div className="flex flex-wrap gap-2">
+          <a href={LINKS.email} className="border border-line px-2.5 py-1.5 text-xs hover:border-pink hover:bg-pink/5">wkhan12@jh.edu</a>
+          <ArrowLink to={LINKS.linkedin} external>LinkedIn</ArrowLink>
         </div>
       </div>
     </footer>
@@ -576,59 +529,18 @@ function Layout() {
   )
 }
 
-function ResearchRow({ item }) {
-  return (
-    <Reveal>
-      <article className="grid gap-5 border-t border-ink py-8 sm:grid-cols-[4rem_1fr_14rem] sm:gap-8 sm:py-10">
-        <span className="font-mono text-sm text-pink">{item.index}</span>
-        <div>
-          <h3 className="font-display text-3xl leading-tight sm:text-4xl">{item.title}</h3>
-          <p className="mt-3 max-w-3xl font-display text-xl leading-snug text-clay sm:text-2xl">{item.question}</p>
-          <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-clay">{item.summary}</p>
-          <div className="mt-5"><ArrowLink to={`/research/${item.slug}`}>Explore research</ArrowLink></div>
-        </div>
-        <div className="space-y-5 border-line text-sm text-clay sm:border-l sm:pl-6">
-          <div>
-            <p className="font-medium text-ink">{item.institution}</p>
-            <p className="mt-1 font-mono text-xs text-pink">{item.dates}</p>
-          </div>
-          <ul className="space-y-2 font-mono text-xs leading-relaxed">
-            {item.anchors.map((anchor) => <li key={anchor}>{anchor}</li>)}
-          </ul>
-        </div>
-      </article>
-    </Reveal>
-  )
-}
-
-function ResearchIndex({ compact = false }) {
-  return (
-    <section className={compact ? '' : 'pb-14'}>
-      {RESEARCH.map((item) => <ResearchRow key={item.slug} item={item} />)}
-      <div className="border-t border-ink" />
-    </section>
-  )
-}
-
 function ResearchGrid() {
   return (
-    <div className="grid border-l border-t border-ink md:grid-cols-2">
+    <div className="grid gap-x-7 md:grid-cols-2">
       {RESEARCH.map((item) => (
-        <article key={item.slug} className="border-b border-r border-ink p-4 sm:p-5">
-          <div className="flex items-start justify-between gap-4">
-            <SectionEyebrow>{item.index}</SectionEyebrow>
-            <span className="font-mono text-[11px] text-clay">{item.dates}</span>
-          </div>
-          <h3 className="mt-2 font-display text-2xl leading-tight">{item.title}</h3>
-          <p className="mt-2 text-[13px] leading-relaxed text-clay">{item.summary}</p>
-          <p className="mt-3 text-[11px] font-semibold text-ink">{item.institution}</p>
-          <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 font-mono text-[10px] text-pink">
-            {item.anchors.slice(0, 3).map((anchor) => <span key={anchor}>{anchor}</span>)}
-          </div>
-          <p className="mt-3 font-mono text-[9px] uppercase leading-relaxed tracking-[0.08em] text-clay">{item.keywords.join(' · ')}</p>
-          <div className="mt-3 flex flex-wrap gap-2">
-            <ArrowLink to={`/research/${item.slug}`}>Details</ArrowLink>
-            {item.links.map((link) => <ArrowLink key={link.href} to={link.href} external>Code</ArrowLink>)}
+        <article key={item.slug} className="border-t border-line py-4">
+          <h3 className="font-display text-[22px] leading-tight"><Link to={`/research/${item.slug}`} className="hover:text-pink">{item.title}</Link></h3>
+          <p className="mt-1 text-xs text-clay">{item.institution}</p>
+          <p className="mt-2 text-sm leading-relaxed">{item.brief}</p>
+          <p className="mt-1 text-xs leading-relaxed text-clay">{item.highlight}</p>
+          <div className="mt-2.5 flex flex-wrap gap-2">
+            <ArrowLink to={`/research/${item.slug}`}><span className="sr-only">{item.title} </span>Notes</ArrowLink>
+            {item.links.map((link) => <ArrowLink key={link.href} to={link.href} external><span className="sr-only">{item.title} </span>Code</ArrowLink>)}
           </div>
         </article>
       ))}
@@ -661,8 +573,13 @@ function ThoughtsPage() {
 
       <div className="mt-6 grid gap-5 lg:grid-cols-[1.35fr_.65fr]">
         <section aria-label="Research thought graph">
+          <div className="flex flex-wrap gap-2 sm:hidden" aria-label="Research questions">
+            {THOUGHT_NODES.map((node) => (
+              <button key={node.id} type="button" aria-pressed={node.id === selectedId} onClick={() => setSelectedId(node.id)} className={`border bg-cream px-3 py-2 text-xs ${node.id === selectedId ? 'border-pink' : 'border-line'}`}>{node.label}</button>
+            ))}
+          </div>
           <div
-            className="relative h-[25rem] overflow-hidden border border-ink bg-cream sm:h-[31rem]"
+            className="relative hidden h-[31rem] overflow-hidden border border-line bg-cream sm:block"
             style={{ backgroundImage: 'radial-gradient(#d8d8d8 1px, transparent 1px)', backgroundSize: '18px 18px' }}
           >
             <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
@@ -747,92 +664,79 @@ function ThoughtsPage() {
 
 function HomePage() {
   return (
-    <main>
+    <main className="mx-auto max-w-6xl px-5 sm:px-8">
       <PageMeta
         description="Waiz Khan is a student in the Department of Applied Mathematics and Statistics at Johns Hopkins University, researching multilingual language models, low-resource learning, and computational decipherment."
       />
 
-      <section className="mx-auto max-w-6xl px-5 py-6 sm:px-8 sm:py-8">
-        <div className="grid items-center gap-6 lg:grid-cols-[1.18fr_.82fr]">
+      <section className="py-6 sm:py-7">
+        <div className="grid items-center gap-5 md:grid-cols-[.85fr_1.15fr] md:gap-9">
           <div>
             <SectionEyebrow>Baltimore · Johns Hopkins</SectionEyebrow>
             <h1 className="sr-only">Waiz Khan</h1>
-            <div className="mt-4 max-w-lg"><DotMatrix text="WAIZ KHAN" className="w-full cursor-crosshair" /></div>
+            <div className="mt-3 max-w-[23rem]"><DotMatrix text="WAIZ KHAN" className="w-full cursor-crosshair" /></div>
           </div>
           <div>
-            <p className="font-display text-2xl leading-tight">Student in the Department of Applied Mathematics and Statistics at Johns Hopkins University.</p>
-            <p className="mt-2 text-[14px] leading-relaxed text-clay">M.S.E. Data Science · Multilingual language models · Low-resource NLP · Computational decipherment</p>
-            <div className="mt-4 flex gap-2"><ArrowLink to="/research">Research</ArrowLink><ArrowLink to="/resume">CV</ArrowLink></div>
+            <p className="font-display text-[23px] leading-snug">Student in the Department of Applied Mathematics and Statistics at Johns Hopkins University.</p>
+            <p className="mt-2 text-sm text-clay">M.S.E. Data Science · Expected May 2027</p>
+            <p className="mt-1 text-sm text-clay">Graduate researcher with Prof. Philipp Koehn.</p>
           </div>
-        </div>
-
-        <div className="mt-6 grid grid-cols-2 border-l border-t border-line lg:grid-cols-4">
-          {[
-            ['Education', 'Johns Hopkins University', 'Applied Mathematics & Statistics · M.S.E. Data Science · 2027'],
-            ['Research', 'Graduate Researcher', 'Prof. Philipp Koehn · 2025–Present'],
-            ['Arzaic', 'Co-Founder & Founding Engineer', 'Iris · Healthcare agents'],
-            ['Heela', 'Vice Chair & Director', 'Nonprofit · Refugee education'],
-          ].map(([label, title, detail]) => (
-            <div key={label} className="border-b border-r border-line p-3.5">
-              <p className="font-mono text-[10px] uppercase tracking-widest text-pink">{label}</p>
-              <p className="mt-2 text-sm font-semibold">{title}</p>
-              <p className="mt-1 text-xs leading-relaxed text-clay">{detail}</p>
-            </div>
-          ))}
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl border-t border-ink px-5 py-6 sm:px-8 sm:py-8">
-        <div className="mb-4 flex items-end justify-between gap-4">
-          <div><SectionEyebrow>Selected work</SectionEyebrow><h2 className="mt-1 font-display text-3xl">Research</h2></div>
-          <ArrowLink to="/research">Research notes</ArrowLink>
-        </div>
+      <section id="research" aria-labelledby="research-title" className="border-t border-ink pb-3 pt-5">
+        <h2 id="research-title" className="mb-3 font-display text-2xl">Research</h2>
         <ResearchGrid />
       </section>
 
-      <section className="mx-auto max-w-6xl border-t border-ink px-5 py-6 sm:px-8 sm:py-8">
-        <div className="mb-4 flex items-end justify-between gap-4">
-          <div><SectionEyebrow>Personal GitHub</SectionEyebrow><h2 className="mt-1 font-display text-3xl">Projects</h2></div>
+      <section id="projects" aria-labelledby="projects-title" className="border-t border-ink py-5">
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+          <h2 id="projects-title" className="font-display text-2xl">Personal projects</h2>
           <ArrowLink to={LINKS.github} external>All repositories</ArrowLink>
         </div>
-        <div className="grid border-l border-t border-ink md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-x-7 md:grid-cols-3">
           {PROJECTS.map((project) => (
-            <article key={project.title} className="border-b border-r border-ink p-4 sm:p-5">
-              <h3 className="font-display text-2xl">{project.title}</h3>
-              <p className="mt-2 text-[13px] leading-relaxed text-clay">{project.line}</p>
-              <p className="mt-3 font-mono text-[9px] uppercase leading-relaxed tracking-[0.08em] text-pink">{project.terms.join(' · ')}</p>
-              <div className="mt-3"><ArrowLink to={project.href} external>Code</ArrowLink></div>
+            <article key={project.title} className="border-t border-line py-3">
+              <div className="flex items-center justify-between gap-3">
+                <h3 className="font-display text-xl">{project.title}</h3>
+                <ArrowLink to={project.href} external><span className="sr-only">{project.title} </span>Code</ArrowLink>
+              </div>
+              <p className="mt-2 text-sm leading-relaxed">{project.line}</p>
+              <p className="mt-1 text-xs leading-relaxed text-clay">{project.terms.slice(0, 2).join(' · ')}</p>
             </article>
           ))}
         </div>
-        <div className="mt-4 flex items-center justify-between gap-4 border-t border-line pt-4">
-          <p className="text-xs text-clay">Arzaic and Iris appear under Work. Research infrastructure appears with the relevant research.</p>
-          <ArrowLink to="/build">Work</ArrowLink>
-        </div>
       </section>
-    </main>
-  )
-}
 
-function ResearchPage() {
-  return (
-    <main className="mx-auto max-w-6xl px-5 py-8 sm:px-8 sm:py-10">
-      <PageMeta title="Research" description="Research by Waiz Khan in multilingual representation, low-resource learning, computational decipherment, and causal ML." />
-      <div className="grid gap-5 border-b border-ink pb-8 lg:grid-cols-[1fr_.8fr] lg:items-end">
-        <div><SectionEyebrow>Current work</SectionEyebrow><h1 className="mt-3 font-display text-5xl sm:text-6xl">Research</h1></div>
-        <p className="text-[15px] leading-relaxed text-clay">Questions in multilingual representation, low-resource learning, ancient scripts, and causal machine learning.</p>
-      </div>
-      <div className="mt-8"><ResearchGrid /></div>
-
-      <section id="directions" className="mt-10 border-t border-ink pt-8">
-        <div className="mb-6 flex items-end justify-between gap-6"><div><SectionEyebrow>Directions</SectionEyebrow><h2 className="mt-2 font-display text-3xl">Research interests</h2></div></div>
-        <div className="grid border-l border-t border-line sm:grid-cols-2 lg:grid-cols-5">
-          {DIRECTIONS.map((direction) => (
-            <div key={direction.title} className="border-b border-r border-line p-4">
-              <p className="font-mono text-[11px] uppercase tracking-wider text-pink">{direction.title}</p>
-              <p className="mt-2 text-xs leading-relaxed text-clay">{direction.terms}</p>
-            </div>
-          ))}
+      <section id="about" aria-labelledby="about-title" className="border-t border-ink py-5">
+        <h2 id="about-title" className="mb-4 font-display text-2xl">About</h2>
+        <div className="grid gap-7 lg:grid-cols-[1.15fr_.85fr]">
+          <section id="experience" aria-labelledby="experience-title">
+            <h3 id="experience-title" className="mb-2 text-sm font-semibold">Experience</h3>
+            <ul className="divide-y divide-line border-t border-line">
+              {EXPERIENCE.map((item) => (
+                <li key={`${item.place}-${item.role}`} className="py-2.5">
+                  <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+                    <p className="text-sm"><span className="font-semibold">{item.place}</span> · {item.role}</p>
+                    <span className="text-xs text-clay">{item.when}</span>
+                  </div>
+                  <p className="mt-1 text-xs leading-relaxed text-clay">{item.detail}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
+          <section id="interests" aria-labelledby="interests-title">
+            <h3 id="interests-title" className="mb-2 text-sm font-semibold">Research interests</h3>
+            <dl className="space-y-2 border-t border-line pt-2.5">
+              {DIRECTIONS.map((direction) => (
+                <div key={direction.title} className="text-xs leading-relaxed">
+                  <dt className="inline font-semibold">{direction.title}</dt>{' '}
+                  <dd className="inline text-clay">— {direction.terms}</dd>
+                </div>
+              ))}
+            </dl>
+            <div className="mt-3"><ArrowLink to="/thoughts">Thoughts & questions</ArrowLink></div>
+          </section>
         </div>
       </section>
     </main>
@@ -842,182 +746,58 @@ function ResearchPage() {
 function ResearchDetailPage() {
   const { slug } = useParams()
   const item = RESEARCH.find((entry) => entry.slug === slug)
-  if (!item) return <Navigate to="/research" replace />
+  if (!item) return <Navigate to="/#research" replace />
 
   return (
-    <main>
-      <PageMeta title={item.title} description={`${item.title}: ${item.question}`} />
-      <section className="mx-auto max-w-6xl px-5 py-8 sm:px-8 sm:py-10">
-        <Link to="/research" className="inline-flex border border-ink px-3 py-2 font-mono text-[11px] uppercase tracking-wider text-clay hover:border-pink hover:bg-pink hover:text-cream">← Research</Link>
-        <div className="mt-7 grid gap-7 lg:grid-cols-[1.4fr_.6fr]">
-          <div>
-            <SectionEyebrow>{item.index} · Research</SectionEyebrow>
-            <h1 className="mt-3 font-display text-4xl leading-none sm:text-6xl">{item.title}</h1>
-            <p className="mt-4 max-w-4xl font-display text-xl leading-snug text-clay sm:text-3xl">{item.question}</p>
-          </div>
-          <div className="border-t border-ink pt-4 lg:mt-8">
-            <p className="font-medium">{item.institution}</p>
-            <p className="mt-2 font-mono text-xs text-pink">{item.dates}</p>
-          </div>
-        </div>
+    <main className="mx-auto max-w-3xl px-5 py-7 sm:px-8 sm:py-9">
+      <PageMeta title={item.title} description={item.summary} />
+      <ArrowLink to="/#research">All research</ArrowLink>
+      <h1 className="mt-5 font-display text-3xl leading-tight sm:text-4xl">{item.title}</h1>
+      <p className="mt-2 text-sm text-clay">{item.institution} · {item.dates}</p>
+      <p className="mt-4 font-display text-xl leading-snug">{item.question}</p>
+      <div className="mt-4 flex flex-wrap gap-2">
+        {item.links.map((link) => <ArrowLink key={link.href} to={link.href} external>{link.label}</ArrowLink>)}
+      </div>
 
-        <div className="mt-7 grid gap-px bg-line sm:grid-cols-2 lg:grid-cols-4">
-          {item.anchors.map((anchor) => <div key={anchor} className="bg-cream p-4 font-mono text-xs text-ink">{anchor}</div>)}
-        </div>
-      </section>
-
-      <section className="border-y border-ink bg-sand">
-        <div className="mx-auto max-w-6xl px-5 py-8 sm:px-8 sm:py-10">
-          <div className="grid border-l border-t border-ink md:grid-cols-2">
-            {[
-            ['Question', item.why],
-            ['Method', item.method],
-            ['Findings', item.findings],
-            ['What changed', item.changed],
-          ].map(([label, copy]) => (
-              <div key={label} className="border-b border-r border-ink p-5 sm:p-6">
-                <SectionEyebrow>{label}</SectionEyebrow>
-                <p className="mt-3 text-[15px] leading-relaxed text-clay">{copy}</p>
-              </div>
-          ))}
-          </div>
-
-          <div className="mt-7 grid gap-7 lg:grid-cols-[1.25fr_.75fr]">
-            <div>
-              <SectionEyebrow>Methods + results</SectionEyebrow>
-              <ul className="mt-3 space-y-2 text-[14px] leading-relaxed text-clay">
-                {item.technical.map((line) => <li key={line} className="border-l-2 border-pink pl-3">{line}</li>)}
-              </ul>
-            </div>
-            <div>
-              <SectionEyebrow>Where next</SectionEyebrow>
-              <p className="mt-3 font-display text-2xl leading-snug">{item.future}</p>
-            </div>
-          </div>
-
-          {item.links.length > 0 && (
-            <div className="mt-7 flex flex-wrap gap-6">
-              {item.links.map((link) => <ArrowLink key={link.href} to={link.href} external>{link.label}</ArrowLink>)}
-            </div>
-          )}
-        </div>
-      </section>
-    </main>
-  )
-}
-
-function DirectionsPage() {
-  return <Navigate to="/research#directions" replace />
-}
-
-function BuildPage() {
-  return (
-    <main>
-      <PageMeta title="Build" description="Arzaic, Iris, and selected systems by Waiz Khan." />
-      <section className="bg-ink text-cream">
-        <div className="mx-auto max-w-6xl px-5 py-8 sm:px-8 sm:py-10">
-          <div className="grid gap-8 lg:grid-cols-[.75fr_1.25fr]">
-            <div>
-              <SectionEyebrow light>Arzaic · Current</SectionEyebrow>
-              <h1 className="mt-3 font-display text-5xl sm:text-6xl">Iris</h1>
-              <p className="mt-3 text-sm text-blush">Co-Founder & Founding Engineer</p>
-            </div>
-            <div>
-              <h2 className="font-display text-3xl leading-tight text-sand">Longitudinal patient-support architecture.</h2>
-              <p className="mt-3 text-[14px] leading-relaxed text-sand">Auditable state · retrieval · tool use · safety checks</p>
-              <div className="mt-5 grid gap-px bg-cream/20 sm:grid-cols-5">
-                {['Gate', 'Route', 'Retrieve', 'Generate', 'Guard'].map((stage) => <div key={stage} className="bg-ink p-3 text-center font-mono text-[10px] uppercase tracking-wider text-blush">{stage}</div>)}
-              </div>
-            </div>
-          </div>
-          <div className="mt-8 flex items-center gap-5 border-t border-cream/20 pt-6">
-            <SectionEyebrow light>Next · Eve</SectionEyebrow>
-            <p className="font-display text-xl text-sand">Reliability-focused learning system under research.</p>
-          </div>
-        </div>
-      </section>
-
-      <section id="experience" className="mx-auto grid max-w-6xl gap-8 px-5 py-8 sm:px-8 sm:py-10 lg:grid-cols-[1.35fr_.65fr]">
-        <div>
-          <SectionEyebrow>Experience</SectionEyebrow>
-          <div className="mt-5 border-t border-ink">
-            {EXPERIENCE.map((item) => (
-              <div key={`${item.place}-${item.role}`} className="grid gap-2 border-b border-line py-4 sm:grid-cols-[7rem_1fr_1.2fr] sm:gap-5">
-                <span className="font-mono text-[10px] text-pink">{item.when}</span>
-                <div><p className="font-display text-xl">{item.place}</p><p className="mt-1 text-xs text-clay">{item.role}</p></div>
-                <p className="text-[13px] leading-relaxed text-clay">{item.detail}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div>
-          <SectionEyebrow>Personal GitHub</SectionEyebrow>
-          <div className="mt-5 border-t border-ink">
-            {PROJECTS.map((project) => (
-              <div key={project.title} className="border-b border-line py-4">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="font-display text-2xl">{project.title}</p>
-                    <p className="mt-1 text-xs leading-relaxed text-clay">{project.line}</p>
-                    <p className="mt-2 font-mono text-[9px] uppercase leading-relaxed tracking-[0.08em] text-pink">{project.terms.join(' · ')}</p>
-                  </div>
-                  <ArrowLink to={project.href} external>Code</ArrowLink>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="mt-5"><ArrowLink to={LINKS.github} external>All repositories</ArrowLink></div>
-        </div>
-      </section>
-    </main>
-  )
-}
-
-function StoryPage() {
-  return (
-    <main>
-      <PageMeta title="About" description="Waiz Khan is a data science student and machine learning researcher at Johns Hopkins University." />
-      <section className="mx-auto max-w-6xl px-5 py-8 sm:px-8 sm:py-10">
-        <div className="grid gap-7 lg:grid-cols-[.72fr_1.28fr]">
-          <div><SectionEyebrow>About</SectionEyebrow><h1 className="mt-3 font-display text-5xl">Waiz Khan</h1></div>
-          <div>
-            <p className="font-display text-2xl leading-tight sm:text-3xl">Student in the Department of Applied Mathematics and Statistics at Johns Hopkins University.</p>
-            <p className="mt-3 text-[14px] leading-relaxed text-clay">M.S.E. Data Science. Research in multilingual language models, low-resource NLP, computational decipherment, and causal machine learning.</p>
-            <div className="mt-4 flex flex-wrap gap-2"><ArrowLink to="/research">Research</ArrowLink><ArrowLink to="/resume">CV</ArrowLink></div>
-          </div>
-        </div>
-        <div className="mt-7 grid border-l border-t border-ink sm:grid-cols-2 lg:grid-cols-4">
-          {[
-            ['Education', 'Johns Hopkins University', 'M.S.E. Data Science · 2027'],
-            ['Research', 'Graduate Researcher', 'Prof. Philipp Koehn'],
-            ['Arzaic', 'Co-Founder & Founding Engineer', 'Iris · Healthcare agents'],
-            ['Heela', 'Vice Chair & Director', 'Nonprofit · Refugee education'],
-          ].map(([label, title, line]) => (
-            <div key={label} className="border-b border-r border-ink p-4">
-              <p className="font-mono text-[10px] uppercase tracking-widest text-pink">{label}</p>
-              <p className="mt-2 text-sm font-semibold">{title}</p>
-              <p className="mt-1 text-xs text-clay">{line}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      <div className="mt-6 space-y-5 border-t border-line pt-5">
+        {[
+          ['Overview', item.why],
+          ['Method', item.method],
+          ['Findings', item.findings],
+        ].map(([label, copy]) => (
+          <section key={label}>
+            <h2 className="text-sm font-semibold">{label}</h2>
+            <p className="mt-1 text-sm leading-relaxed text-clay">{copy}</p>
+          </section>
+        ))}
+        <details className="border-y border-line py-3">
+          <summary className="cursor-pointer text-sm font-semibold">Technical notes +</summary>
+          <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-relaxed text-clay">
+            {item.technical.map((line) => <li key={line}>{line}</li>)}
+          </ul>
+          <p className="mt-3 text-sm leading-relaxed text-clay">{item.changed}</p>
+        </details>
+        <section>
+          <h2 className="text-sm font-semibold">Open question</h2>
+          <p className="mt-1 text-sm leading-relaxed text-clay">{item.future}</p>
+        </section>
+      </div>
     </main>
   )
 }
 
 function ResumePage() {
   return (
-    <main className="mx-auto max-w-6xl px-5 py-10 sm:px-8 sm:py-12">
-      <PageMeta title="CV" description="Curriculum vitae for Waiz Khan." />
-      <SectionEyebrow>CV</SectionEyebrow>
-      <h1 className="mt-5 font-display text-5xl sm:text-7xl">Curriculum vitae</h1>
-      <div className="mt-10 flex flex-wrap gap-4">
-        <a href={LINKS.resumePdf} download="Waiz_Khan.pdf" className="border-2 border-ink px-6 py-3 hover:border-pink hover:bg-pink hover:text-cream">Download PDF</a>
-        <a href={LINKS.resumePdf} target="_blank" rel="noopener noreferrer" className="border-2 border-ink px-6 py-3 hover:border-pink hover:text-pink">Open in new tab</a>
+    <main className="mx-auto max-w-6xl px-5 py-7 sm:px-8">
+      <PageMeta title="Resume" description="Resume for Waiz Khan." />
+      <h1 className="font-display text-3xl">Resume</h1>
+      <div className="mt-4 flex flex-wrap gap-2">
+        <a href={LINKS.resumePdf} download="Waiz_Khan.pdf" className="border border-line px-3 py-2 text-sm hover:border-pink hover:bg-pink/5">Download PDF</a>
+        <ArrowLink to={LINKS.resumePdf} external>Open in new tab</ArrowLink>
       </div>
-      <div className="my-10 border-2 border-ink">
+      <div className="mt-5 border border-line">
         <object data={LINKS.resumePdf} type="application/pdf" className="h-[85vh] w-full" aria-label="Waiz Khan resume PDF">
-          <div className="p-10 text-center text-clay"><a href={LINKS.resumePdf} className="underline decoration-blush decoration-2 underline-offset-4">Download the CV</a></div>
+          <div className="p-5 text-center text-clay"><a href={LINKS.resumePdf} className="underline decoration-pink underline-offset-4">Download the resume</a></div>
         </object>
       </div>
     </main>
@@ -1030,13 +810,13 @@ export default function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
-          <Route path="/research" element={<ResearchPage />} />
+          <Route path="/research" element={<Navigate to="/#research" replace />} />
           <Route path="/research/:slug" element={<ResearchDetailPage />} />
           <Route path="/thoughts" element={<ThoughtsPage />} />
-          <Route path="/directions" element={<DirectionsPage />} />
-          <Route path="/build" element={<BuildPage />} />
-          <Route path="/heela" element={<Navigate to="/build#experience" replace />} />
-          <Route path="/story" element={<StoryPage />} />
+          <Route path="/directions" element={<Navigate to="/#interests" replace />} />
+          <Route path="/build" element={<Navigate to="/#experience" replace />} />
+          <Route path="/heela" element={<Navigate to="/#experience" replace />} />
+          <Route path="/story" element={<Navigate to="/#about" replace />} />
           <Route path="/resume" element={<ResumePage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
