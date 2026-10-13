@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import {
   BrowserRouter,
   Link,
@@ -36,7 +36,7 @@ const RESEARCH = [
     method:
       'Representation-level measurements are evaluated across NTREX-128 and Belebele, across model depth, model families, and training recipes. Predictions are set before experiments, and model families are held out during validation.',
     findings:
-      'The experiments found a recurring depth structure in language-specific variation, substantial differences between training recipes, and relationships with downstream multilingual behavior that persisted under additional controls and held-out validation.',
+      'Experiments examine depth structure in language-specific variation and differences between training recipes. Downstream validation is ongoing; broad cross-model claims remain provisional.',
     changed:
       'Directly optimizing one representation metric exposed a shortcut. That shifted the work from treating the metric as a target to asking which measurements remain meaningful under intervention.',
     future:
@@ -145,16 +145,22 @@ const RESEARCH = [
 ]
 
 const DIRECTIONS = [
-  { title: 'Language', terms: 'Multilingual models · low-resource NLP · decipherment' },
-  { title: 'Learning & memory', terms: 'Continual learning · episodic memory · consolidation' },
-  { title: 'World models', terms: 'Predictive representations · vision · spatial intelligence' },
-  { title: 'Embodied AI', terms: 'Robot perception · navigation · learning through action' },
-  { title: 'NeuroAI', terms: 'Human memory · event segmentation · fMRI' },
-  { title: 'Scientific AI', terms: 'Earth-system dynamics · rare events · uncertainty' },
-  { title: 'Reliable AI', terms: 'Evaluation · robustness · safety' },
+  { title: 'Learning architectures', terms: 'Adaptive computation, alternative learning rules, and routing.' },
+  { title: 'Memory & world models', terms: 'Episodic memory, continual learning, and predictive representations.' },
+  { title: 'NeuroAI', terms: 'Human cognition and comparisons with fMRI and MEG data.' },
+  { title: 'Physical systems', terms: 'Vision, robotics, and Earth-system dynamics.' },
 ]
 
 const THOUGHT_NODES = [
+  {
+    id: 'adaptive-learning',
+    label: 'Adaptive computation & learning',
+    category: 'Exploratory direction',
+    note: 'Can a model learn which computation to use and which parameters to update?',
+    view: 'Choosing a computation and choosing a learning update are different decisions. A useful experiment should separate those choices and compare them against fixed routing and update rules.',
+    open: 'Does coordinating different learning mechanisms improve adaptation from limited examples?',
+    terms: ['alternative learning rules', 'expert routing', 'adaptive computation'],
+  },
   {
     id: 'representation',
     label: 'Representation',
@@ -261,22 +267,6 @@ const THOUGHT_NODES = [
   },
 ]
 
-const THOUGHT_EDGES = [
-  ['representation', 'multilingual'],
-  ['representation', 'low-resource'],
-  ['representation', 'decipherment'],
-  ['representation', 'evaluation'],
-  ['representation', 'memory'],
-  ['representation', 'world-models'],
-  ['multilingual', 'low-resource'],
-  ['low-resource', 'decipherment'],
-  ['decipherment', 'evaluation'],
-  ['evaluation', 'world-models'],
-  ['evaluation', 'continual'],
-  ['memory', 'neuroai'],
-  ['memory', 'continual'],
-  ['world-models', 'neuroai'],
-]
 
 const PROJECTS = [
   {
@@ -406,7 +396,7 @@ function DotMatrix({ text, className = '' }) {
         element.setAttribute('height', size.toFixed(2))
         element.setAttribute('x', (dot.cx - size / 2).toFixed(2))
         element.setAttribute('y', (dot.cy - size / 2).toFixed(2))
-        element.setAttribute('fill', dot.on ? (nearby ? '#e60063' : '#090909') : '#dedede')
+        element.setAttribute('fill', dot.on ? (nearby ? '#3158bd' : '#1b2938') : '#dde3eb')
       })
     }
 
@@ -445,7 +435,7 @@ function DotMatrix({ text, className = '' }) {
             y={dot.cy - size / 2}
             width={size}
             height={size}
-            fill={dot.on ? '#090909' : '#dedede'}
+            fill={dot.on ? '#1b2938' : '#dde3eb'}
           />
         )
       })}
@@ -474,30 +464,28 @@ function ScrollToTop() {
   return null
 }
 
-function ArrowLink({ to, children, external = false, className = '' }) {
-  const styles = `inline-flex items-center gap-2 border border-line px-2.5 py-1.5 text-xs no-underline transition-colors hover:border-pink hover:bg-pink/5 hover:text-ink ${className}`
+function SquareLink({ to, children, external = false, className = '' }) {
   if (external) {
-    return <a href={to} target="_blank" rel="noopener noreferrer" className={styles}>{children} ↗</a>
+    return <a href={to} target="_blank" rel="noopener noreferrer" className={`square-link ${className}`}>{children}<span aria-hidden="true">↗</span></a>
   }
-  return <Link to={to} className={styles}>{children} →</Link>
+  return <Link to={to} className={`square-link ${className}`}>{children}</Link>
 }
 
 function Header() {
   const { pathname, hash } = useLocation()
-  const navClass = (active) => `whitespace-nowrap border bg-cream px-2 py-2 text-[11px] transition-colors hover:border-pink hover:bg-pink/5 sm:px-2.5 ${active ? 'border-pink text-ink' : 'border-line text-clay'}`
-
+  const links = [
+    ['Research', '/#research', pathname.startsWith('/research/') || (pathname === '/' && hash === '#research')],
+    ['Projects', '/#projects', pathname === '/' && hash === '#projects'],
+    ['About', '/#about', pathname === '/' && ['#about', '#experience', '#interests'].includes(hash)],
+  ]
   return (
-    <header className="sticky top-0 z-50 border-b border-line bg-cream/92 backdrop-blur-md">
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-5 gap-y-2 px-5 py-2.5 sm:px-8">
-        <Link to="/" className="font-display text-xl italic text-ink">Waiz Khan</Link>
-        <nav className="flex flex-wrap items-center gap-1 sm:gap-1.5" aria-label="Primary navigation">
-          {[
-            ['Research', '/#research', pathname.startsWith('/research/') || (pathname === '/' && hash === '#research')],
-            ['Projects', '/#projects', pathname === '/' && hash === '#projects'],
-            ['About', '/#about', pathname === '/' && ['#about', '#experience', '#interests'].includes(hash)],
-            ['Resume', '/resume', pathname === '/resume'],
-          ].map(([label, to, active]) => <Link key={label} to={to} aria-current={active ? 'location' : undefined} className={navClass(active)}>{label}</Link>)}
-          <a href={LINKS.github} target="_blank" rel="noopener noreferrer" className={navClass(false)}>GitHub ↗</a>
+    <header className="site-header">
+      <div className="header-inner">
+        <Link to="/" className="site-brand" aria-label="Waiz Khan home"><span className="brand-mark">WK</span><span className="brand-caption">Research & selected work</span></Link>
+        <nav aria-label="Primary navigation" className="primary-nav">
+          {links.map(([label, to, active]) => <Link key={label} to={to} aria-current={active ? 'location' : undefined}>{label}</Link>)}
+          <Link to="/resume" aria-current={pathname === '/resume' ? 'page' : undefined}>Resume</Link>
+          <a href={LINKS.github} target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
         </nav>
       </div>
     </header>
@@ -505,301 +493,155 @@ function Header() {
 }
 
 function Footer() {
-  return (
-    <footer className="border-t border-line bg-cream">
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-5 py-4 sm:px-8">
-        <p className="text-xs text-clay">Waiz Khan · Baltimore</p>
-        <div className="flex flex-wrap gap-2">
-          <a href={LINKS.email} className="border border-line px-2.5 py-1.5 text-xs hover:border-pink hover:bg-pink/5">wkhan12@jh.edu</a>
-          <ArrowLink to={LINKS.linkedin} external>LinkedIn</ArrowLink>
-        </div>
-      </div>
-    </footer>
-  )
+  return <footer className="site-footer"><span>Waiz Khan · Baltimore</span><a href={LINKS.email}>wkhan12@jh.edu</a></footer>
 }
 
 function Layout() {
+  return <><ScrollToTop /><a className="skip-link" href="#main">Skip to content</a><Header /><Outlet /><Footer /></>
+}
+
+function Profile() {
   return (
-    <div className="min-h-screen bg-cream text-ink">
-      <ScrollToTop />
-      <Header />
-      <Outlet />
-      <Footer />
-    </div>
+    <aside className="profile" aria-label="About Waiz Khan">
+      <div className="profile-intro">
+      <p className="eyebrow">Johns Hopkins University</p>
+      <h1 className="sr-only">Waiz Khan</h1>
+      <DotMatrix text="WAIZ KHAN" className="pixel-signature" />
+      <p className="affiliation">Student in the Department of Applied Mathematics and Statistics at Johns Hopkins University.</p>
+      <dl className="profile-facts">
+        <div><dt>Degree</dt><dd>M.S.E. Data Science<br /><span>Expected May 2027</span></dd></div>
+        <div><dt>Research</dt><dd>Graduate researcher<br /><span>Prof. Philipp Koehn</span></dd></div>
+      </dl>
+      <div className="profile-contact">
+        <SquareLink to={LINKS.email} external>Email</SquareLink>
+        <SquareLink to={LINKS.linkedin} external>LinkedIn</SquareLink>
+      </div>
+      </div>
+      <section id="interests" className="profile-interests" aria-labelledby="interests-title">
+        <h2 id="interests-title" className="eyebrow">Exploring</h2>
+        <p className="small-note">Questions for future work.</p>
+        <dl>{DIRECTIONS.map((item) => <div key={item.title}><dt>{item.title}</dt><dd>{item.terms}</dd></div>)}</dl>
+        <Link to="/thoughts" className="text-link">Questions & notes <span aria-hidden="true">→</span></Link>
+      </section>
+    </aside>
   )
 }
 
-function ResearchGrid() {
+function ResearchList() {
   return (
-    <div className="grid gap-x-7 md:grid-cols-2">
+    <div className="research-list">
       {RESEARCH.map((item) => (
-        <article key={item.slug} className="border-t border-line py-4">
-          <h3 className="font-display text-[22px] leading-tight"><Link to={`/research/${item.slug}`} className="hover:text-pink">{item.title}</Link></h3>
-          <p className="mt-1 text-xs text-clay">{item.institution}</p>
-          <p className="mt-2 text-sm leading-relaxed">{item.brief}</p>
-          <p className="mt-1 text-xs leading-relaxed text-clay">{item.highlight}</p>
-          <div className="mt-2.5 flex flex-wrap gap-2">
-            <ArrowLink to={`/research/${item.slug}`}><span className="sr-only">{item.title} </span>Notes</ArrowLink>
-            {item.links.map((link) => <ArrowLink key={link.href} to={link.href} external><span className="sr-only">{item.title} </span>Code</ArrowLink>)}
-          </div>
+        <article key={item.slug} className="research-entry">
+          <details>
+            <summary>
+              <span className="research-heading"><span className="entry-title">{item.title}</span><span className="entry-meta">{item.institution}</span></span>
+              <span className="research-brief">{item.brief}</span>
+              <span className="expand-mark" aria-hidden="true">+</span>
+            </summary>
+            <div className="research-expanded">
+              <p className="result-line">{item.highlight}</p>
+              <p>{item.method}</p>
+              <div className="entry-actions">
+                <SquareLink to={`/research/${item.slug}`}>Full research note <span aria-hidden="true">→</span></SquareLink>
+                {item.links.map((link) => <SquareLink key={link.href} to={link.href} external>{link.label}</SquareLink>)}
+              </div>
+            </div>
+          </details>
         </article>
       ))}
     </div>
   )
 }
 
-function SectionEyebrow({ children, light = false }) {
-  return <p className={`font-mono text-xs uppercase tracking-[0.25em] ${light ? 'text-blush' : 'text-pink'}`}>{children}</p>
-}
-
-function ThoughtsPage() {
-  const [selectedId, setSelectedId] = useState('representation')
-  const selected = THOUGHT_NODES.find((node) => node.id === selectedId)
-  const nodeById = Object.fromEntries(THOUGHT_NODES.map((node) => [node.id, node]))
-  const connected = THOUGHT_EDGES
-    .filter(([from, to]) => from === selectedId || to === selectedId)
-    .map(([from, to]) => nodeById[from === selectedId ? to : from])
-
-  return (
-    <main className="mx-auto max-w-6xl px-5 py-8 sm:px-8 sm:py-10">
-      <PageMeta title="Thoughts" description="A connected map of Waiz Khan's research questions across language, representation, memory, evaluation, and intelligent systems." />
-      <div className="grid gap-4 border-b border-ink pb-6 lg:grid-cols-[.7fr_1.3fr] lg:items-end">
-        <div>
-          <SectionEyebrow>Connected questions</SectionEyebrow>
-          <h1 className="mt-2 font-display text-5xl sm:text-6xl">Thoughts</h1>
-        </div>
-        <p className="text-[15px] leading-relaxed text-clay">A working map of questions connecting current research to longer-term directions. Each node holds a question, a current view, and the part that remains unresolved.</p>
-      </div>
-
-      <div className="mt-6 grid gap-5 lg:grid-cols-[1.35fr_.65fr]">
-        <section aria-label="Research thought graph">
-          <div className="flex flex-wrap gap-2 sm:hidden" aria-label="Research questions">
-            {THOUGHT_NODES.map((node) => (
-              <button key={node.id} type="button" aria-pressed={node.id === selectedId} onClick={() => setSelectedId(node.id)} className={`border bg-cream px-3 py-2 text-xs ${node.id === selectedId ? 'border-pink' : 'border-line'}`}>{node.label}</button>
-            ))}
-          </div>
-          <div
-            className="relative hidden h-[31rem] overflow-hidden border border-line bg-cream sm:block"
-            style={{ backgroundImage: 'radial-gradient(#d8d8d8 1px, transparent 1px)', backgroundSize: '18px 18px' }}
-          >
-            <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-              {THOUGHT_EDGES.map(([from, to]) => {
-                const start = nodeById[from]
-                const end = nodeById[to]
-                const active = from === selectedId || to === selectedId
-                return (
-                  <line
-                    key={`${from}-${to}`}
-                    x1={start.x}
-                    y1={start.y}
-                    x2={end.x}
-                    y2={end.y}
-                    stroke={active ? '#e60063' : '#a8a8a8'}
-                    strokeWidth={active ? 1.5 : 1}
-                    vectorEffect="non-scaling-stroke"
-                  />
-                )
-              })}
-            </svg>
-
-            {THOUGHT_NODES.map((node) => {
-              const active = node.id === selectedId
-              return (
-                <button
-                  key={node.id}
-                  type="button"
-                  aria-label={`Open thought: ${node.label}`}
-                  aria-pressed={active}
-                  onClick={() => setSelectedId(node.id)}
-                  className={`absolute z-10 -translate-x-1/2 -translate-y-1/2 border bg-cream px-2 py-1.5 font-mono text-[10px] leading-none shadow-[2px_2px_0_#fff] transition-colors sm:px-2.5 sm:py-2 sm:text-[11px] ${active ? 'border-pink bg-pink/10 text-ink' : 'border-ink text-clay hover:border-pink hover:text-ink'}`}
-                  style={{ left: `${node.x}%`, top: `${node.y}%` }}
-                >
-                  {node.label}
-                </button>
-              )
-            })}
-
-            <p className="absolute bottom-3 left-3 font-mono text-[10px] uppercase tracking-wider text-clay">{THOUGHT_NODES.length} notes · {THOUGHT_EDGES.length} links</p>
-          </div>
-        </section>
-
-        <aside className="flex min-h-64 flex-col border border-ink p-5 sm:p-6" aria-live="polite">
-          <div className="flex items-start justify-between gap-4">
-            <SectionEyebrow>{selected.category}</SectionEyebrow>
-            <span className="h-3 w-3 border border-pink bg-pink/10" aria-hidden="true" />
-          </div>
-          <h2 className="mt-3 font-display text-4xl leading-tight">{selected.label}</h2>
-
-          <div className="mt-4 border-t border-line pt-3">
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-pink">Question</p>
-            <p className="mt-2 text-[15px] leading-relaxed text-ink">{selected.note}</p>
-          </div>
-          <div className="mt-4 border-t border-line pt-3">
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-pink">Working view</p>
-            <p className="mt-2 text-[14px] leading-relaxed text-clay">{selected.view}</p>
-          </div>
-          <div className="mt-4 border-t border-line pt-3">
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-pink">Still open</p>
-            <p className="mt-2 text-[14px] leading-relaxed text-clay">{selected.open}</p>
-          </div>
-
-          <div className="mt-4 border-t border-line pt-3">
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-pink">Connected to</p>
-            <div className="mt-2 flex flex-wrap gap-2">
-              {connected.map((node) => (
-                <button key={node.id} type="button" aria-label={`Follow connection: ${node.label}`} onClick={() => setSelectedId(node.id)} className="border border-line px-2 py-1 text-[11px] text-clay hover:border-pink hover:text-ink">{node.label}</button>
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-4 flex flex-wrap gap-2">
-            {selected.terms.map((term) => <span key={term} className="border border-line px-2 py-1 font-mono text-[10px] uppercase tracking-wider text-clay">{term}</span>)}
-          </div>
-          {selected.to && <div className="mt-auto pt-5"><ArrowLink to={selected.to}>Related work</ArrowLink></div>}
-        </aside>
-      </div>
-    </main>
-  )
-}
-
 function HomePage() {
   return (
-    <main className="mx-auto max-w-6xl px-5 sm:px-8">
-      <PageMeta
-        description="Waiz Khan is a student in the Department of Applied Mathematics and Statistics at Johns Hopkins University, researching multilingual language models, low-resource learning, and computational decipherment."
-      />
-
-      <section className="py-6 sm:py-7">
-        <div className="grid items-center gap-5 md:grid-cols-[.85fr_1.15fr] md:gap-9">
-          <div>
-            <SectionEyebrow>Baltimore · Johns Hopkins</SectionEyebrow>
-            <h1 className="sr-only">Waiz Khan</h1>
-            <div className="mt-3 max-w-[23rem]"><DotMatrix text="WAIZ KHAN" className="w-full cursor-crosshair" /></div>
-          </div>
-          <div>
-            <p className="font-display text-[23px] leading-snug">Student in the Department of Applied Mathematics and Statistics at Johns Hopkins University.</p>
-            <p className="mt-2 text-sm text-clay">M.S.E. Data Science · Expected May 2027</p>
-            <p className="mt-1 text-sm text-clay">Graduate researcher with Prof. Philipp Koehn.</p>
-          </div>
-        </div>
-      </section>
-
-      <section id="research" aria-labelledby="research-title" className="border-t border-ink pb-3 pt-5">
-        <h2 id="research-title" className="mb-3 font-display text-2xl">Research</h2>
-        <ResearchGrid />
-      </section>
-
-      <section id="projects" aria-labelledby="projects-title" className="border-t border-ink py-5">
-        <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
-          <h2 id="projects-title" className="font-display text-2xl">Personal projects</h2>
-          <ArrowLink to={LINKS.github} external>All repositories</ArrowLink>
-        </div>
-        <div className="grid gap-x-7 md:grid-cols-3">
-          {PROJECTS.map((project) => (
-            <article key={project.title} className="border-t border-line py-3">
-              <div className="flex items-center justify-between gap-3">
-                <h3 className="font-display text-xl">{project.title}</h3>
-                <ArrowLink to={project.href} external><span className="sr-only">{project.title} </span>Code</ArrowLink>
-              </div>
-              <p className="mt-2 text-sm leading-relaxed">{project.line}</p>
-              <p className="mt-1 text-xs leading-relaxed text-clay">{project.terms.slice(0, 2).join(' · ')}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section id="about" aria-labelledby="about-title" className="border-t border-ink py-5">
-        <h2 id="about-title" className="mb-4 font-display text-2xl">About</h2>
-        <div className="grid gap-7 lg:grid-cols-[1.15fr_.85fr]">
-          <section id="experience" aria-labelledby="experience-title">
-            <h3 id="experience-title" className="mb-2 text-sm font-semibold">Experience</h3>
-            <ul className="divide-y divide-line border-t border-line">
-              {EXPERIENCE.map((item) => (
-                <li key={`${item.place}-${item.role}`} className="py-2.5">
-                  <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-                    <p className="text-sm"><span className="font-semibold">{item.place}</span> · {item.role}</p>
-                    <span className="text-xs text-clay">{item.when}</span>
-                  </div>
-                  <p className="mt-1 text-xs leading-relaxed text-clay">{item.detail}</p>
-                </li>
-              ))}
-            </ul>
-          </section>
-          <section id="interests" aria-labelledby="interests-title">
-            <h3 id="interests-title" className="mb-2 text-sm font-semibold">Research interests</h3>
-            <dl className="space-y-2 border-t border-line pt-2.5">
-              {DIRECTIONS.map((direction) => (
-                <div key={direction.title} className="text-xs leading-relaxed">
-                  <dt className="inline font-semibold">{direction.title}</dt>{' '}
-                  <dd className="inline text-clay">— {direction.terms}</dd>
-                </div>
-              ))}
-            </dl>
-            <div className="mt-3"><ArrowLink to="/thoughts">Thoughts & questions</ArrowLink></div>
-          </section>
-        </div>
-      </section>
+    <main id="main" className="home-layout">
+      <PageMeta description="Waiz Khan, a student in Applied Mathematics and Statistics at Johns Hopkins University. Research in multilingual representation, low-resource learning, and ancient-script decipherment; interests in learning architectures, memory, world models, and NeuroAI." />
+      <Profile />
+      <div className="index-content">
+        <section id="research" aria-labelledby="research-title" className="index-section">
+          <div className="section-heading"><h2 id="research-title">Research</h2><p>Select a row for details</p></div>
+          <ResearchList />
+        </section>
+        <section id="projects" aria-labelledby="projects-title" className="index-section">
+          <div className="section-heading"><h2 id="projects-title">Personal projects</h2><a href={LINKS.github} target="_blank" rel="noopener noreferrer" className="text-link">All repositories ↗</a></div>
+          <ul className="project-list">
+            {PROJECTS.map((item) => (
+              <li key={item.title}>
+                <h3>{item.title}</h3><p>{item.line}</p>
+                <SquareLink to={item.href} external><span className="sr-only">{item.title} </span>Code</SquareLink>
+              </li>
+            ))}
+          </ul>
+        </section>
+        <section id="about" aria-labelledby="about-title" className="index-section">
+          <div className="section-heading"><h2 id="about-title">Experience</h2><span className="section-note">Research · Engineering · Nonprofit</span></div>
+          <ul id="experience" className="experience-list">
+            {EXPERIENCE.filter(item => item.place !== 'Johns Hopkins University').map((item) => (
+              <li key={item.place}>
+                <span className="experience-date">{item.when}</span>
+                <div><h3>{item.place}<span>{item.role}</span></h3><p>{item.detail}</p></div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
     </main>
   )
 }
 
 function ResearchDetailPage() {
   const { slug } = useParams()
-  const item = RESEARCH.find((entry) => entry.slug === slug)
+  const item = RESEARCH.find(entry => entry.slug === slug)
   if (!item) return <Navigate to="/#research" replace />
-
   return (
-    <main className="mx-auto max-w-3xl px-5 py-7 sm:px-8 sm:py-9">
+    <main id="main" className="reading-page">
       <PageMeta title={item.title} description={item.summary} />
-      <ArrowLink to="/#research">All research</ArrowLink>
-      <h1 className="mt-5 font-display text-3xl leading-tight sm:text-4xl">{item.title}</h1>
-      <p className="mt-2 text-sm text-clay">{item.institution} · {item.dates}</p>
-      <p className="mt-4 font-display text-xl leading-snug">{item.question}</p>
-      <div className="mt-4 flex flex-wrap gap-2">
-        {item.links.map((link) => <ArrowLink key={link.href} to={link.href} external>{link.label}</ArrowLink>)}
+      <Link to="/#research" className="text-link">← Research index</Link>
+      <div className="reading-heading">
+        <p className="eyebrow">{item.institution} · {item.dates}</p>
+        <h1>{item.title}</h1><p className="lead">{item.question}</p>
       </div>
+      {[['Overview', item.why], ['Method', item.method], ['Findings', item.findings]].map(([label, copy]) => (
+        <section className="reading-section" key={label}><h2>{label}</h2><p>{copy}</p></section>
+      ))}
+      <details className="technical-notes">
+        <summary>Technical notes<span className="expand-mark" aria-hidden="true">+</span></summary>
+        <ul>{item.technical.map(line => <li key={line}>{line}</li>)}</ul>
+        <p>{item.changed}</p>
+      </details>
+      <section className="reading-section"><h2>Open question</h2><p>{item.future}</p></section>
+      <div className="entry-actions">{item.links.map(link => <SquareLink key={link.href} to={link.href} external>{link.label}</SquareLink>)}</div>
+    </main>
+  )
+}
 
-      <div className="mt-6 space-y-5 border-t border-line pt-5">
-        {[
-          ['Overview', item.why],
-          ['Method', item.method],
-          ['Findings', item.findings],
-        ].map(([label, copy]) => (
-          <section key={label}>
-            <h2 className="text-sm font-semibold">{label}</h2>
-            <p className="mt-1 text-sm leading-relaxed text-clay">{copy}</p>
-          </section>
-        ))}
-        <details className="border-y border-line py-3">
-          <summary className="cursor-pointer text-sm font-semibold">Technical notes +</summary>
-          <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-relaxed text-clay">
-            {item.technical.map((line) => <li key={line}>{line}</li>)}
-          </ul>
-          <p className="mt-3 text-sm leading-relaxed text-clay">{item.changed}</p>
+function ThoughtsPage() {
+  return (
+    <main id="main" className="reading-page">
+      <PageMeta title="Research directions" description="Research questions and exploratory directions in learning architectures, language, memory, world models, and NeuroAI." />
+      <Link to="/#interests" className="text-link">← Overview</Link>
+      <div className="reading-heading"><p className="eyebrow">Questions & notes</p><h1>Research directions</h1><p className="lead">Working questions in language, learning, memory, and cognition.</p></div>
+      <div className="direction-list">{THOUGHT_NODES.map(node => (
+        <details key={node.id}>
+          <summary><span><span className="entry-title">{node.label}</span><span className="entry-meta">{node.category}</span></span><span className="expand-mark" aria-hidden="true">+</span></summary>
+          <div className="direction-body">
+            <p className="direction-question">{node.note}</p><p>{node.view}</p>
+            <h2>Open question</h2><p>{node.open}</p>
+            {node.to && <div className="entry-actions"><SquareLink to={node.to}>Related research →</SquareLink></div>}
+          </div>
         </details>
-        <section>
-          <h2 className="text-sm font-semibold">Open question</h2>
-          <p className="mt-1 text-sm leading-relaxed text-clay">{item.future}</p>
-        </section>
-      </div>
+      ))}</div>
     </main>
   )
 }
 
 function ResumePage() {
   return (
-    <main className="mx-auto max-w-6xl px-5 py-7 sm:px-8">
+    <main id="main" className="resume-page">
       <PageMeta title="Resume" description="Resume for Waiz Khan." />
-      <h1 className="font-display text-3xl">Resume</h1>
-      <div className="mt-4 flex flex-wrap gap-2">
-        <a href={LINKS.resumePdf} download="Waiz_Khan.pdf" className="border border-line px-3 py-2 text-sm hover:border-pink hover:bg-pink/5">Download PDF</a>
-        <ArrowLink to={LINKS.resumePdf} external>Open in new tab</ArrowLink>
-      </div>
-      <div className="mt-5 border border-line">
-        <object data={LINKS.resumePdf} type="application/pdf" className="h-[85vh] w-full" aria-label="Waiz Khan resume PDF">
-          <div className="p-5 text-center text-clay"><a href={LINKS.resumePdf} className="underline decoration-pink underline-offset-4">Download the resume</a></div>
-        </object>
-      </div>
+      <div className="section-heading"><h1>Resume</h1><div className="entry-actions"><a href={LINKS.resumePdf} download="Waiz_Khan.pdf" className="square-link">Download PDF ↓</a><SquareLink to={LINKS.resumePdf} external>Open PDF</SquareLink></div></div>
+      <object data={LINKS.resumePdf} type="application/pdf" aria-label="Waiz Khan resume PDF"><p><a href={LINKS.resumePdf}>Download the resume</a></p></object>
     </main>
   )
 }
@@ -813,7 +655,7 @@ export default function App() {
           <Route path="/research" element={<Navigate to="/#research" replace />} />
           <Route path="/research/:slug" element={<ResearchDetailPage />} />
           <Route path="/thoughts" element={<ThoughtsPage />} />
-          <Route path="/directions" element={<Navigate to="/#interests" replace />} />
+          <Route path="/directions" element={<Navigate to="/thoughts" replace />} />
           <Route path="/build" element={<Navigate to="/#experience" replace />} />
           <Route path="/heela" element={<Navigate to="/#experience" replace />} />
           <Route path="/story" element={<Navigate to="/#about" replace />} />
