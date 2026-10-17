@@ -27,7 +27,7 @@ const RESEARCH = [
     dates: '2025–Present',
     summary:
       'Language-specific variation inside multilingual language models, studied across layers, languages, model families, and training methods.',
-    brief: 'How language changes model representations across layers and training methods.',
+    brief: 'How multilingual models represent information across different languages.',
     highlight: '17 models · 128 languages · held-out model families',
     anchors: ['17 open models', '128 languages', '0.6B–8B parameters', 'held-out model families'],
     keywords: ['multilingual LLMs', 'representation learning', 'NTREX-128', 'Belebele'],
@@ -57,7 +57,7 @@ const RESEARCH = [
     dates: 'Ongoing',
     summary:
       'Representation, transfer, translation, and evaluation when training data is uneven or scarce.',
-    brief: 'Translation and cross-lingual transfer with limited training data.',
+    brief: 'Machine translation and language learning when training data is limited.',
     highlight: 'Ongoing · transfer, representation, and evaluation',
     anchors: ['representation', 'cross-lingual transfer', 'machine translation', 'evaluation'],
     keywords: ['low-resource NLP', 'machine translation', 'cross-lingual transfer', 'evaluation'],
@@ -87,7 +87,7 @@ const RESEARCH = [
     dates: '2026–Present',
     summary:
       'Multimodal translation, unsupervised sign structure, and evaluation infrastructure for ancient scripts.',
-    brief: 'Visual, distributional, and graph structure in ancient writing systems.',
+    brief: 'Finding linguistic structure in ancient writing systems using images, text, and graphs.',
     highlight: '11 corpora · hieroglyph translation · contamination audits',
     anchors: ['61k examples', '15+ architectures', 'vision + language', '≈34% duplicate leakage'],
     keywords: ['computational decipherment', 'multimodal learning', 'graph learning', 'data provenance'],
@@ -119,7 +119,7 @@ const RESEARCH = [
     dates: '2022 · Revisited 2026',
     summary:
       'Prediction, causal inference, and fixed-budget allocation for chronic absenteeism.',
-    brief: 'Chronic absenteeism: prediction, causal inference, and allocation of support.',
+    brief: 'Predicting chronic absenteeism and studying how to allocate limited student support.',
     highlight: '47,027 students · ROC-AUC 0.841 vs. 0.699 baseline',
     anchors: ['47,027 students', 'ROC-AUC 0.841', '0.699 baseline', 'causal inference + optimization'],
     keywords: ['causal ML', 'gradient boosting', 'DoWhy', 'integer optimization'],
@@ -271,19 +271,19 @@ const THOUGHT_NODES = [
 const PROJECTS = [
   {
     title: 'OFX',
-    line: 'A replayable limit-order-book terminal for studying market structure.',
+    line: 'An interactive market-data terminal with order-book visualization and event replay.',
     terms: ['TypeScript', 'WebGL', 'market microstructure', 'event replay'],
     href: 'https://github.com/nolimitwaiz/ofx-terminal',
   },
   {
     title: 'NavRover',
-    line: 'ROS 2 navigation logs turned into labeled learning data.',
+    line: 'A ROS 2 pipeline that turns robot navigation logs into labeled datasets.',
     terms: ['ROS 2', 'Python', 'robot navigation', 'dataset generation'],
     href: 'https://github.com/nolimitwaiz/navrover',
   },
   {
     title: 'Klesis',
-    line: 'Text sent between nearby devices through sound.',
+    line: 'An offline messaging app that sends text between nearby devices through sound.',
     terms: ['PWA', 'Web Audio', 'ggwave', 'offline communication'],
     href: 'https://github.com/nolimitwaiz/klesis',
   },
@@ -366,10 +366,12 @@ function DotMatrix({ text, className = '' }) {
         element.style.opacity = 1
         return
       }
-      element.style.opacity = 0
-      element.animate([{ opacity: 0 }, { opacity: 1 }], {
-        duration: 380,
-        delay: dots[index].delay,
+      // Keep the name readable while the background pixels settle in.
+      const startOpacity = dots[index].on ? 0.75 : 0
+      element.style.opacity = startOpacity
+      element.animate([{ opacity: startOpacity }, { opacity: 1 }], {
+        duration: 260,
+        delay: dots[index].delay * 0.15,
         fill: 'forwards',
         easing: 'ease-out',
       })
@@ -396,7 +398,7 @@ function DotMatrix({ text, className = '' }) {
         element.setAttribute('height', size.toFixed(2))
         element.setAttribute('x', (dot.cx - size / 2).toFixed(2))
         element.setAttribute('y', (dot.cy - size / 2).toFixed(2))
-        element.setAttribute('fill', dot.on ? (nearby ? '#3158bd' : '#1b2938') : '#dde3eb')
+        element.setAttribute('fill', dot.on ? (nearby ? '#285f4f' : '#19251f') : '#e0e5e1')
       })
     }
 
@@ -435,7 +437,7 @@ function DotMatrix({ text, className = '' }) {
             y={dot.cy - size / 2}
             width={size}
             height={size}
-            fill={dot.on ? '#1b2938' : '#dde3eb'}
+            fill={dot.on ? '#19251f' : '#e0e5e1'}
           />
         )
       })}
@@ -475,17 +477,16 @@ function Header() {
   const { pathname, hash } = useLocation()
   const links = [
     ['Research', '/#research', pathname.startsWith('/research/') || (pathname === '/' && hash === '#research')],
-    ['Projects', '/#projects', pathname === '/' && hash === '#projects'],
-    ['About', '/#about', pathname === '/' && ['#about', '#experience', '#interests'].includes(hash)],
+    ['Projects', '/#projects', pathname.startsWith('/projects/') || (pathname === '/' && hash === '#projects')],
+    ['Experience', '/#experience', pathname === '/' && ['#experience', '#about'].includes(hash)],
+    ['Resume', '/resume', pathname === '/resume'],
   ]
   return (
     <header className="site-header">
       <div className="header-inner">
-        <Link to="/" className="site-brand" aria-label="Waiz Khan home"><span className="brand-mark">WK</span><span className="brand-caption">Research & selected work</span></Link>
+        <Link to="/" className="site-brand" aria-label="Waiz Khan home">Waiz Khan</Link>
         <nav aria-label="Primary navigation" className="primary-nav">
           {links.map(([label, to, active]) => <Link key={label} to={to} aria-current={active ? 'location' : undefined}>{label}</Link>)}
-          <Link to="/resume" aria-current={pathname === '/resume' ? 'page' : undefined}>Resume</Link>
-          <a href={LINKS.github} target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
         </nav>
       </div>
     </header>
@@ -500,92 +501,78 @@ function Layout() {
   return <><ScrollToTop /><a className="skip-link" href="#main">Skip to content</a><Header /><Outlet /><Footer /></>
 }
 
-function Profile() {
+function OverviewRow({ title, meta, children, to, action, external = false }) {
   return (
-    <aside className="profile" aria-label="About Waiz Khan">
-      <div className="profile-intro">
-      <p className="eyebrow">Johns Hopkins University</p>
-      <h1 className="sr-only">Waiz Khan</h1>
-      <DotMatrix text="WAIZ KHAN" className="pixel-signature" />
-      <p className="affiliation">Student in the Department of Applied Mathematics and Statistics at Johns Hopkins University.</p>
-      <dl className="profile-facts">
-        <div><dt>Degree</dt><dd>M.S.E. Data Science<br /><span>Expected May 2027</span></dd></div>
-        <div><dt>Research</dt><dd>Graduate researcher<br /><span>Prof. Philipp Koehn</span></dd></div>
-      </dl>
-      <div className="profile-contact">
-        <SquareLink to={LINKS.email} external>Email</SquareLink>
-        <SquareLink to={LINKS.linkedin} external>LinkedIn</SquareLink>
-      </div>
-      </div>
-      <section id="interests" className="profile-interests" aria-labelledby="interests-title">
-        <h2 id="interests-title" className="eyebrow">Exploring</h2>
-        <p className="small-note">Questions for future work.</p>
-        <dl>{DIRECTIONS.map((item) => <div key={item.title}><dt>{item.title}</dt><dd>{item.terms}</dd></div>)}</dl>
-        <Link to="/thoughts" className="text-link">Questions & notes <span aria-hidden="true">→</span></Link>
-      </section>
-    </aside>
-  )
-}
-
-function ResearchList() {
-  return (
-    <div className="research-list">
-      {RESEARCH.map((item) => (
-        <article key={item.slug} className="research-entry">
-          <details>
-            <summary>
-              <span className="research-heading"><span className="entry-title">{item.title}</span><span className="entry-meta">{item.institution}</span></span>
-              <span className="research-brief">{item.brief}</span>
-              <span className="expand-mark" aria-hidden="true">+</span>
-            </summary>
-            <div className="research-expanded">
-              <p className="result-line">{item.highlight}</p>
-              <p>{item.method}</p>
-              <div className="entry-actions">
-                <SquareLink to={`/research/${item.slug}`}>Full research note <span aria-hidden="true">→</span></SquareLink>
-                {item.links.map((link) => <SquareLink key={link.href} to={link.href} external>{link.label}</SquareLink>)}
-              </div>
-            </div>
-          </details>
-        </article>
-      ))}
-    </div>
+    <article className="overview-row">
+      <div className="row-heading"><h3>{title}</h3><p>{meta}</p></div>
+      <p className="row-description">{children}</p>
+      <SquareLink to={to} external={external}><span className="sr-only">{title}: </span>{action}</SquareLink>
+    </article>
   )
 }
 
 function HomePage() {
   return (
-    <main id="main" className="home-layout">
-      <PageMeta description="Waiz Khan, a student in Applied Mathematics and Statistics at Johns Hopkins University. Research in multilingual representation, low-resource learning, and ancient-script decipherment; interests in learning architectures, memory, world models, and NeuroAI." />
-      <Profile />
-      <div className="index-content">
-        <section id="research" aria-labelledby="research-title" className="index-section">
-          <div className="section-heading"><h2 id="research-title">Research</h2><p>Select a row for details</p></div>
-          <ResearchList />
-        </section>
-        <section id="projects" aria-labelledby="projects-title" className="index-section">
-          <div className="section-heading"><h2 id="projects-title">Personal projects</h2><a href={LINKS.github} target="_blank" rel="noopener noreferrer" className="text-link">All repositories ↗</a></div>
-          <ul className="project-list">
-            {PROJECTS.map((item) => (
-              <li key={item.title}>
-                <h3>{item.title}</h3><p>{item.line}</p>
-                <SquareLink to={item.href} external><span className="sr-only">{item.title} </span>Code</SquareLink>
-              </li>
-            ))}
-          </ul>
-        </section>
-        <section id="about" aria-labelledby="about-title" className="index-section">
-          <div className="section-heading"><h2 id="about-title">Experience</h2><span className="section-note">Research · Engineering · Nonprofit</span></div>
-          <ul id="experience" className="experience-list">
-            {EXPERIENCE.filter(item => item.place !== 'Johns Hopkins University').map((item) => (
-              <li key={item.place}>
-                <span className="experience-date">{item.when}</span>
-                <div><h3>{item.place}<span>{item.role}</span></h3><p>{item.detail}</p></div>
-              </li>
-            ))}
-          </ul>
-        </section>
-      </div>
+    <main id="main" className="home-page">
+      <PageMeta description="Waiz Khan is a data science student at Johns Hopkins University, a graduate researcher with Prof. Philipp Koehn, Co-Founder and Founding Engineer at Arzaic, and Vice Chair and Director at Heela." />
+      <section id="about" className="introduction" aria-label="About Waiz Khan">
+        <h1><span className="sr-only">Waiz Khan</span><DotMatrix text="WAIZ KHAN" className="pixel-signature" /></h1>
+        <p className="affiliation">Student in the Department of Applied Mathematics and Statistics at Johns Hopkins University.</p>
+        <p className="degree">M.S.E. Data Science · Expected May 2027</p>
+        <p className="introduction-copy">Graduate researcher with Prof. Philipp Koehn. Co-Founder & Founding Engineer at Arzaic. Vice Chair & Director at Heela, a nonprofit supporting refugee students.</p>
+        <div className="intro-links">
+          <SquareLink to="/resume">Resume</SquareLink>
+          <SquareLink to={LINKS.github} external>GitHub</SquareLink>
+          <a href={LINKS.email} className="square-link">Email</a>
+          <SquareLink to={LINKS.linkedin} external>LinkedIn</SquareLink>
+        </div>
+      </section>
+
+      <section id="research" aria-labelledby="research-title" className="overview-section">
+        <div className="section-heading"><h2 id="research-title">Research</h2><span>Questions, methods, and findings</span></div>
+        <div className="research-list">
+          {RESEARCH.map(item => <OverviewRow key={item.slug} title={item.title} meta={item.institution} to={`/research/${item.slug}`} action="Details">{item.brief}</OverviewRow>)}
+        </div>
+      </section>
+
+      <section id="projects" aria-labelledby="projects-title" className="overview-section">
+        <div className="section-heading"><h2 id="projects-title">Selected projects</h2><a href={LINKS.github} target="_blank" rel="noopener noreferrer" className="text-link">All repositories ↗</a></div>
+        <div className="project-list">
+          <OverviewRow title="Iris" meta="Arzaic · Healthcare agents" to="/projects/iris" action="Overview">A healthcare-agent architecture for ongoing patient support, with retrieval, tool use, and safety checks.</OverviewRow>
+          {PROJECTS.map(item => <OverviewRow key={item.title} title={item.title} meta={item.terms.slice(0, 2).join(' · ')} to={item.href} action="Code" external>{item.line}</OverviewRow>)}
+        </div>
+      </section>
+
+      <section id="experience" aria-labelledby="experience-title" className="overview-section">
+        <div className="section-heading"><h2 id="experience-title">Experience</h2></div>
+        <ul className="experience-list">
+          {EXPERIENCE.map(item => (
+            <li key={item.place}>
+              <h3>{item.place}</h3><p>{item.role}</p><span>{item.when}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section id="interests" aria-labelledby="interests-title" className="interest-note">
+        <h2 id="interests-title">Research interests</h2>
+        <p>Learning architectures, continual learning and memory, world models, and NeuroAI.</p>
+        <Link to="/thoughts" className="text-link">Research directions & questions →</Link>
+      </section>
+    </main>
+  )
+}
+
+function IrisPage() {
+  return (
+    <main id="main" className="reading-page">
+      <PageMeta title="Iris" description="Iris at Arzaic: healthcare-agent architecture for ongoing patient support. Waiz Khan, Co-Founder and Founding Engineer." />
+      <Link to="/#projects" className="text-link">← Selected projects</Link>
+      <div className="reading-heading"><p className="eyebrow">Arzaic · Healthcare agents</p><h1>Iris</h1><p className="lead">Healthcare-agent architecture for ongoing patient support.</p></div>
+      <section className="reading-section"><h2>Role</h2><p>Co-Founder & Founding Engineer at Arzaic.</p></section>
+      <section className="reading-section"><h2>System</h2><p>Iris brings together longitudinal patient state, information retrieval, agent tools, and safety checks.</p></section>
+      <section className="reading-section"><h2>Architecture</h2><ol className="architecture-list">{['Gate', 'Route', 'Retrieve', 'Generate', 'Guard'].map(stage => <li key={stage}>{stage}</li>)}</ol></section>
+      <section className="reading-section"><h2>Focus</h2><p>Patient context over time, auditable state, tool use, and safety evaluation.</p></section>
     </main>
   )
 }
@@ -621,7 +608,8 @@ function ThoughtsPage() {
     <main id="main" className="reading-page">
       <PageMeta title="Research directions" description="Research questions and exploratory directions in learning architectures, language, memory, world models, and NeuroAI." />
       <Link to="/#interests" className="text-link">← Overview</Link>
-      <div className="reading-heading"><p className="eyebrow">Questions & notes</p><h1>Research directions</h1><p className="lead">Working questions in language, learning, memory, and cognition.</p></div>
+      <div className="reading-heading"><p className="eyebrow">Questions & notes</p><h1>Research directions</h1><p className="lead">Interests and working questions for future research.</p></div>
+      <dl className="direction-overview">{DIRECTIONS.map(item => <div key={item.title}><dt>{item.title}</dt><dd>{item.terms}</dd></div>)}</dl>
       <div className="direction-list">{THOUGHT_NODES.map(node => (
         <details key={node.id}>
           <summary><span><span className="entry-title">{node.label}</span><span className="entry-meta">{node.category}</span></span><span className="expand-mark" aria-hidden="true">+</span></summary>
@@ -654,6 +642,7 @@ export default function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/research" element={<Navigate to="/#research" replace />} />
           <Route path="/research/:slug" element={<ResearchDetailPage />} />
+          <Route path="/projects/iris" element={<IrisPage />} />
           <Route path="/thoughts" element={<ThoughtsPage />} />
           <Route path="/directions" element={<Navigate to="/thoughts" replace />} />
           <Route path="/build" element={<Navigate to="/#experience" replace />} />
