@@ -6,22 +6,25 @@ export const LINKS = {
   linkedin: 'https://www.linkedin.com/in/waiz-khan-024529223',
 }
 
-// Newest first. `work` lists research done in that role.
+// Newest first. `year` groups entries; `work` lists research done in that role.
 export const TIMELINE = [
   {
-    when: '2026–',
+    year: '2026',
+    when: '2026 – now',
     role: 'Co-Founder & Founding Engineer',
     place: 'Arzaic',
     detail: 'Building Iris, a healthcare agent for ongoing patient support.',
   },
   {
-    when: '2026–',
+    year: '2026',
+    when: '2026 – now',
     role: 'Vice Chair & Director',
     place: 'Heela',
     detail: 'A nonprofit supporting refugee students.',
   },
   {
-    when: '2025–',
+    year: '2025',
+    when: '2025 – now',
     role: 'Graduate Researcher',
     place: 'Johns Hopkins University',
     detail: 'With Prof. Philipp Koehn.',
@@ -32,6 +35,7 @@ export const TIMELINE = [
     ],
   },
   {
+    year: '2022',
     when: '2022',
     role: 'Research Assistant',
     place: 'GD Goenka University',
