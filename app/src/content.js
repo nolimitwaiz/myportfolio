@@ -8,6 +8,7 @@ export const LINKS = {
 export const RESEARCH = [
   {
     slug: 'multilingual-representation',
+    year: 2025,
     title: 'Multilingual Representation',
     brief: 'How multilingual models represent information across different languages.',
     meta: 'Johns Hopkins · Prof. Philipp Koehn · 2025–Present',
@@ -21,6 +22,7 @@ export const RESEARCH = [
   },
   {
     slug: 'low-resource-language-learning',
+    year: 2025,
     title: 'Low-Resource Language Learning',
     brief: 'Machine translation and language learning when training data is limited.',
     meta: 'Johns Hopkins · Machine Translation · Ongoing',
@@ -34,6 +36,7 @@ export const RESEARCH = [
   },
   {
     slug: 'computational-decipherment',
+    year: 2026,
     title: 'Computational Decipherment',
     brief: 'Finding linguistic structure in ancient writing systems using images, text, and graphs.',
     meta: 'Johns Hopkins · Ancient Languages · 2026–Present',
@@ -48,8 +51,9 @@ export const RESEARCH = [
   },
   {
     slug: 'human-systems',
+    year: 2022,
     title: 'Causal ML & Education',
-    brief: 'Predicting chronic absenteeism and studying how to allocate limited student support.',
+    brief: 'Predicting chronic absenteeism and allocating limited student support. Revisited in 2026.',
     meta: 'GD Goenka University · Dr. Yogesh Kumar · 2022, revisited 2026',
     question: 'What changes when a prediction affects a person?',
     sections: [
@@ -63,14 +67,14 @@ export const RESEARCH = [
 ]
 
 export const PROJECTS = [
-  { title: 'OFX', brief: 'A market-data terminal with order-book visualization and event replay.', href: 'https://github.com/nolimitwaiz/ofx-terminal' },
-  { title: 'NavRover', brief: 'A ROS 2 pipeline that turns robot navigation logs into labeled datasets.', href: 'https://github.com/nolimitwaiz/navrover' },
-  { title: 'Klesis', brief: 'An offline messaging app that sends text between nearby devices through sound.', href: 'https://github.com/nolimitwaiz/klesis' },
+  { year: 2026, title: 'OFX', brief: 'A market-data terminal with order-book visualization and event replay.', href: 'https://github.com/nolimitwaiz/ofx-terminal' },
+  { year: 2026, title: 'NavRover', brief: 'A ROS 2 pipeline that turns robot navigation logs into labeled datasets.', href: 'https://github.com/nolimitwaiz/navrover' },
+  { year: 2026, title: 'Klesis', brief: 'An offline messaging app that sends text between nearby devices through sound.', href: 'https://github.com/nolimitwaiz/klesis' },
 ]
 
 export const EXPERIENCE = [
-  { role: 'Co-Founder & Founding Engineer', place: 'Arzaic', when: '2026–', detail: 'Building Iris, a healthcare agent for ongoing patient support.' },
-  { role: 'Vice Chair & Director', place: 'Heela', when: '2026–', detail: 'A nonprofit supporting refugee students.' },
-  { role: 'Graduate Researcher', place: 'Johns Hopkins University', when: '2025–', detail: 'With Prof. Philipp Koehn.' },
-  { role: 'Research Assistant', place: 'GD Goenka University', when: '2022', detail: 'With Dr. Yogesh Kumar.' },
+  { role: 'Co-Founder & Founding Engineer', place: 'Arzaic', year: 2026, when: '2026–', detail: 'Building Iris, a healthcare agent for ongoing patient support.' },
+  { role: 'Vice Chair & Director', place: 'Heela', year: 2026, when: '2026–', detail: 'A nonprofit supporting refugee students.' },
+  { role: 'Graduate Researcher', place: 'Johns Hopkins University', year: 2025, when: '2025–', detail: 'Research with Prof. Philipp Koehn.' },
+  { role: 'Research Assistant', place: 'GD Goenka University', year: 2022, when: '2022', detail: 'Research with Dr. Yogesh Kumar.' },
 ]

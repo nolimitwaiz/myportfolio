@@ -21,6 +21,49 @@ function Back() {
   return <Link to="/" className="back">← Waiz Khan</Link>
 }
 
+const KIND_ORDER = ['Role', 'Research', 'Project']
+
+function timelineEntries() {
+  const entries = [
+    ...EXPERIENCE.map((item) => ({ year: item.year, kind: 'Role', key: item.place, title: `${item.role}, ${item.place}`, text: item.detail })),
+    ...RESEARCH.map((item) => ({ year: item.year, kind: 'Research', key: item.slug, title: item.title, text: item.brief, to: `/research/${item.slug}` })),
+    ...PROJECTS.map((item) => ({ year: item.year, kind: 'Project', key: item.title, title: item.title, text: item.brief, href: item.href })),
+  ]
+  const years = [...new Set(entries.map((entry) => entry.year))].sort((a, b) => b - a)
+  return years.map((year) => ({
+    year,
+    items: entries
+      .filter((entry) => entry.year === year)
+      .sort((a, b) => KIND_ORDER.indexOf(a.kind) - KIND_ORDER.indexOf(b.kind)),
+  }))
+}
+
+function EntryTitle({ entry }) {
+  if (entry.to) return <Link to={entry.to} className="title">{entry.title} →</Link>
+  if (entry.href) return <External href={entry.href}><span className="title">{entry.title} ↗</span></External>
+  return <span className="title">{entry.title}</span>
+}
+
+function Timeline() {
+  return (
+    <section id="timeline" className="timeline" aria-label="Timeline">
+      {timelineEntries().map(({ year, items }) => (
+        <div key={year} className="year">
+          <h2>{year}</h2>
+          <ol>
+            {items.map((entry) => (
+              <li key={entry.key} className={entry.kind === 'Role' ? 'role' : undefined}>
+                <div className="row"><EntryTitle entry={entry} /><span className="kind">{entry.kind}</span></div>
+                <p>{entry.text}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      ))}
+    </section>
+  )
+}
+
 function HomePage() {
   usePage()
   return (
@@ -30,6 +73,7 @@ function HomePage() {
         Student in the Department of Applied Mathematics and Statistics at Johns Hopkins University,
         M.S.E. Data Science, expected May 2027.
       </p>
+      <p className="intro">Interested in learning architectures, memory and world models, and NeuroAI.</p>
       <p className="links">
         <Link to="/resume">Resume</Link>
         <External href={LINKS.github}>GitHub</External>
@@ -37,42 +81,7 @@ function HomePage() {
         <a href={LINKS.email}>Email</a>
       </p>
 
-      <section id="research">
-        <h2>Research</h2>
-        <ul>
-          {RESEARCH.map((item) => (
-            <li key={item.slug}>
-              <Link to={`/research/${item.slug}`} className="title">{item.title} →</Link>
-              <p>{item.brief}</p>
-            </li>
-          ))}
-        </ul>
-        <p className="note">Also interested in learning architectures, memory and world models, and NeuroAI.</p>
-      </section>
-
-      <section id="projects">
-        <h2>Projects</h2>
-        <ul>
-          {PROJECTS.map((item) => (
-            <li key={item.title}>
-              <External href={item.href}><span className="title">{item.title} ↗</span></External>
-              <p>{item.brief}</p>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section id="experience">
-        <h2>Experience</h2>
-        <ul>
-          {EXPERIENCE.map((item) => (
-            <li key={item.place}>
-              <div className="row"><span className="title">{item.role}, {item.place}</span><span className="when">{item.when}</span></div>
-              <p>{item.detail}</p>
-            </li>
-          ))}
-        </ul>
-      </section>
+      <Timeline />
     </main>
   )
 }
@@ -120,10 +129,10 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/research/:slug" element={<ResearchPage />} />
         <Route path="/resume" element={<ResumePage />} />
-        <Route path="/research" element={<Navigate to="/#research" replace />} />
-        <Route path="/projects/iris" element={<Navigate to="/#experience" replace />} />
-        <Route path="/build" element={<Navigate to="/#experience" replace />} />
-        <Route path="/heela" element={<Navigate to="/#experience" replace />} />
+        <Route path="/research" element={<Navigate to="/" replace />} />
+        <Route path="/projects/iris" element={<Navigate to="/" replace />} />
+        <Route path="/build" element={<Navigate to="/" replace />} />
+        <Route path="/heela" element={<Navigate to="/" replace />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
