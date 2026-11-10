@@ -35,7 +35,7 @@ const RESEARCH = [
     id: 'language-factor-share',
     title: 'Measuring the Language Share of Multilingual Representations',
     status: 'First author · Under review at ICLR 2027',
-    meta: 'Johns Hopkins CLSP · With Philipp Koehn and Kenton Murray',
+    meta: 'Johns Hopkins University · With Philipp Koehn',
     summary: 'I developed Language Factor Share (LFS), a measure of how much variation in multilingual model representations is associated with language identity. LFS dipped in the middle layers of all 17 models in the primary analysis, but training models to lower it weakened cross-language alignment in our experiments.',
     more: [
       ['What LFS measures', 'LFS uses variance decomposition on representations of matched multilingual examples to estimate the share of variation associated with language identity. A low share does not mean a layer has lost all language information.'],
@@ -47,7 +47,7 @@ const RESEARCH = [
     id: 'ancient-script-modeling',
     title: 'Ancient-script modeling and evaluation',
     status: 'Ongoing research',
-    meta: 'Johns Hopkins CLSP · Advised by Philipp Koehn',
+    meta: 'Johns Hopkins University · Advised by Philipp Koehn',
     summary: 'I trained character-level models from scratch on Hebrew, Coptic, and Greek, and compared rendered hieroglyphs with tokenized transliterations for Egyptian-to-German translation. I also audited data for overlap with training sets and built frozen evaluation splits for computational decipherment. The translation comparison is preliminary.',
     code: 'https://github.com/nolimitwaiz/ancient-script-decipherment',
     more: [
@@ -84,7 +84,7 @@ const MORE_PROJECTS = [
 ]
 
 const EXPERIENCE = [
-  ['Research Assistant, Johns Hopkins CLSP', 'Dec 2025 – present', 'Multilingual representations and ancient-script modeling with Philipp Koehn.'],
+  ['Research Assistant, Johns Hopkins University', 'Dec 2025 – present', 'Multilingual representations and ancient-script modeling with Philipp Koehn.'],
   ['Co-Founder and CTO, Arzaic', 'Apr 2026 – present', 'Iris development through the Johns Hopkins Pava Center accelerator.'],
   ['Vice Chair and Director, Heela', '2026 – present', <>Leadership at <a href="https://heela.org" {...ext}>Heela</a>, a nonprofit supporting college access for refugee students.</>],
   ['Research Assistant, GD Goenka University', '2022', 'Chronic absenteeism research with Dr. Yogesh Kumar.'],
@@ -166,7 +166,7 @@ export default function App() {
       <aside className="side">
         <Portrait />
         <h1>Waiz Khan</h1>
-        <p className="role">M.S.E. student in Data Science<br />Johns Hopkins University<br />Center for Language and Speech Processing</p>
+        <p className="role">M.S.E. student in Data Science<br />Johns Hopkins University</p>
         <ul className="links">
           {LINKS.map(([icon, label, href]) => (
             <li key={icon}><a href={href} {...(href.startsWith('http') ? ext : {})}>{ICONS[icon]}{label}</a></li>
@@ -181,7 +181,7 @@ export default function App() {
 
       <main>
         <section id="about" className="bio" aria-label="About">
-          <p>I’m a Data Science M.S.E. student in the Department of Applied Mathematics and Statistics at Johns Hopkins University and a research assistant with <a href={KOEHN} {...ext}>Philipp Koehn</a> at CLSP.</p>
+          <p>I’m a Data Science M.S.E. student in the Department of Applied Mathematics and Statistics at Johns Hopkins University and a research assistant with <a href={KOEHN} {...ext}>Philipp Koehn</a>.</p>
           <p>My current research is on multilingual model representations and ancient-script modeling. More broadly, I’m interested in how learning, inference, and memory support adaptation in models and people.</p>
           <p className="notice">Applying to PhD programs for Fall 2027.</p>
         </section>
