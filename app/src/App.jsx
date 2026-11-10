@@ -15,7 +15,7 @@ const ICONS = {
 
 const LINKS = [
   ['mail', EMAIL, `mailto:${EMAIL}`],
-  ['cv', 'Resume (PDF)', `${BASE}Waiz_Khan.pdf`],
+  ['cv', 'Resume (PDF)', `${BASE}Waiz_Khan.pdf?v=fef445a2`],
   ['github', 'GitHub', 'https://github.com/nolimitwaiz'],
   ['linkedin', 'LinkedIn', 'https://www.linkedin.com/in/waiz-khan-024529223'],
 ]
@@ -25,9 +25,20 @@ const TOC = [['about', 'About'], ['research', 'Research'], ['interests', 'Intere
 const SPY = TOC.flatMap(([id]) => id === 'experience' ? [[id, id], ['education', id]] : [[id, id]])
 
 const INTERESTS = [
-  ['Learning and inference', 'How learning rules and choices about which computations to run affect what a model can learn and generalize.'],
-  ['Memory and adaptation', 'How systems can learn from new experiences without losing what they already know.'],
-  ['Representations and human cognition', 'How models represent language with limited data, and how behavioral and neural data could help test hypotheses about learning and memory.'],
+  { id: 'representations', group: 'now', label: ['Multilingual', 'representations'], text: 'How language identity appears across model layers and families, and what changes when we intervene during training.', wide: [5, 22], narrow: [6, 21] },
+  { id: 'transfer', group: 'now', label: ['Low-resource', 'language learning'], text: 'How languages with more training data can support languages with less, and how to tell when transfer helps.', wide: [8, 61], narrow: [54, 21] },
+  { id: 'scripts', group: 'now', label: ['Computational', 'decipherment'], text: 'What models trained from scratch can learn from ancient text and rendered signs.', wide: [25, 82], narrow: [6, 40] },
+  { id: 'evaluation', group: 'now', label: ['Evaluation'], text: 'How contamination audits, frozen test splits, and held-out model families change what results we can trust.', wide: [28, 42], narrow: [54, 40] },
+  { id: 'learning', group: 'next', label: ['Learning and', 'inference'], text: 'How learning rules and choices about which computations to run affect what a model can learn and generalize.', wide: [54, 22], narrow: [6, 68] },
+  { id: 'memory', group: 'next', label: ['Memory and', 'adaptation'], text: 'How systems can learn from new experiences without losing what they already know.', wide: [53, 63], narrow: [54, 68] },
+  { id: 'cognition', group: 'next', label: ['Human cognition', 'and NeuroAI'], text: 'How comparisons between model representations, behavioral data, and neural data could help test ideas about learning and memory.', wide: [73, 42], narrow: [6, 88] },
+  { id: 'world', group: 'next', label: ['World models', 'and robot learning'], text: 'How predictive models could support planning and action in robots and agents.', wide: [72, 83], narrow: [54, 88] },
+]
+const INTEREST_BY_ID = Object.fromEntries(INTERESTS.map(item => [item.id, item]))
+const INTEREST_EDGES = [
+  ['representations', 'transfer'], ['representations', 'evaluation'], ['transfer', 'scripts'], ['evaluation', 'scripts'],
+  ['representations', 'learning'], ['evaluation', 'memory'], ['learning', 'memory'], ['learning', 'cognition'],
+  ['memory', 'cognition'], ['memory', 'world'], ['cognition', 'world'],
 ]
 
 const RESEARCH = [
@@ -133,6 +144,43 @@ function useActiveSection() {
   return active
 }
 
+function InterestWeb() {
+  const [active, setActive] = useState(INTERESTS[0].id)
+  const selected = INTEREST_BY_ID[active]
+
+  return (
+    <>
+      <div className="interest-web" role="group" aria-label="Research interests map">
+        <span className="web-group web-now">Current work</span>
+        <span className="web-group web-next">Research directions</span>
+        {['wide', 'narrow'].map(layout => (
+          <svg key={layout} className={`web-lines web-${layout}`} viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+            {INTEREST_EDGES.map(([from, to]) => {
+              const [x1, y1] = INTEREST_BY_ID[from][layout]
+              const [x2, y2] = INTEREST_BY_ID[to][layout]
+              return <line key={`${from}-${to}`} className={active === from || active === to ? 'on' : undefined} x1={x1} y1={y1} x2={x2} y2={y2} vectorEffect="non-scaling-stroke" />
+            })}
+          </svg>
+        ))}
+        {INTERESTS.map(item => (
+          <button key={item.id} type="button" className={`web-node ${item.group}`}
+            style={{ '--x': `${item.wide[0]}%`, '--y': `${item.wide[1]}%`, '--small-x': `${item.narrow[0]}%`, '--small-y': `${item.narrow[1]}%` }}
+            aria-label={`${item.label.join(' ')} (${item.group === 'now' ? 'current work' : 'research direction'})`}
+            aria-pressed={active === item.id} aria-controls="interest-note"
+            onClick={() => setActive(item.id)} onMouseEnter={() => setActive(item.id)}>
+            <span className="web-marker" aria-hidden="true" />
+            <span className="web-label" aria-hidden="true">{item.label.map(line => <span key={line}>{line}</span>)}</span>
+          </button>
+        ))}
+      </div>
+      <div className="web-note" id="interest-note" aria-live="polite">
+        <h3>{selected.label.join(' ')}</h3>
+        <p>{selected.text}</p>
+      </div>
+    </>
+  )
+}
+
 function Entry({ item }) {
   return (
     <article className="entry" id={item.id}>
@@ -193,9 +241,7 @@ export default function App() {
 
         <section id="interests">
           <h2>Research Interests</h2>
-          <dl className="interests">
-            {INTERESTS.map(([title, text]) => <div key={title}><dt>{title}</dt><dd>{text}</dd></div>)}
-          </dl>
+          <InterestWeb />
         </section>
 
         <section id="projects">
