@@ -135,6 +135,8 @@ function useActiveSection() {
     }
     addEventListener('scroll', update, { passive: true })
     addEventListener('resize', update)
+    // Shared section links can load before React mounts their targets.
+    document.getElementById(location.hash.slice(1))?.scrollIntoView()
     update()
     return () => {
       removeEventListener('scroll', update)
