@@ -233,7 +233,6 @@ export default function App() {
         <section id="about" className="bio" aria-label="About">
           <p>I’m a Data Science M.S.E. student in the Department of Applied Mathematics and Statistics at Johns Hopkins University and a research assistant with <a href={KOEHN} {...ext}>Philipp Koehn</a>.</p>
           <p>My current research is on multilingual model representations and ancient-script modeling. More broadly, I’m interested in how learning, inference, and memory support adaptation in models and people.</p>
-          <p className="notice">Applying to PhD programs for Fall 2027.</p>
         </section>
 
         <section id="research">
